@@ -1,15 +1,36 @@
 const assets = {
-  'some-asset': {
-    path: 'some/absolute/path.png',
-    type: 'png',
+  'default-vert': {
+    path: '/assets/shaders/default.vert',
+    type: 'shader',
   },
-  'some-shader': {
-    path: 'some/absolute/path.png',
+  'default-frag': {
+    path: '/assets/shaders/default.frag',
     type: 'shader',
   }
 };
 
 
 export async function loadAll() {
-  // Load them all and handle making things.
+  const assetMap = new Map();
+  for (const [name, details] of Object.entries(assets)) {
+    try {
+
+      const res = await fetch(details.path);
+      if (!res.ok) {
+        throw new Error();
+      }
+
+      if (details.type === 'text' || details.type === 'shader') {
+        const text = await res.text();
+        assetMap.set(name, text);
+      }
+
+      // TODO (seamus) : What about images, 3D models, sounds etc!
+
+
+    } catch (e) {
+      throw new Error(`Error loading asset: ${name}.`);
+    }
+  }
+  return assetMap;
 }
