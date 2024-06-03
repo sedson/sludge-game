@@ -1,2 +1,2 @@
 rm ./dep/*
-cp ~/Documents/gum/gum.js ./dep/
+cp ~/Documents/gum/gum.module.js ./dep/

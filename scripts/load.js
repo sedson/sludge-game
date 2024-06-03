@@ -14,6 +14,10 @@ const assets = {
   'terrain-frag': {
     path: '/assets/shaders/terrain.frag',
     type: 'shader',
+  },
+  'kayak-model': {
+    path: '/assets/kayak.ply',
+    type: 'ply',
   }
 };
 
@@ -33,7 +37,12 @@ export async function loadAll() {
         assetMap.set(name, text);
       }
 
-      // TODO (seamus) : What about images, 3D models, sounds etc!
+      if (details.type === 'ply' || details.type === 'model') {
+        const buffer = await res.arrayBuffer();
+        assetMap.set(name, buffer);
+      }
+
+      // TODO (seamus) : What about images, sounds etc!
 
 
     } catch (e) {

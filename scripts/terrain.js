@@ -11,30 +11,10 @@ export function setup(gumInstance) {
 
   terrain.program = 'terrainShaderProgram';
 
-  const kayakShape = g.shapes.cube(1).fill(g.color('black'))
-
-  kayak = g.node().setGeometry(g.mesh(kayakShape));
-
-  kayak.velocity = g.vec3();
-
-  // Parent the camera to the kayak.
-  g.camera.setParent(kayak);
-
-
+  g.camera.fov = 80;
 }
 
 // The tick function
 export function draw(delta) {
-    g.camera.target.set(...kayak.transform.position.xyz);
-    g.camera.fov = 90;
-  kayak.transform.position.add(kayak.velocity.copy().mult(0.1 * delta));
-  kayak.velocity.mult(0.95 ** delta);
+
 }
-
-
-window.addEventListener('keydown', e => {
-  if (e.key === 'w') {
-    // -Z is forward.
-    kayak.velocity = g.vec3(0, 0, -1);
-  }
-})
