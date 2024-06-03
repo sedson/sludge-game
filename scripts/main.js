@@ -1,5 +1,8 @@
 import { loadAll } from "./load.js";
 
+// Get the setup and draw from KayakScene.
+import * as KayakScene from "./kayak-test-scene.js";
+
 // Make a new instance of the Gum engine, attached to the #game-canvas element 
 // element.
 const g = new GUM3D.Gum("#game-canvas");
@@ -58,13 +61,19 @@ function setup() {
 
   // Tell the boxObject to use our new custom program.
   boxObject.program = 'customShaderProgram';
+
+
+  KayakScene.setup(g);
 }
 
 
 // called each frame
 function draw(delta) {
   g.clear(g.color("lime"));
+
   g.drawScene();
+
+  KayakScene.draw(delta);
 }
 
 
