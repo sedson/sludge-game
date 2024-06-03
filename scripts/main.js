@@ -2,6 +2,7 @@ import { loadAll } from "./load.js";
 
 // Get the setup and draw from KayakScene.
 import * as KayakScene from "./kayak-test-scene.js";
+import * as TerrainScene from "./terrain.js";
 
 // Make a new instance of the Gum engine, attached to the #game-canvas element 
 // element.
@@ -17,7 +18,7 @@ g.defaultPass = 'unlit';
 // the responses synchronously. Less headache (maybe). The assets will contain 
 // a map of responses.
 const assets = await loadAll();
-
+window.assets = assets;
 
 // TEMP ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––--
 
@@ -48,6 +49,11 @@ g.shaders.customShaderProgram = {
   frag: assets.get('default-frag'),
 }
 
+g.shaders.terrainShaderProgram = {
+  vert: assets.get('terrain-vert'),
+  frag: assets.get('terrain-frag'),
+}
+
 
 // called once. We can use the 'g' namespace for static type things outside of 
 // setup but certain things must be done in setup. Those things are 
@@ -58,12 +64,13 @@ function setup() {
 
   // Add the new shaders. Now that our GL is all set, we can compile shaders.
   g.addProgram('customShaderProgram');
+  g.addProgram('terrainShaderProgram');
 
   // Tell the boxObject to use our new custom program.
   boxObject.program = 'customShaderProgram';
 
 
-  KayakScene.setup(g);
+  TerrainScene.setup(g);
 }
 
 
@@ -73,7 +80,7 @@ function draw(delta) {
 
   g.drawScene();
 
-  KayakScene.draw(delta);
+  TerrainScene.draw(delta);
 }
 
 

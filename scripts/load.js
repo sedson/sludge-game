@@ -6,6 +6,14 @@ const assets = {
   'default-frag': {
     path: '/assets/shaders/default.frag',
     type: 'shader',
+  },
+  'terrain-vert': {
+    path: '/assets/shaders/terrain.vert',
+    type: 'shader',
+  },
+  'terrain-frag': {
+    path: '/assets/shaders/terrain.frag',
+    type: 'shader',
   }
 };
 
