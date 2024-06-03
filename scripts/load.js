@@ -1,10 +1,10 @@
 const assets = {
   'some-asset': {
-    path: 'some/abosulute/path.png',
+    path: 'some/absolute/path.png',
     type: 'png',
   },
   'some-shader': {
-    path: 'some/abosulute/path.png',
+    path: 'some/absolute/path.png',
     type: 'shader',
   }
 };
