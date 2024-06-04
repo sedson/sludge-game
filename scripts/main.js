@@ -70,6 +70,11 @@ function setup() {
   SmoothKayakScene.setup(g, assets);
   DecorationsScene.setup(g, assets);
 
+    g.addEffect('post-terror', {
+        uTime: 0,
+        uTerror: 0,
+    });
+    
   g.addEffect('post-depth-fade', {
     uStart: 10,
     uEnd: 400,
