@@ -8,9 +8,6 @@ let g;
 let kayak;
 
 // 0 is -z
-//
-let angle = 0;
-let velocity = 0;
 
 let current_vector;
 
@@ -29,6 +26,8 @@ let movement_angle_target = 0;
 let movement_angle_actual = 0;
 
 let movement_passive_friction = 0.008;
+
+let global_kayak_turn = 0;
 
 
 // Make a height debugger. 
@@ -112,7 +111,9 @@ export function setup(gumInstance, assets) {
 	);
 
 	kayak = makeKayak(assets);
+	window.kayak = kayak;
 	kayak.velocity = g.vec3();
+
 
 	// Parent the camera to the kayak.
 	g.camera.setParent(kayak);
@@ -130,15 +131,18 @@ export function setup(gumInstance, assets) {
 export function update_speed_and_rotation() {
 	let current_time = g.time
 	let kayak_turn = turn_ratio(current_time);
+	global_kayak_turn = kayak_turn;
 	let kayak_speed = movement_ratio(current_time, movement_speed_target_backwards);
 	kayak.velocity.mult(1 - movement_passive_friction);
 	if (current_time <= movement_msec_start + movement_msec_total) {
-		kayak.rotate(0, degrees_to_radians(kayak_turn), 0);
+		if (kayak_turn > 0) {
+			kayak.rotate(0, degrees_to_radians(kayak_turn), 0);
+		}
 		movement_angle_actual = movement_angle_target;
 	}
 	kayak.velocity = make_vector(kayak_turn, kayak_speed)
 		.add(kayak.velocity)
-		.add(current_vector);
+	// .add(current_vector);
 	console.log("actual:" + movement_angle_actual + " target:" + movement_angle_target + " turn:" + kayak_turn);
 }
 
@@ -156,7 +160,11 @@ export function draw(delta) {
    Z: ${kayak.z.toFixed(3)}, 
    HEIGHT: ${h[0].toFixed(3)},
    DX: ${h[1].toFixed(3)},
-   DX: ${h[3].toFixed(3)}`;
+   DX: ${h[3].toFixed(3)}
+   vel: ${kayak.velocity}
+   angle: ${movement_angle_actual},
+   turn : ${global_kayak_turn}
+   actual kayak RY: ${g.degrees(kayak.rotation.y)}`;
 }
 
 
