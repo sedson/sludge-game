@@ -63,7 +63,14 @@ export class AudioEngine {
 export function createEngineAndLoadAudio() {
   const speakers = new AudioEngine();
   speakers.activateContext()
+  
   speakers.createLoop('cicadas', "../assets/audio/cicadas.wav")
   speakers.createOneShot('squeak', '../assets/audio/squeak1.m4a')
+
+  // Splashes
+  for (const str of ['splash1', 'splash2', 'splish1', 'splish2']) {
+    speakers.createOneShot(str, `../assets/audio/splashies/${str}.mp3`)
+  }
+
   return speakers;
 }

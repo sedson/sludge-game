@@ -11,6 +11,7 @@ let kayak;
 //
 let angle = 0;
 let velocity = 0;
+let splashiesVolume = .11
 
 // Make a height debugger. 
 const heightInfo = document.createElement('div');
@@ -92,21 +93,25 @@ async function paddle(direction) {
       switch (direction) {
       case "forwardleft":
         // -Z is forward.
+        g.audioEngine.playOneShot('splish1', splashiesVolume);
         angle = angle - 10;
         kayak.velocity = make_vector(angle, -1).add(kayak.velocity);
         kayak.rotate(0, degrees_to_radians(angle), 0);
         break;
       case "forwardright":
+        g.audioEngine.playOneShot('splash1', splashiesVolume);
         angle = angle + 10;
         kayak.velocity = make_vector(angle, -1).add(kayak.velocity);
         kayak.rotate(0, degrees_to_radians(angle), 0);
         break;
       case "backwardleft":
+        g.audioEngine.playOneShot('splish2', splashiesVolume);
         angle = angle - 15;
         kayak.velocity = make_vector(angle, .5).add(kayak.velocity);
         kayak.rotate(0, degrees_to_radians(angle), 0);
         break;
       case "backwardright":
+        g.audioEngine.playOneShot('splash2', splashiesVolume);
         angle = angle + 15;
         kayak.velocity = make_vector(angle, .5).add(kayak.velocity);
         kayak.rotate(0, degrees_to_radians(angle), 0);
