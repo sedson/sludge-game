@@ -1,3 +1,5 @@
+import { height } from "./height-map.js";
+
 // g is the the kludge here.
 let g;
 
@@ -28,6 +30,16 @@ let movement_angle_actual = 0;
 
 let movement_passive_friction = 0.008;
 
+
+// Make a height debugger. 
+const heightInfo = document.createElement('div');
+heightInfo.classList.add('height-info');
+document.body.append(heightInfo);
+
+let splashiesVolume = .11
+
+
+
 export function movement_ratio(time, backwards) {
 	if (time > movement_msec_start + movement_msec_total || movement_msec_start == 0) {
 		return 0;
@@ -45,11 +57,11 @@ export function turn_ratio(time) {
 		return 0;
 	}
 	let new_angle = (movement_angle_target * (g.sin((time - movement_msec_start) / movement_msec_total)));
-	return new_angle; 
+	return new_angle;
 }
 
 export function degrees_to_radians(degrees) {
-	return degrees * (Math.PI/ 180)
+	return degrees * (Math.PI / 180)
 }
 
 export function make_vector(new_angle, new_velocity) {
@@ -77,23 +89,41 @@ export function setup_current() {
 	return make_vector(current_angle, current_speed);
 }
 
+function makeKayak(assets) {
+	const boat = g.node();
+
+	const mainMesh = g.plyLoader.fromBuffer(assets.get('kayak-model'));
+	const riggingMesh = g.plyLoader.fromBuffer(assets.get('kayak-rigging-model'));
+
+	boat.setGeometry(g.mesh(mainMesh));
+
+	const child = boat.createChildNode()
+		.setGeometry(g.mesh(riggingMesh.renderEdges()));
+
+	return boat;
+}
+
 // The once at the start function.
-export function setup(gumInstance) {
+export function setup(gumInstance, assets) {
 	g = gumInstance;
 	const gridShape = g.shapes.grid(100, 100);
 	g.node().setGeometry(
 		g.mesh(gridShape.renderEdges())
 	);
 
-	// Just the box mesh shape for now.
-	const kayakShape = g.shapes.cube(1).fill(g.color('black'))
-
-	kayak = g.node().setGeometry(g.mesh(kayakShape));
-
+	kayak = makeKayak(assets);
 	kayak.velocity = g.vec3();
 
 	// Parent the camera to the kayak.
 	g.camera.setParent(kayak);
+
+	// Data related to paddling the kayak
+	kayak.paddler = {
+		fatigue: 0,
+		restNeeded: 2000, // ms of rest to recover from each stroke
+	};
+
+	g.camera.move(0, 1.3, -1);
 
 	current_vector = setup_current();
 }
@@ -115,16 +145,25 @@ export function update_speed_and_rotation() {
 
 // The tick function
 export function draw(delta) {
-	g.camera.target.set(...kayak.transform.position.xyz);
+	g.camera.target.set(...kayak.transform.transformPoint([0, 1, -2]));
 	kayak.transform.position.add(kayak.velocity.copy().mult(0.1 * delta));
 	update_speed_and_rotation();
+
+
+	const h = height(kayak.x, kayak.z);
+	heightInfo.innerText =
+		`X: ${kayak.x.toFixed(3)}, 
+   Z: ${kayak.z.toFixed(3)}, 
+   HEIGHT: ${h[0].toFixed(3)},
+   DX: ${h[1].toFixed(3)},
+   DX: ${h[3].toFixed(3)}`;
 }
 
 
 export function forward_left() {
 	// -Z is forward.
 	movement_msec_start = g.time;
-	movement_speed_target_backwards = false ;
+	movement_speed_target_backwards = false;
 	make_angle(movement_angle_base_forward, false);
 }
 export function forward_right() {
@@ -143,17 +182,78 @@ export function backward_right() {
 	make_angle(movement_angle_base_backward, false);
 }
 
+// window.addEventListener('keydown', e => {
+// 	if (e.key === 'q') {
+// 		backward_left();
+// 	}
+// 	if (e.key === 'w') {
+// 		forward_left();
+// 	}
+// 	if (e.key === 'o') {
+// 		forward_right();
+// 	}
+// 	if (e.key === 'p') {
+// 		backward_right();
+// 	}
+// })
+
+
+// Handle the impulse to paddle, as directed by player's keypress
+// if the paddler is too tired, they must rest before continuing
+async function paddle(direction) {
+	return new Promise((resolve, reject) => {
+		// are you tired yet?
+		if (kayak.paddler.fatigue < 2) {
+			// no? ok, paddle this stroke
+			switch (direction) {
+			case "forwardleft":
+				// -Z is forward.
+				g.audioEngine.playOneShot('splish1', splashiesVolume);
+				forward_left();
+				break;
+			case "forwardright":
+				g.audioEngine.playOneShot('splash1', splashiesVolume);
+				forward_right();
+				break;
+			case "backwardleft":
+				g.audioEngine.playOneShot('splish2', splashiesVolume);
+				backward_left();
+				break;
+			case "backwardright":
+				g.audioEngine.playOneShot('splash2', splashiesVolume);
+				backward_right();
+				break;
+			default:
+				return;
+			}
+			// increment the fatigue counter
+			kayak.paddler.fatigue += 1;
+			// then require a certain amount of rest
+			setTimeout(resolve, kayak.paddler.restNeeded);
+		} else {
+			// if you *are* tired, reject the promise
+			reject();
+		}
+	}).then(() => {
+		// when the paddler is all rested up, decrement the counter
+		kayak.paddler.fatigue -= 1;
+	}).catch(() => {
+		// if the paddler was too tired, maybe tell the player
+		console.log("too tired...");
+	})
+}
+
 window.addEventListener('keydown', e => {
 	if (e.key === 'q') {
-		backward_left();
+		paddle('backwardleft');
 	}
 	if (e.key === 'w') {
-		forward_left();
+		paddle('forwardleft');
 	}
 	if (e.key === 'o') {
-		forward_right();
+		paddle('forwardright');
 	}
 	if (e.key === 'p') {
-		backward_right();
+		paddle('backwardright');
 	}
 })

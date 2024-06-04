@@ -4,6 +4,8 @@ import { createEngineAndLoadAudio } from './audio-engine.js';
 
 // Grab our scenes.
 import * as KayakScene from "./kayak-test-scene.js";
+import * as SmoothKayakScene from "./smooth-kayak-test-scene.js";
+
 import * as TerrainScene from "./terrain.js";
 import * as DecorationsScene from "./decorations-scene.js";
 
@@ -47,7 +49,9 @@ function setup() {
   g.audioEngine = createEngineAndLoadAudio();
 
   TerrainScene.setup(g, assets);
-  KayakScene.setup(g, assets);
+  // KayakScene.setup(g, assets);
+  SmoothKayakScene.setup(g, assets);
+
   DecorationsScene.setup(g, assets);
 
   g.addEffect('post-depth-fade', {
@@ -66,7 +70,8 @@ function draw(delta) {
   g.clear(g.color('#444466'));
 
   TerrainScene.draw(delta);
-  KayakScene.draw(delta);
+  // KayakScene.draw(delta);
+  SmoothKayakScene.draw(delta);
   DecorationsScene.draw(delta);
 
 
