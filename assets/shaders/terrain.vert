@@ -21,8 +21,8 @@ out float vDepth;
 out float vId;
 
 float hash(in vec3 x) {
-     vec2 p = 80.0 * fract(x.xz * 0.3972743);
-     return fract(p.x * p.y * (p.x - p.y));
+     vec3 p = 80.0 * fract(x * 0.3972743);
+     return fract(p.x * p.y * (p.x - p.y) + p.z * (p.x + p.y));
 }
 
 vec4 heightMap(in vec3 x) {
@@ -58,13 +58,19 @@ vec4 heightMap(in vec3 x) {
           );
 }
 
-void main() {
-     vec3 sample_pos = aPosition.xyz / 15.0;
-     vec4 vMapped = vec4(0);
+vec4 height(in vec2 pos) {
+     vec3 p = vec3(pos.x / 10.0, 0.0, pos.y / 10.0);
+     vec4 mapped = vec4(0.0);
      for (int i = 1; i < 8; i++) {
-          vMapped = vMapped + (heightMap(sample_pos * float(i)) / (4.0 * float(i)));
+          vec4 hm = heightMap((p + vec3(3.0 * float(i - 1))) * float(i));
+          mapped = mapped + (hm / (1.0 + 5.0 * float(i - 1)));
      }
-     vMapped = vec4(vMapped.x * 8.0 + 3.0, vMapped.yzw * 8.0);
+     return vec4(mapped.x * 8.0 + 1.0, mapped.yzw * 8.0);
+}
+
+void main() {
+     vec4 SamplePos = uModel * aPosition;
+     vec4 vMapped = height(SamplePos.xz);
      mat4 modelView = uView * uModel;
      mat3 normMatrix = transpose(inverse(mat3(modelView)));
      vViewNormal = normalize(normMatrix * vMapped.yzw);
@@ -73,5 +79,5 @@ void main() {
      vId = aSurfaceId;
      vWorldPosition = uModel * vec4(aPosition.x, vMapped.x, aPosition.z, 1.0);
 
-     gl_Position = uProjection * uView * uModel * vec4(aPosition.x, vMapped.x, aPosition.z, 1.0);
+     gl_Position = uProjection * uView * vWorldPosition;
 }
