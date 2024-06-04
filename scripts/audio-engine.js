@@ -1,12 +1,12 @@
 export class AudioEngine {
   constructor() {
-    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
     this.loops = {}
     this.oneShotBuffers = {}
     this.oneShots = {}
   }
 
-  async playOneShot(name, volume){
+  async playOneShot(name, volume) {
     let bufferSource = this.audioCtx.createBufferSource();
     bufferSource.buffer = this.oneShotBuffers[name]
 
@@ -27,7 +27,7 @@ export class AudioEngine {
     return this.audioCtx.decodeAudioData(audioData);
   }
 
-  async createLoop(name, url){
+  async createLoop(name, url) {
     let bufferSource = this.audioCtx.createBufferSource();
     bufferSource.buffer = await this.loadAudioFile(url)
 
@@ -43,12 +43,12 @@ export class AudioEngine {
     }
   }
 
-  async activateContext(){
+  async activateContext() {
     if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
   }
 
-  async loopVolume(loopName, volume, additive = false){
-    if (!this.loops[loopName]){
+  async loopVolume(loopName, volume, additive = false) {
+    if (!this.loops[loopName]) {
       return
     }
 
@@ -60,16 +60,10 @@ export class AudioEngine {
   }
 }
 
-const speakers = new AudioEngine();
-
-speakers.activateContext()
-speakers.createLoop('cicadas', "../assets/audio/cicadas.wav")
-speakers.createOneShot('squeak', '../assets/audio/squeak1.m4a')
-
-document.addEventListener("keyup", function(event){
-
-  if (event.key === "s") speakers.loopVolume('cicadas', .5, true)
-
-  if (event.key === "j") speakers.playOneShot("squeak", .5)
-
-})
+export function createEngineAndLoadAudio() {
+  const speakers = new AudioEngine();
+  speakers.activateContext()
+  speakers.createLoop('cicadas', "../assets/audio/cicadas.wav")
+  speakers.createOneShot('squeak', '../assets/audio/squeak1.m4a')
+  return speakers;
+}

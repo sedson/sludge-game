@@ -1,5 +1,6 @@
 import { Gum } from '/dep/gum.module.js';
 import { loadAll } from "./load.js";
+import { createEngineAndLoadAudio } from './audio-engine.js';
 
 // Grab our scenes.
 import * as KayakScene from "./kayak-test-scene.js";
@@ -39,6 +40,8 @@ function setup() {
   });
 
 
+  g.audioEngine = createEngineAndLoadAudio();
+
   TerrainScene.setup(g, assets);
   KayakScene.setup(g, assets);
   DecorationsScene.setup(g, assets);
@@ -48,6 +51,9 @@ function setup() {
     uEnd: 100,
     uBlendColor: g.color('#444466').rgba,
   });
+
+
+  g.audioEngine.loopVolume('cicadas', 1);
 }
 
 
