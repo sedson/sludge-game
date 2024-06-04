@@ -1,3 +1,5 @@
+import { height } from "./height-map.js";
+
 // g is the the kludge here.
 let g;
 
@@ -9,6 +11,11 @@ let kayak;
 //
 let angle = 0;
 let velocity = 0;
+
+// Make a height debugger. 
+const heightInfo = document.createElement('div');
+heightInfo.classList.add('height-info');
+document.body.append(heightInfo);
 
 export function make_vector(new_angle, new_velocity) {
   let x = 0;
@@ -61,6 +68,9 @@ export function draw(delta) {
   g.camera.target.set(...kayak.transform.transformPoint([0, 1, -2]));
   kayak.transform.position.add(kayak.velocity.copy().mult(0.1 * delta));
   kayak.velocity.mult(0.95);
+
+  const h = height(kayak.x, kayak.z);
+  heightInfo.innerText = `HEIGHT: ${h}`;
 }
 
 export function degrees_to_radians(degrees) {

@@ -8,3 +8,10 @@ body {
   width: 100vw;
   height: 100vh;
 }
+
+.height-info {
+  position: fixed;
+  z-index: 10;
+  bottom: 1rem;
+  left: 1rem;
+}
