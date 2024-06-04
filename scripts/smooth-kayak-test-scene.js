@@ -138,7 +138,7 @@ export function update_speed_and_rotation() {
 			kayak.rotate(0, kayak.ry + degrees_to_radians(kayak_turn), 0);
 		}
 	}
-	kayak.velocity = make_vector(kayak_turn, kayak_speed)
+	kayak.velocity = make_vector(g.degrees(kayak.ry) + kayak_turn, kayak_speed)
 		.add(kayak.velocity)
 	// .add(current_vector);
 	console.log("actual:" + g.degrees(kayak.rotation.y) + " target:" + movement_angle_target + " turn:" + kayak_turn);
