@@ -6,6 +6,7 @@ let g;
 // Module "state" can go here. We can do better.
 
 let kayak;
+let cidada_location;
 
 // 0 is -z
 
@@ -36,7 +37,9 @@ document.body.append(heightInfo);
 
 let splashiesVolume = .11
 
-
+const randomWorldPoint = () => {
+  return g.vec3(Math.floor(Math.random() * 200), 0, Math.floor(Math.random() * 200));
+}
 
 export function movement_ratio(time, backwards) {
 	if (time > movement_msec_start + movement_msec_total || movement_msec_start == 0) {
@@ -113,6 +116,8 @@ export function setup(gumInstance, assets) {
 	window.kayak = kayak;
 	kayak.velocity = g.vec3();
 
+  // Cicada location
+  cidada_location = randomWorldPoint()
 
 	// Parent the camera to the kayak.
 	g.camera.setParent(kayak);
@@ -154,11 +159,17 @@ export function update_speed_and_rotation() {
 	kayak.velocity = make_vector(g.degrees(kayak.ry) + kayak_turn, kayak_speed)
 		.add(kayak.velocity)
 	// .add(current_vector);
-}
+	// console.log("actual:" + g.degrees(kayak.rotation.y) + " target:" + movement_angle_target + " turn:" + kayak_turn);
 
 
 // The tick function
 export function draw(delta) {
+
+  const cicadaDiff = g.vec3(kayak.x - cidada_location.x, 0, kayak.z - cidada_location.z)
+  let cicadaDiffMag = .5 / Math.abs(cicadaDiff.x) + .5 / Math.abs(cicadaDiff.z)
+  // console.log(300 - cicadaDiffMag)
+  g.audioEngine.loopVolume('cicadas', cicadaDiffMag);
+
 	g.camera.target.set(...kayak.transform.transformPoint([0, 1, -2]));
 	kayak.transform.position.add(kayak.velocity.copy().mult(0.1 * delta));
 	update_speed_and_rotation();
