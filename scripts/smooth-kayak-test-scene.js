@@ -130,10 +130,11 @@ export function setup(gumInstance, assets) {
 
 export function heightmap_friction_calculation() {
 	let boundary = 1;
-	if (height(kayak.x, kayak.z) < (0 - boundary)) {
+	const h = height(kayak.x, kayak.z)[0];
+	if (h < (0 - boundary)) {
 		return movement_passive_friction;
 	} else {
-		return Math.max(boundary + height(kayak.x, kayak.z), 1);
+		return Math.max(boundary + h, 1);
 	}
 }
 
@@ -142,7 +143,7 @@ export function update_speed_and_rotation() {
 	let kayak_turn = turn_ratio(current_time);
 	global_kayak_turn = kayak_turn;
 	let kayak_speed = movement_ratio(current_time, movement_speed_target_backwards);
-	
+
 	let local_friction = heightmap_friction_calculation();
 	kayak.velocity.mult(1 - local_friction);
 	if (current_time <= movement_msec_start + movement_msec_total) {
