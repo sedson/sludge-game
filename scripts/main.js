@@ -27,6 +27,10 @@ const assets = await loadAll();
 // (1) adding shader programs
 // (2) adding post-process passes
 function setup() {
+
+  // User interaction required to start audio - otherwise audio engine is "suspended"
+  document.addEventListener('click', () => g.audioEngine.activateContext())
+  document.addEventListener('keydown', () => g.audioEngine.activateContext())
   // Here is the easiest way to add new shaders to GUM! These shaders will be 
   // available to any mesh as 'terrainShaderProgram'.
   g.addProgram('terrainShaderProgram', {
