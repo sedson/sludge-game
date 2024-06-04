@@ -65,6 +65,7 @@ class NoAudio {
   activateContext() {};
   createLoop() {};
   loadAudioFile() {};
+  createOneShot() {};
 }
 
 export function createEngineAndLoadAudio() {
