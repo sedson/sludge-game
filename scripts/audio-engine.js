@@ -63,8 +63,8 @@ export class AudioEngine {
 const speakers = new AudioEngine();
 
 speakers.activateContext()
-speakers.createLoop('cicadas', "sfx/cicadas.wav")
-speakers.createOneShot('squeak', 'sfx/squeak1.m4a')
+speakers.createLoop('cicadas', "../assets/audio/cicadas.wav")
+speakers.createOneShot('squeak', '../assets/audio/squeak1.m4a')
 
 document.addEventListener("keyup", function(event){
 
