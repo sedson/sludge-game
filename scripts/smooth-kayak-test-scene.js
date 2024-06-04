@@ -127,12 +127,24 @@ export function setup(gumInstance, assets) {
 
 	current_vector = setup_current();
 }
+
+export function heightmap_friction_calculation() {
+	let boundary = 1;
+	if (height(kayak.x, kayak.z) < (0 - boundary)) {
+		return movement_passive_friction;
+	} else {
+		return Math.max(boundary + height(kayak.x, kayak.z), 1);
+	}
+}
+
 export function update_speed_and_rotation() {
 	let current_time = g.time
 	let kayak_turn = turn_ratio(current_time);
 	global_kayak_turn = kayak_turn;
 	let kayak_speed = movement_ratio(current_time, movement_speed_target_backwards);
-	kayak.velocity.mult(1 - movement_passive_friction);
+	
+	let local_friction = heightmap_friction_calculation();
+	kayak.velocity.mult(1 - local_friction);
 	if (current_time <= movement_msec_start + movement_msec_total) {
 		if (kayak_turn !== 0) {
 			kayak.rotate(0, kayak.ry + degrees_to_radians(kayak_turn), 0);
@@ -141,7 +153,6 @@ export function update_speed_and_rotation() {
 	kayak.velocity = make_vector(g.degrees(kayak.ry) + kayak_turn, kayak_speed)
 		.add(kayak.velocity)
 	// .add(current_vector);
-	console.log("actual:" + g.degrees(kayak.rotation.y) + " target:" + movement_angle_target + " turn:" + kayak_turn);
 }
 
 
