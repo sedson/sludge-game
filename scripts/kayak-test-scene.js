@@ -70,7 +70,12 @@ export function draw(delta) {
   kayak.velocity.mult(0.95);
 
   const h = height(kayak.x, kayak.z);
-  heightInfo.innerText = `HEIGHT: ${h}`;
+  heightInfo.innerText =
+    `X: ${kayak.x.toFixed(3)}, 
+   Z: ${kayak.z.toFixed(3)}, 
+   HEIGHT: ${h[0].toFixed(3)},
+   DX: ${h[1].toFixed(3)},
+   DX: ${h[3].toFixed(3)}`;
 }
 
 export function degrees_to_radians(degrees) {
