@@ -23,7 +23,6 @@ let movement_angle_base_backward = 25;
 // movement speed increases linearly to max over movement_msec
 // movement angle increases in sine function 0..1 over movement_msec
 let movement_angle_target = 0;
-let movement_angle_actual = 0;
 
 let movement_passive_friction = 0.008;
 
@@ -78,7 +77,7 @@ export function make_angle(target, is_turning_right) {
 	} else {
 		new_angle = -1 * (target + variation);
 	}
-	movement_angle_target = ((movement_angle_actual + new_angle)) % 360;
+	movement_angle_target = ((g.degrees(kayak.rotation.y) + new_angle)) % 360;
 }
 
 export function setup_current() {
@@ -138,12 +137,11 @@ export function update_speed_and_rotation() {
 		if (kayak_turn > 0) {
 			kayak.rotate(0, degrees_to_radians(kayak_turn), 0);
 		}
-		movement_angle_actual = movement_angle_target;
 	}
 	kayak.velocity = make_vector(kayak_turn, kayak_speed)
 		.add(kayak.velocity)
 	// .add(current_vector);
-	console.log("actual:" + movement_angle_actual + " target:" + movement_angle_target + " turn:" + kayak_turn);
+	console.log("actual:" + g.degrees(kayak.rotation.y) + " target:" + movement_angle_target + " turn:" + kayak_turn);
 }
 
 
@@ -162,9 +160,8 @@ export function draw(delta) {
    DX: ${h[1].toFixed(3)},
    DX: ${h[3].toFixed(3)}
    vel: ${kayak.velocity}
-   angle: ${movement_angle_actual},
-   turn : ${global_kayak_turn}
-   actual kayak RY: ${g.degrees(kayak.rotation.y)}`;
+   angle: ${g.degrees(kayak.rotation.y)},
+   turn : ${global_kayak_turn}`;
 }
 
 
