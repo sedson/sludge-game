@@ -11,7 +11,7 @@ let kayak;
 //
 let angle = 0;
 let velocity = 0;
-let splashiesVolume = .11
+let splashiesVolume = .4
 
 // Make a height debugger. 
 const heightInfo = document.createElement('div');
@@ -149,4 +149,11 @@ window.addEventListener('keydown', e => {
   if (e.key === 'p') {
     paddle('backwardright');
   }
+
+  // Debugging
+  // if (e.key === 'j') {
+  //   g.audioEngine.loopVolume('waterglide', 10);
+  //   // g.audioEngine.loopLowpass('cicadas', );
+  //   // paddle('backwardright');
+  // }
 })

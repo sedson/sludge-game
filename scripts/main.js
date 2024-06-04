@@ -62,6 +62,7 @@ function setup() {
 
 
   g.audioEngine.loopVolume('cicadas', 1);
+  g.audioEngine.loopVolume('waterglide_ambient', 3);
 }
 
 

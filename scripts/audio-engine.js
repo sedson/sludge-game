@@ -56,7 +56,6 @@ export class AudioEngine {
 
     const gainNode = this.loops[loopName].gain
     gainNode.gain.value = volume
-    console.log(gainNode)
   }
 }
 
@@ -65,7 +64,8 @@ export function createEngineAndLoadAudio() {
   speakers.activateContext()
   
   speakers.createLoop('cicadas', "../assets/audio/cicadas.wav")
-  speakers.createOneShot('squeak', '../assets/audio/squeak1.m4a')
+  speakers.createLoop('waterglide', "../assets/audio/splashies/continuous1.mp3")
+  speakers.createLoop('waterglide_ambient', "../assets/audio/splashies/continuous1.mp3")
 
   // Splashes
   for (const str of ['splash1', 'splash2', 'splish1', 'splish2']) {
