@@ -59,10 +59,23 @@ export class AudioEngine {
   }
 }
 
+class NoAudio {
+  playOneShot() {};
+  loopVolume() {};
+  activateContext() {};
+  createLoop() {};
+  loadAudioFile() {};
+}
+
 export function createEngineAndLoadAudio() {
-  const speakers = new AudioEngine();
+  let speakers;
+  try {
+    speakers = new AudioEngine();
+  } catch (e) {
+    speakers = new NoAudio();
+  }
   speakers.activateContext()
-  
+
   speakers.createLoop('cicadas', "../assets/audio/cicadas.wav")
   speakers.createLoop('waterglide', "../assets/audio/splashies/continuous1.mp3")
   speakers.createLoop('waterglide_ambient', "../assets/audio/splashies/continuous1.mp3")

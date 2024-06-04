@@ -18,7 +18,7 @@ let movement_msec_total = 500;
 let movement_speed_add = .05;
 let movement_speed_target_backwards = true;
 
-let movement_angle_base_forward = 20;
+let movement_angle_base_forward = 40;
 let movement_angle_base_backward = 25;
 // movement speed increases linearly to max over movement_msec
 // movement angle increases in sine function 0..1 over movement_msec
@@ -77,7 +77,7 @@ export function make_angle(target, is_turning_right) {
 	} else {
 		new_angle = -1 * (target + variation);
 	}
-	movement_angle_target = ((g.degrees(kayak.rotation.y) + new_angle)) % 360;
+	movement_angle_target = g.radians(new_angle);
 }
 
 export function setup_current() {
@@ -134,8 +134,8 @@ export function update_speed_and_rotation() {
 	let kayak_speed = movement_ratio(current_time, movement_speed_target_backwards);
 	kayak.velocity.mult(1 - movement_passive_friction);
 	if (current_time <= movement_msec_start + movement_msec_total) {
-		if (kayak_turn > 0) {
-			kayak.rotate(0, degrees_to_radians(kayak_turn), 0);
+		if (kayak_turn !== 0) {
+			kayak.rotate(0, kayak.ry + degrees_to_radians(kayak_turn), 0);
 		}
 	}
 	kayak.velocity = make_vector(kayak_turn, kayak_speed)
