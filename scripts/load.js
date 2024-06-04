@@ -26,8 +26,25 @@ const assets = {
   'intersecting-quads': {
     path: '/assets/intersecting_quads.ply',
     type: 'ply',
+  },
+  'tree-sprite': {
+    path: '/assets/tree_test_sprite.png',
+    type: 'image',
+  },
+  'foliage-frag': {
+    path: '/assets/shaders/foliage.frag',
+    type: 'shader',
   }
 };
+
+function loadImg(src) {
+  return new Promise((res, rej) => {
+    let img = new Image();
+    img.onload = () => res(img);
+    img.onerror = rej;
+    img.src = src;
+  })
+}
 
 
 export async function loadAll() {
@@ -48,6 +65,11 @@ export async function loadAll() {
       if (details.type === 'ply' || details.type === 'model') {
         const buffer = await res.arrayBuffer();
         assetMap.set(name, buffer);
+      }
+
+      if (details.type === 'image') {
+        const img = await loadImg(details.path);
+        assetMap.set(name, img);
       }
 
       // TODO (seamus) : What about images, sounds etc!

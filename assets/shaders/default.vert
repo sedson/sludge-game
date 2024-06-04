@@ -39,5 +39,6 @@ void main() {
   vWorldPosition = uModel * aPosition;
   vColor = aColor;
   vId = aSurfaceId;
+  vTexCoord = aTexCoord;
   gl_Position = uProjection * uView * uModel * vec4(aPosition.xyz, 1.0);
 }

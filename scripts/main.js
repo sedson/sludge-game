@@ -4,6 +4,8 @@ import { loadAll } from "./load.js";
 // Grab our scenes.
 import * as KayakScene from "./kayak-test-scene.js";
 import * as TerrainScene from "./terrain.js";
+import * as DecorationsScene from "./decorations-scene.js";
+
 
 // Make a new instance of the Gum engine, attached to the #game-canvas element 
 // element.
@@ -31,8 +33,15 @@ function setup() {
     frag: assets.get('terrain-frag'),
   });
 
+  g.addProgram('foliage', {
+    vert: assets.get('default-vert'),
+    frag: assets.get('foliage-frag'),
+  });
+
+
   TerrainScene.setup(g, assets);
   KayakScene.setup(g, assets);
+  DecorationsScene.setup(g, assets);
 
   g.addEffect('post-depth-fade', {
     uStart: 10,
@@ -48,6 +57,8 @@ function draw(delta) {
 
   TerrainScene.draw(delta);
   KayakScene.draw(delta);
+  DecorationsScene.draw(delta);
+
 
   g.drawScene();
 }
