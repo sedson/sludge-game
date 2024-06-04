@@ -14,18 +14,18 @@ let current_vector;
 
 
 let movement_msec_start = 0;
-let movement_msec_total = 500;
+let movement_msec_total = 600;
 
-let movement_speed_add = .05;
+let movement_speed_add = .04;
 let movement_speed_target_backwards = true;
 
-let movement_angle_base_forward = 40;
-let movement_angle_base_backward = 25;
+let movement_angle_base_forward = 80;
+let movement_angle_base_backward = 120;
 // movement speed increases linearly to max over movement_msec
 // movement angle increases in sine function 0..1 over movement_msec
 let movement_angle_target = 0;
 
-let movement_passive_friction = 0.008;
+let movement_passive_friction = 0.005;
 
 let global_kayak_turn = 0;
 
@@ -122,7 +122,7 @@ export function setup(gumInstance, assets) {
 	// Parent the camera to the kayak.
 	g.camera.setParent(kayak);
 
-	// Data related to paddling the kayak
+	// Data related to paddling the kayakheight(kayak.x, kayak.z)
 	kayak.paddler = {
 		fatigue: 0,
 		restNeeded: 2000, // ms of rest to recover from each stroke
@@ -135,12 +135,30 @@ export function setup(gumInstance, assets) {
 
 export function heightmap_friction_calculation() {
 	let boundary = 1;
-	const h = height(kayak.x, kayak.z)[0];
-	if (h < (0 - boundary)) {
+	let local_height = height(kayak.x, kayak.z)[0];
+	let remaining = 1 - movement_passive_friction
+	if (local_height < (0 - boundary)) {
 		return movement_passive_friction;
 	} else {
-		return Math.max(boundary + h, 1);
+		return Math.max(
+			1,
+			movement_passive_friction + (remaining * g.sin(boundary + local_height))
+		);
 	}
+}
+
+export function kayak_bobbing(current_time) {
+	let big_amp = .045;
+	let big_fre = 1300;
+	let med_amp = .065;
+	let med_fre = 700;
+	let sml_amp = .035; 
+	let sml_fre = 300;
+	kayak.position.y = ( -0.04 +
+		(big_amp * g.sin(current_time / big_fre)) +
+		(med_amp * g.sin(current_time / med_fre)) +
+		(sml_amp * g.sin(current_time / sml_fre))
+	);
 }
 
 export function update_speed_and_rotation() {
@@ -151,6 +169,9 @@ export function update_speed_and_rotation() {
 
 	let local_friction = heightmap_friction_calculation();
 	kayak.velocity.mult(1 - local_friction);
+
+	kayak_bobbing(current_time);
+
 	if (current_time <= movement_msec_start + movement_msec_total) {
 		if (kayak_turn !== 0) {
 			kayak.rotate(0, kayak.ry + degrees_to_radians(kayak_turn), 0);
@@ -158,8 +179,7 @@ export function update_speed_and_rotation() {
 	}
 	kayak.velocity = make_vector(g.degrees(kayak.ry) + kayak_turn, kayak_speed)
 		.add(kayak.velocity)
-	// .add(current_vector);
-	// console.log("actual:" + g.degrees(kayak.rotation.y) + " target:" + movement_angle_target + " turn:" + kayak_turn);
+		.add(current_vector);
 }
 
 // The tick function
@@ -234,25 +254,25 @@ async function paddle(direction) {
 		if (kayak.paddler.fatigue < 2) {
 			// no? ok, paddle this stroke
 			switch (direction) {
-			case "forwardleft":
-				// -Z is forward.
-				g.audioEngine.playOneShot('splish1', splashiesVolume);
-				forward_left();
-				break;
-			case "forwardright":
-				g.audioEngine.playOneShot('splash1', splashiesVolume);
-				forward_right();
-				break;
-			case "backwardleft":
-				g.audioEngine.playOneShot('splish2', splashiesVolume);
-				backward_left();
-				break;
-			case "backwardright":
-				g.audioEngine.playOneShot('splash2', splashiesVolume);
-				backward_right();
-				break;
-			default:
-				return;
+				case "forwardleft":
+					// -Z is forward.
+					g.audioEngine.playOneShot('splish1', splashiesVolume);
+					forward_left();
+					break;
+				case "forwardright":
+					g.audioEngine.playOneShot('splash1', splashiesVolume);
+					forward_right();
+					break;
+				case "backwardleft":
+					g.audioEngine.playOneShot('splish2', splashiesVolume);
+					backward_left();
+					break;
+				case "backwardright":
+					g.audioEngine.playOneShot('splash2', splashiesVolume);
+					backward_right();
+					break;
+				default:
+					return;
 			}
 			// increment the fatigue counter
 			kayak.paddler.fatigue += 1;
