@@ -4,7 +4,7 @@ let kayak;
 
 export function setup(gumInstance) {
   g = gumInstance;
-  const gridShape = g.shapes.grid(1000, 500);
+  const gridShape = g.shapes.grid(4000, 600);
   const terrain = g.node().setGeometry(
     g.mesh(gridShape.fill(g.color('sand')))
   );

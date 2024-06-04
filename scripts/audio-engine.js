@@ -20,8 +20,8 @@ export class AudioEngine {
     const k = typeof amount === 'number' ? amount : 50;
 
     for (let i = 0; i < samples; ++i) {
-        const x = (i * 2) / samples - 1;
-        curve[i] = ((3 + k) * x) / (Math.PI + k * Math.abs(x));
+      const x = (i * 2) / samples - 1;
+      curve[i] = ((3 + k) * x) / (Math.PI + k * Math.abs(x));
     }
     return curve;
   }
@@ -43,7 +43,7 @@ export class AudioEngine {
     return osc;
   }
 
-  lowGain(gain){
+  lowGain(gain) {
     const gainNode = new GainNode(this.audioCtx);
     gainNode.gain.value = gain || .01
     return gainNode
@@ -91,7 +91,7 @@ export class AudioEngine {
 
     // Connect nodes
     sp1.connect(gainNode).connect(this.limiter);
-    sp1.connect(gainNode).connect(convolver).connect(this.limiter);
+    // sp1.connect(gainNode).connect(convolver).connect(this.limiter);
     sp1.start();
 
 

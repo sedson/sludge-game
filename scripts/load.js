@@ -23,8 +23,16 @@ const assets = {
     path: '/assets/kayak_rigging.ply',
     type: 'ply',
   },
-  'intersecting-quads': {
-    path: '/assets/intersecting_quads.ply',
+  'tree': {
+    path: '/assets/tree.ply',
+    type: 'ply',
+  },
+  'tree-canopy': {
+    path: '/assets/tree-canopy.ply',
+    type: 'ply',
+  },
+  'heron': {
+    path: '/assets/heron.ply',
     type: 'ply',
   },
   'tree-sprite': {
@@ -34,6 +42,22 @@ const assets = {
   'foliage-frag': {
     path: '/assets/shaders/foliage.frag',
     type: 'shader',
+  },
+  'sprite-frag': {
+    path: '/assets/shaders/sprite.frag',
+    type: 'shader',
+  },
+  'heron': {
+    path: '/assets/textures/heron-1.png',
+    type: 'image',
+  },
+  'silhouettes': {
+    path: '/assets/textures/silhouettes.png',
+    type: 'image',
+  },
+  'panorama': {
+    path: '/assets/panorama.ply',
+    type: 'ply',
   }
 };
 

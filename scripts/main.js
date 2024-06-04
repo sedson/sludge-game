@@ -45,6 +45,11 @@ function setup() {
     frag: assets.get('foliage-frag'),
   });
 
+  g.addProgram('sprite', {
+    vert: assets.get('default-vert'),
+    frag: assets.get('sprite-frag'),
+  });
+
 
   g.audioEngine = createEngineAndLoadAudio();
 
@@ -56,13 +61,14 @@ function setup() {
 
   g.addEffect('post-depth-fade', {
     uStart: 10,
-    uEnd: 100,
+    uEnd: 400,
     uBlendColor: g.color('#444466').rgba,
   });
 
 
   g.audioEngine.loopVolume('cicadas', 1);
   g.audioEngine.loopVolume('waterglide_ambient', 3);
+
 }
 
 
