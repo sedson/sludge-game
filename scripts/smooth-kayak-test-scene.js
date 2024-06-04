@@ -160,7 +160,7 @@ export function update_speed_and_rotation() {
 		.add(kayak.velocity)
 	// .add(current_vector);
 	// console.log("actual:" + g.degrees(kayak.rotation.y) + " target:" + movement_angle_target + " turn:" + kayak_turn);
-
+}
 
 // The tick function
 export function draw(delta) {
