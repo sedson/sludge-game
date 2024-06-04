@@ -49,11 +49,17 @@ export class AudioEngine {
     return gainNode
   }
 
+  async loadReverbBuffer(convolver) {
+    const response = await fetch("../assets/audio/cicadas.wav");
+    const audioData = await response.arrayBuffer();
+    convolver.buffer = await this.audioCtx.decodeAudioData(audioData);
+  }
+
   createSpookyOscillator() {
     const sp1 = this.buildOscillator("sine", 100);
     const gainNode = this.lowGain(.005)
-    sp1.connect(gainNode).connect(this.limiter);
-    sp1.start()
+    // sp1.connect(gainNode).connect(this.limiter);
+    // sp1.start()
 
     // // Vibrato effect (frequency modulation)
     const vibrato = this.buildOscillator("sine", 93);
@@ -67,6 +73,28 @@ export class AudioEngine {
     vibratoGain2.gain.setValueAtTime(50, this.audioCtx.currentTime);
     vibrato2.connect(vibratoGain2).connect(sp1.frequency);
     vibrato2.start();
+
+    // const tremolo = this.buildOscillator("sine", 4);
+    // const tremoloGain = this.lowGain(.05)
+    // tremoloGain.gain.setValueAtTime(0.5, this.audioCtx.currentTime);
+    // tremolo.connect(tremoloGain.gain)
+    // tremolo.start();
+
+    // // Reverb effect
+    // const convolver = this.audioCtx.createConvolver();
+    // this.loadReverbBuffer(convolver);
+
+    // // Gain node for tremolo effect
+    // const gainNode2 = this.audioCtx.createGain();
+    // gainNode2.gain.value = 0.5; // Base volume
+    // tremoloGain.connect(gainNode2.gain);
+
+    // Connect nodes
+    sp1.connect(gainNode).connect(this.limiter);
+    sp1.connect(gainNode).connect(convolver).connect(this.limiter);
+    sp1.start();
+
+
 
   }
 
@@ -130,6 +158,7 @@ class NoAudio {
   createLoop() {};
   loadAudioFile() {};
   createOneShot() {};
+  createSpookyOscillator() {}
 }
 
 export function createEngineAndLoadAudio() {
