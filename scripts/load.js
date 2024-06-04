@@ -18,6 +18,14 @@ const assets = {
   'kayak-model': {
     path: '/assets/kayak.ply',
     type: 'ply',
+  },
+  'kayak-rigging-model': {
+    path: '/assets/kayak_rigging.ply',
+    type: 'ply',
+  },
+  'intersecting-quads': {
+    path: '/assets/intersecting_quads.ply',
+    type: 'ply',
   }
 };
 

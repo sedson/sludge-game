@@ -18,6 +18,21 @@ export function make_vector(new_angle, new_velocity) {
 }
 
 
+function makeKayak(assets) {
+  const boat = g.node();
+
+  const mainMesh = g.plyLoader.fromBuffer(assets.get('kayak-model'));
+  const riggingMesh = g.plyLoader.fromBuffer(assets.get('kayak-rigging-model'));
+
+  boat.setGeometry(g.mesh(mainMesh));
+
+  const child = boat.createChildNode()
+    .setGeometry(g.mesh(riggingMesh.renderEdges()));
+
+  return boat;
+}
+
+
 // The once at the start function.
 export function setup(gumInstance, assets) {
   g = gumInstance;
@@ -26,11 +41,7 @@ export function setup(gumInstance, assets) {
     g.mesh(gridShape.renderEdges())
   );
 
-  // Just the box mesh shape for now.
-  const kayakShape = g.plyLoader.fromBuffer(assets.get('kayak-model'))
-    .fill(g.color('lime'))
-
-  kayak = g.node().setGeometry(g.mesh(kayakShape));
+  kayak = makeKayak(assets);
 
   kayak.velocity = g.vec3();
 
@@ -42,11 +53,12 @@ export function setup(gumInstance, assets) {
     fatigue: 0,
     restNeeded: 2000, // ms of rest to recover from each stroke
   };
+  g.camera.move(0, 1.3, -1);
 }
 
 // The tick function
 export function draw(delta) {
-  g.camera.target.set(...kayak.transform.position.xyz);
+  g.camera.target.set(...kayak.transform.transformPoint([0, 1, -2]));
   kayak.transform.position.add(kayak.velocity.copy().mult(0.1 * delta));
   kayak.velocity.mult(0.95);
 }
@@ -58,50 +70,50 @@ export function degrees_to_radians(degrees) {
 // Handle the impulse to paddle, as directed by player's keypress
 // if the paddler is too tired, they must rest before continuing
 async function paddle(direction) {
-    return new Promise((resolve, reject) => {
-	// are you tired yet?
-	if (kayak.paddler.fatigue < 2) {
-	    // no? ok, paddle this stroke
-	    switch (direction) {
-	    case "forwardleft":
-                // -Z is forward.
-		angle = angle - 10;
-		kayak.velocity = make_vector(angle, -1).add(kayak.velocity);
-		kayak.rotate(0, degrees_to_radians(angle), 0);
-		break;
-	    case "forwardright":
-		angle = angle + 10;
-		kayak.velocity = make_vector(angle, -1).add(kayak.velocity);
-		kayak.rotate(0, degrees_to_radians(angle), 0);
-		break;
-	    case "backwardleft":
-		angle = angle - 15;
-		kayak.velocity = make_vector(angle, .5).add(kayak.velocity);
-		kayak.rotate(0, degrees_to_radians(angle), 0);
-		break;
-	    case "backwardright":
-		angle = angle + 15;
-		kayak.velocity = make_vector(angle, .5).add(kayak.velocity);
-		kayak.rotate(0, degrees_to_radians(angle), 0);
-		break;
-	    default:
-		return;
-	    }
-	    // increment the fatigue counter
-    	    kayak.paddler.fatigue += 1;
-	    // then require a certain amount of rest
-	    setTimeout(resolve, kayak.paddler.restNeeded);
-	} else {
-	    // if you *are* tired, reject the promise
-	    reject();
-	}
-    }).then(() => {
-	// when the paddler is all rested up, decrement the counter
-	kayak.paddler.fatigue -= 1;
-    }).catch(() => {
-	// if the paddler was too tired, maybe tell the player
-	console.log("too tired...");
-    })
+  return new Promise((resolve, reject) => {
+    // are you tired yet?
+    if (kayak.paddler.fatigue < 2) {
+      // no? ok, paddle this stroke
+      switch (direction) {
+      case "forwardleft":
+        // -Z is forward.
+        angle = angle - 10;
+        kayak.velocity = make_vector(angle, -1).add(kayak.velocity);
+        kayak.rotate(0, degrees_to_radians(angle), 0);
+        break;
+      case "forwardright":
+        angle = angle + 10;
+        kayak.velocity = make_vector(angle, -1).add(kayak.velocity);
+        kayak.rotate(0, degrees_to_radians(angle), 0);
+        break;
+      case "backwardleft":
+        angle = angle - 15;
+        kayak.velocity = make_vector(angle, .5).add(kayak.velocity);
+        kayak.rotate(0, degrees_to_radians(angle), 0);
+        break;
+      case "backwardright":
+        angle = angle + 15;
+        kayak.velocity = make_vector(angle, .5).add(kayak.velocity);
+        kayak.rotate(0, degrees_to_radians(angle), 0);
+        break;
+      default:
+        return;
+      }
+      // increment the fatigue counter
+      kayak.paddler.fatigue += 1;
+      // then require a certain amount of rest
+      setTimeout(resolve, kayak.paddler.restNeeded);
+    } else {
+      // if you *are* tired, reject the promise
+      reject();
+    }
+  }).then(() => {
+    // when the paddler is all rested up, decrement the counter
+    kayak.paddler.fatigue -= 1;
+  }).catch(() => {
+    // if the paddler was too tired, maybe tell the player
+    console.log("too tired...");
+  })
 }
 
 window.addEventListener('keydown', e => {
