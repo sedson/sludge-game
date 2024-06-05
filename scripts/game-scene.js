@@ -167,7 +167,6 @@ export function setup(gumInstance, assets) {
 export function heightmap_friction_calculation() {
 	// Get some point in front of the kayak.
 	let front = kayak.transform.transformPoint([0, 0, -1]);
-	console.log(front);
 
 	// Local depth 
 	let depth_center = -height(kayak.x, kayak.z)[0];
@@ -186,7 +185,6 @@ export function heightmap_friction_calculation() {
 	// Remap the depth from 
 	const friction_factor = g.remap(local_depth, depth_boundary, -depth_boundary, movement_passive_friction, friction_multiplier * movement_passive_friction);
 
-	console.log({ friction_factor });
 	return friction_factor;
 }
 
@@ -356,7 +354,6 @@ async function paddle(direction) {
 		p_tooltip.classList.remove('key-pressed');
 	}).catch(() => {
 		// if the paddler was too tired, maybe tell the player
-		console.log("too tired...");
 		fatigue_tooltip.innerText = "Don't overwork yourself! Rest a sec...";
 	})
 }
