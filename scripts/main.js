@@ -62,7 +62,7 @@ function setup() {
     uShallowColor: g.color("#4c987b").rgb,
     uDeepColor: g.color("#2f5a32").rgb,
     uShoreColor: [0.8, 0.9, 0.8],
-    uWaterParams: [7, 0.5, 0.4],
+    uWaterParams: [6, 0.95, 0.3],
   });
 
   g.shaders['post-terror'] = {

@@ -4174,27 +4174,27 @@ class RendererGL2 {
    * @param {object} config Optional configuration.
    * @returns {RenderContext} The new render context instance.
    */
-  constructor (canvas, w, h, config) {
+  constructor(canvas, w, h, config) {
     /**
      * The renderer's canvas.
      * @type {HTMLCanvasElement}
      */
     this.canvas = canvas;
-    
+
     /**
      * The width of the renderer. Use the .resize(w, h) method to change.
      * @readyonly
      * @type {number}
-     */ 
-    this.w = w; 
-    
+     */
+    this.w = w;
+
     /**
      * The height of the renderer. Use the .resize(w, h) method to change.
      * @readyonly
      * @type {number}
-     */ 
+     */
     this.h = h;
-    
+
     /**
      * The aspect ratio. Use the .resize(w, h) method to change.
      * @readyonly 
@@ -4208,7 +4208,7 @@ class RendererGL2 {
      */
     this.glSettings = {
       // Frame buffers do not support antialias, so skip it.
-      antialias: false, 
+      antialias: false,
 
       // Mimic Processing's optional clear pattern.
       preserveDrawingBuffer: true,
@@ -4218,18 +4218,18 @@ class RendererGL2 {
     if (config) {
       Object.assign(this.glSettings, config);
     }
-    
+
     /**
      * The WebGl2 context.
      * @type {WebGL2RenderingContext}
-    */
+     */
     this.gl = canvas.getContext('webgl2', this.glSettings);
-   
+
     if (!this.gl) {
       console.warn('Web GL 2 not available!');
       return;
     }
-    
+
     /**
      * Default configuration for GL rendering.
      * @private
@@ -4268,7 +4268,7 @@ class RendererGL2 {
      * @type {arrray}
      */
     this.clearColor = [0, 0, 0, 1];
-    
+
     /**
      * The name of the active program.
      * @type {string}
@@ -4290,7 +4290,7 @@ class RendererGL2 {
 
     /**
      * The maximun number of samplers available on the current device.
-     */ 
+     */
     this.MAX_TEX_UNIT = this.gl.getParameter(this.gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 
     /**
@@ -4298,14 +4298,14 @@ class RendererGL2 {
      * @type {object}
      */
     this.uniformTypes = {
-      'FLOAT'      : 'uniform1f',
-      'FLOAT_VEC2' : 'uniform2fv',
-      'FLOAT_VEC3' : 'uniform3fv',
-      'FLOAT_VEC4' : 'uniform4fv',
-      'FLOAT_MAT4' : 'uniformMatrix4fv',
-      'SAMPLER_2D' : 'uniform1i',
+      'FLOAT': 'uniform1f',
+      'FLOAT_VEC2': 'uniform2fv',
+      'FLOAT_VEC3': 'uniform3fv',
+      'FLOAT_VEC4': 'uniform4fv',
+      'FLOAT_MAT4': 'uniformMatrix4fv',
+      'SAMPLER_2D': 'uniform1i',
     };
-    
+
     /**
      * The available meshes keyed by id.
      */
@@ -4318,7 +4318,7 @@ class RendererGL2 {
 
     /**
      * A list of the the vertex attributes.
-     */ 
+     */
     this.vertexAttributes = [...vertexAttributeLayout];
 
     if (config.attributes) {
@@ -4327,7 +4327,7 @@ class RendererGL2 {
 
     /**
      * Attrib info hashes keyed by name.
-     */ 
+     */
     this.attributeInfoByName = {};
     this.vertexAttributes.forEach((attrib, i) => {
       this.attributeInfoByName[attrib.name] = attrib;
@@ -4337,19 +4337,19 @@ class RendererGL2 {
     /**
      * A hash to track a block of shared uniforms between programs. Useful 
      * for things like view matrices, sky colors etc.
-     */ 
+     */
     this.globalUniformBlock = {};
 
     /**
      * Gl resource deleters by constructor name.
-     */ 
+     */
     this.deleteLookup = {
-      'WebGLProgram' : 'deleteProgram',
-      'WebGLTexture' : 'deleteTexture',
-      'WebGLFramebuffer' : 'deleteFramebuffer',
-      'WebGLVertexArrayObject' : 'deleteVertexArray',
+      'WebGLProgram': 'deleteProgram',
+      'WebGLTexture': 'deleteTexture',
+      'WebGLFramebuffer': 'deleteFramebuffer',
+      'WebGLVertexArrayObject': 'deleteVertexArray',
     };
-    
+
   }
 
 
@@ -4358,13 +4358,13 @@ class RendererGL2 {
    * and face culling.
    * @param {object} settings 
    */
-  _configure (settings) {
+  _configure(settings) {
     if (settings) {
       for (let setting in settings) {
         this._configuration[setting] = settings[setting];
       }
     }
-    
+
     this.depthTest(this._configuration.depthTest);
     this.depthWrite(this._configuration.depthWrite);
     this.cullFace(this._configuration.faceCulling);
@@ -4376,8 +4376,8 @@ class RendererGL2 {
    * the gum canvas size.
    * @param {number} w The width.
    * @param {number} h The height.
-   */ 
-  resize (w, h) {
+   */
+  resize(w, h) {
     if (w === this.w && h === this.h) return;
     this.w = Math.max(w, 1);
     this.h = Math.max(h, 1);
@@ -4394,20 +4394,20 @@ class RendererGL2 {
    * Turn depth testing on or off.
    * @param {boolean} flag Whether depth testing is enabled.
    */
-  depthTest (flag) {
+  depthTest(flag) {
     this._configuration.depthTest = flag;
     this.gl.disable(this.gl.DEPTH_TEST);
     if (flag) {
       this.gl.enable(this.gl.DEPTH_TEST);
     }
   }
-  
+
 
   /**
    * Turn depth writing on or off.
    * @param {boolean} flag Whether depth writing is enabled.
    */
-  depthWrite (flag) {
+  depthWrite(flag) {
     this._configuration.depthWrite = flag;
     this.gl.depthMask(flag);
   }
@@ -4418,32 +4418,32 @@ class RendererGL2 {
    * @param {string} face The face to cull. Either 'back', 'front', 'none', or 
    *     'all'.
    */
-  cullFace (face) {
+  cullFace(face) {
     const gl = this.gl;
     this._configuration.faceCulling = face;
 
     switch (('' + face).toUpperCase()) {
-      case 'NONE':
-        gl.disable(gl.CULL_FACE);
-        break;
+    case 'NONE':
+      gl.disable(gl.CULL_FACE);
+      break;
 
-      case 'ALL':
-        gl.enable(gl.CULL_FACE);
-        gl.cullFace(gl.FRONT_AND_BACK);
-        break;
+    case 'ALL':
+      gl.enable(gl.CULL_FACE);
+      gl.cullFace(gl.FRONT_AND_BACK);
+      break;
 
-      case 'FRONT':
-        gl.enable(gl.CULL_FACE);
-        gl.cullFace(gl.FRONT);
-        break;
+    case 'FRONT':
+      gl.enable(gl.CULL_FACE);
+      gl.cullFace(gl.FRONT);
+      break;
 
-      case 'BACK':
-        gl.enable(gl.CULL_FACE);
-        gl.cullFace(gl.BACK);
-        break;
+    case 'BACK':
+      gl.enable(gl.CULL_FACE);
+      gl.cullFace(gl.BACK);
+      break;
 
-      default:
-        gl.disable(gl.CULL_FACE);
+    default:
+      gl.disable(gl.CULL_FACE);
     }
   }
 
@@ -4456,7 +4456,7 @@ class RendererGL2 {
    * @returns {string}
    * @private
    */
-  _prefixAttribName (name) {
+  _prefixAttribName(name) {
     if (name[0] === 'a') {
       return name;
     }
@@ -4469,12 +4469,12 @@ class RendererGL2 {
    * @param {string} program The name of the program to use.
    * @returns {void}
    */
-  setProgram (program) {
+  setProgram(program) {
     if (!this.shaderPrograms[program]) {
       console.warn('No program found:', program);
       return;
     }
-    
+
     if (this.activeProgram === program) {
       return;
     }
@@ -4492,7 +4492,7 @@ class RendererGL2 {
    *     canvas.
    * @returns {void}
    */
-  setRenderTarget (target) {
+  setRenderTarget(target) {
     if (target === null || this.renderTargets[target] === null) {
       this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
       this.renderTarget = null;
@@ -4519,7 +4519,7 @@ class RendererGL2 {
    * @param {string} name A unique name for the render target. 
    * @param {boolean} depth Whether to create a depth texture as well.
    */
-  createRenderTarget (name, depth) {
+  createRenderTarget(name, depth) {
     const target = { w: this.w, h: this.h };
     const gl = this.gl;
 
@@ -4531,43 +4531,43 @@ class RendererGL2 {
       texture: target.colorTexture,
     };
 
-    this.textureUnitIndex ++;
+    this.textureUnitIndex++;
 
     gl.activeTexture(gl.TEXTURE0 + target.colorTexUnit);
 
     // Make a texture to be the color of the target.
     gl.bindTexture(gl.TEXTURE_2D, target.colorTexture);
-    
+
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.w, this.h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-    
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S,     gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T,     gl.CLAMP_TO_EDGE);
+
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    
+
     // Create the frame buffer.
     target.frameBuffer = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, target.frameBuffer);
 
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, target.colorTexture, 0);
-    
+
     if (depth) {
       target.depthTexUnit = this.textureUnitIndex;
       target.depthTexture = gl.createTexture();
-      
+
       this.texturesByName[name + '.depth'] = {
         unit: target.depthTexUnit,
         texture: target.depthTexture,
       };
-      
-      this.textureUnitIndex ++;
+
+      this.textureUnitIndex++;
 
 
       gl.activeTexture(gl.TEXTURE0 + target.depthTexUnit);
       gl.bindTexture(gl.TEXTURE_2D, target.depthTexture);
 
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT24, this.w, this.h, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_INT, null);
-      
+
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -4584,8 +4584,8 @@ class RendererGL2 {
    * Update the dimensions of a render target by name. Scales it to match the 
    * current canvas.
    * @param 
-   */ 
-  updateRenderTarget (name) {
+   */
+  updateRenderTarget(name) {
     const target = this.renderTargets[name];
     if (!target) return;
 
@@ -4597,6 +4597,14 @@ class RendererGL2 {
 
     target.w = this.w;
     target.h = this.h;
+
+    // TODO For some reason, if I do the framebuffer resizing below with the 
+    // buffertextures set as the active, they don't work. If some texture is set
+    //  as active texture, then the call to texImage2D resizes the texture 
+    // without breaking things. But what ever is in active texture get busted. 
+    // In the currnet version of Gum, texture0 is always the none texture. Let 
+    // that be the one that gets busted.
+    gl.activeTexture(gl.TEXTURE0);
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, target.frameBuffer);
 
@@ -4624,7 +4632,7 @@ class RendererGL2 {
    * @param {string} mesh 
    * @returns
    */
-  draw (meshName, uniforms = {}, program = null) {
+  draw(meshName, uniforms = {}, program = null) {
     let mesh;
 
     // Check for a named mesh, which is stored in the renderer's responsobility.
@@ -4637,7 +4645,7 @@ class RendererGL2 {
     } else {
       mesh = meshName;
     }
-    
+
 
     if (program && program !== this.activeProgram) {
       this.setProgram(program);
@@ -4645,7 +4653,7 @@ class RendererGL2 {
 
     if (mesh.program && mesh.program !== this.activeProgram) {
       this.setProgram(mesh.program);
-    } 
+    }
 
     for (let uniform in uniforms) {
       this.uniform(uniform, uniforms[uniform]);
@@ -4664,13 +4672,13 @@ class RendererGL2 {
     this.gl.drawArrays(this.gl[mesh.data.mode], 0, mesh.data.vertexCount);
     this.gl.bindVertexArray(null);
   }
-  
+
 
   /**
    * Find the constant name of a uniform type by the returned uniform type 
    * pointer
    */
-  findUniformType (typePointer) {
+  findUniformType(typePointer) {
     for (let namedType of Object.keys(this.uniformTypes)) {
       if (this.gl[namedType] === typePointer) {
         return namedType;
@@ -4687,7 +4695,7 @@ class RendererGL2 {
    * @param {string} frag The fragment shader source.
    * @returns 
    */
-  createProgram (name, vert, frag) {
+  createProgram(name, vert, frag) {
 
     const program = this.gl.createProgram();
 
@@ -4695,7 +4703,7 @@ class RendererGL2 {
     this.gl.shaderSource(vertexShader, vert);
     this.gl.compileShader(vertexShader);
     this.gl.attachShader(program, vertexShader);
-    
+
     const fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
     this.gl.shaderSource(fragmentShader, frag);
     this.gl.compileShader(fragmentShader);
@@ -4716,17 +4724,17 @@ class RendererGL2 {
     // Store information on any uniforms in the program.
     const uniformBlock = {};
     const uniformCount = this.gl.getProgramParameter(program, this.gl.ACTIVE_UNIFORMS);
-    
+
     for (let i = 0; i < uniformCount; i++) {
       const uniformInfo = this.gl.getActiveUniform(program, i);
       const { size, type, name } = uniformInfo;
-      
+
       let namedType = this.findUniformType(type);
-      
+
       if (!namedType) {
         continue;
       }
-      
+
       uniformBlock[name] = {
         type: namedType,
         location: this.gl.getUniformLocation(program, name),
@@ -4740,7 +4748,7 @@ class RendererGL2 {
         this._uniform(this.uniformTypes[namedType], location, value, isMatrix);
       }
     }
-    
+
     this.shaderPrograms[name] = program;
     this.shaderProgramUniforms[name] = uniformBlock;
     return program;
@@ -4751,7 +4759,7 @@ class RendererGL2 {
    * Enforce an identical attribute layout across the programs.
    * @param {WebGLProgram} program 
    */
-  bindVertexAttributeLocations (program) {
+  bindVertexAttributeLocations(program) {
     for (let i = 0; i < this.vertexAttributes.length; i++) {
       const attrib = this.vertexAttributes[i];
       this.gl.bindAttribLocation(program, i, attrib.name);
@@ -4766,15 +4774,15 @@ class RendererGL2 {
    * @param {Float32Array} attribs.normal
    *     ... any other vertex attributes.
    * @returns {WebGLVertexArrayObject}
-   */ 
-  _createVao (attribs) {
+   */
+  _createVao(attribs) {
     const vao = this.gl.createVertexArray();
     this._bufferAttribs(vao, attribs);
     return vao;
   }
-  
 
-  _bufferAttribs (vao, attribs) {
+
+  _bufferAttribs(vao, attribs) {
     this.gl.bindVertexArray(vao);
 
     for (const [attrib, data] of Object.entries(attribs)) {
@@ -4801,8 +4809,7 @@ class RendererGL2 {
 
 
 
-
-  _getMeshId (name) {
+  _getMeshId(name) {
     const n = name;
     let postFix = '';
     let num = 1;
@@ -4813,16 +4820,16 @@ class RendererGL2 {
     return n + postFix;
   }
 
-  
+
   /**
    * Add a retained-mode mesh to the renderer.
    * @param {Mesh|object} 
-   */ 
-  addMesh (meshData) {
+   */
+  addMesh(meshData) {
     let data;
-    
+
     // Flatten a mesh 
-    if (meshData.render) {  
+    if (meshData.render) {
       data = data.render();
     } else {
       data = meshData;
@@ -4831,7 +4838,7 @@ class RendererGL2 {
     let name = data.name || 'mesh';
     name = this._getMeshId(name);
 
-    if (this.meshes[name]) { 
+    if (this.meshes[name]) {
       this.updateMesh(name, data);
       return;
     }
@@ -4841,13 +4848,13 @@ class RendererGL2 {
     mesh.vao = this._createVao(data.attribs);
 
     mesh.program = data.program ?? null;
-    
+
     this.meshes[name] = mesh;
     return name;
   }
 
 
-  updateMesh (name, data) {
+  updateMesh(name, data) {
     if (!this.meshes[name]) {
       return;
     }
@@ -4857,7 +4864,7 @@ class RendererGL2 {
 
     mesh.data = data;
     // mesh.vao = this.gl.createVertexArray();
-    
+
     this._bufferAttribs(mesh.vao, data.attribs);
   }
 
@@ -4867,7 +4874,7 @@ class RendererGL2 {
    * @param {string} name The name of the uniform.
    * @param {any} value The value to set.
    */
-  uniform (name, value) {
+  uniform(name, value) {
     const uniforms = this.shaderProgramUniforms[this.activeProgram];
 
     if (!uniforms[name]) {
@@ -4897,8 +4904,8 @@ class RendererGL2 {
    * @param {WebGLUniformLocation} location The location in the program.
    * @param {array|float|int} value The value to set.
    * @param {boolean} isMatrix Matrix flag.
-   */ 
-  _uniform (fn, location, value, isMatrix = false) {
+   */
+  _uniform(fn, location, value, isMatrix = false) {
     if (isMatrix) {
       this.gl[fn](location, false, value);
     } else {
@@ -4906,19 +4913,19 @@ class RendererGL2 {
     }
   }
 
-  
-  clear (color) {
+
+  clear(color) {
     this.gl.clearColor(...color);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
   }
 
-  clearDepth () {
+  clearDepth() {
     this.gl.clear(this.gl.DEPTH_BUFFER_BIT);
   }
 
 
 
-  hardFind (pointer) {
+  hardFind(pointer) {
     for (const [key, value] of Object.entries(this.gl.constructor)) {
       if (typeof value !== 'number') {
         continue;
@@ -4931,34 +4938,34 @@ class RendererGL2 {
   }
 
 
-  addTexture (name, imageData, settings) {
+  addTexture(name, imageData, settings) {
     const gl = this.gl;
 
-    if (this.textureUnitIndex >= this.MAX_TEX_UNIT) { 
+    if (this.textureUnitIndex >= this.MAX_TEX_UNIT) {
       console.warn('Maximum texture units exceeded.');
-      return; 
+      return;
     }
 
     let unit, texture;
-    
+
     if (this.texturesByName[name]) {
       unit = this.texturesByName[name].unit;
       texture = this.texturesByName[name].texture;
     } else {
       unit = this.textureUnitIndex;
       texture = gl.createTexture();
-      this.texturesByName[name] = { unit, texture };
-      this.textureUnitIndex ++;
+      this.texturesByName[name] = { unit, texture, settings };
+      this.textureUnitIndex++;
     }
 
     gl.activeTexture(gl.TEXTURE0 + unit);
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    
+
     const { width, height, filter, clamp } = settings;
 
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, imageData);
-    
+
     if (clamp) {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -4966,15 +4973,15 @@ class RendererGL2 {
 
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl[filter]);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl[filter]);
-    
+
     return unit;
   }
 
 
   /**
    * Get the total number of vertices in this mesh.
-   */ 
-  totalVertices () {
+   */
+  totalVertices() {
     return Object.values(this.meshes).reduce((a, b) => a + b.data.vertexCount, 0);
   }
 
@@ -4982,7 +4989,7 @@ class RendererGL2 {
   /**
    * Set any uniforms in the global block.
    */
-  setGlobalUniformBlock () {
+  setGlobalUniformBlock() {
     for (let uniform in this.globalUniformBlock) {
       this.uniform(uniform, this.globalUniformBlock[uniform]);
     }
@@ -4993,22 +5000,22 @@ class RendererGL2 {
    * Blit from one frame buffer to another.
    * @param {WebGLFramebuffer|null} The source buffer or null for canvas.
    * @param {WebGLFramebuffer|null} The target buffer or null for canvas.
-   */ 
-  blitBuffer (src, target) {
+   */
+  blitBuffer(src, target) {
     this.gl.bindFramebuffer(this.gl.READ_FRAMEBUFFER, src);
     this.gl.bindFramebuffer(this.gl.DRAW_FRAMEBUFFER, target);
     let w = this.w;
     let h = this.h;
     if (w > 0 && h > 0) {
-      this.gl.blitFramebuffer(0, 0, w, h, 0, 0, w, h, this.gl.COLOR_BUFFER_BIT, this.gl.NEAREST);      
+      this.gl.blitFramebuffer(0, 0, w, h, 0, 0, w, h, this.gl.COLOR_BUFFER_BIT, this.gl.NEAREST);
     }
   }
 
 
   /**
    * Free up gl (or js) memory for a single object.
-   */ 
-  _disposeGLEntity (entity) {
+   */
+  _disposeGLEntity(entity) {
     if (!entity) return;
     const constructor = entity.constructor.name;
     if (this.deleteLookup[constructor]) {
@@ -5021,8 +5028,8 @@ class RendererGL2 {
 
   /**
    * Dispose of any gl resources.
-   */ 
-  dispose () {
+   */
+  dispose() {
     this.gl;
     console.log('disposeId', this.instanceId);
     for (let target of Object.values(this.renderTargets)) {
@@ -5048,7 +5055,7 @@ class RendererGL2 {
     }
   }
 
-  _printShader (info, shaderSrc) {
+  _printShader(info, shaderSrc) {
     if (info.length === 0) return;
 
     let lines = shaderSrc.split('\n');

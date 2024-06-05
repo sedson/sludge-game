@@ -73,66 +73,66 @@ const randomWorldPoint = () => {
 }
 
 export function movement_ratio(time, backwards) {
-  if (time > movement_msec_start + movement_msec_total || movement_msec_start == 0) {
-    return 0;
-  }
-  let speed = (movement_speed_add * ((time - movement_msec_start) / movement_msec_total));
-  if (!backwards) {
-    // negative z for forward
-    return speed * -1;
-  }
-  return speed;
+	if (time > movement_msec_start + movement_msec_total || movement_msec_start == 0) {
+		return 0;
+	}
+	let speed = (movement_speed_add * ((time - movement_msec_start) / movement_msec_total));
+	if (!backwards) {
+		// negative z for forward
+		return speed * -1;
+	}
+	return speed;
 }
 
 export function turn_ratio(time) {
-  if (time > movement_msec_start + movement_msec_total || movement_msec_start == 0) {
-    return 0;
-  }
-  let new_angle = (movement_angle_target * (g.sin((time - movement_msec_start) / movement_msec_total)));
-  return new_angle;
+	if (time > movement_msec_start + movement_msec_total || movement_msec_start == 0) {
+		return 0;
+	}
+	let new_angle = (movement_angle_target * (g.sin((time - movement_msec_start) / movement_msec_total)));
+	return new_angle;
 }
 
 export function degrees_to_radians(degrees) {
-  return degrees * (Math.PI / 180)
+	return degrees * (Math.PI / 180)
 }
 
 export function make_vector(new_angle, new_velocity) {
-  let x = 0;
-  let y = 0;
-  let radians = degrees_to_radians(new_angle);
-  return g.vec3(new_velocity * (g.sin(radians)), 0, new_velocity * (g.cos(radians)));
+	let x = 0;
+	let y = 0;
+	let radians = degrees_to_radians(new_angle);
+	return g.vec3(new_velocity * (g.sin(radians)), 0, new_velocity * (g.cos(radians)));
 }
 
 export function make_angle(target, is_turning_right) {
-  let variation = g.random(0, 10);
-  let new_angle;
-  if (is_turning_right) {
-    new_angle = target + variation;
-  } else {
-    new_angle = -1 * (target + variation);
-  }
-  movement_angle_target = g.radians(new_angle);
+	let variation = g.random(0, 10);
+	let new_angle;
+	if (is_turning_right) {
+		new_angle = target + variation;
+	} else {
+		new_angle = -1 * (target + variation);
+	}
+	movement_angle_target = g.radians(new_angle);
 }
 
 export function setup_current() {
 
-  let current_angle = g.random(0, 360);
-  let current_speed = 0.0004;
-  return make_vector(current_angle, current_speed);
+	let current_angle = g.random(0, 360);
+	let current_speed = 0.0004;
+	return make_vector(current_angle, current_speed);
 }
 
 function makeKayak(assets) {
-  const boat = g.node();
+	const boat = g.node();
 
-  const mainMesh = g.plyLoader.fromBuffer(assets.get('kayak-model'));
-  const riggingMesh = g.plyLoader.fromBuffer(assets.get('kayak-rigging-model'));
+	const mainMesh = g.plyLoader.fromBuffer(assets.get('kayak-model'));
+	const riggingMesh = g.plyLoader.fromBuffer(assets.get('kayak-rigging-model'));
 
-  boat.setGeometry(g.mesh(mainMesh));
+	boat.setGeometry(g.mesh(mainMesh));
 
-  const child = boat.createChildNode()
-    .setGeometry(g.mesh(riggingMesh.renderEdges()));
+	const child = boat.createChildNode()
+		.setGeometry(g.mesh(riggingMesh.renderEdges()));
 
-  return boat;
+	return boat;
 }
 
 // The once at the start function.
@@ -150,8 +150,8 @@ export function setup(gumInstance, assets) {
 	whale_location = g.vec3(200, 0, 200);
 	sigh_location = g.vec3(0, 0, 0);
 
-  // Parent the camera to the kayak.
-  g.camera.setParent(kayak);
+	// Parent the camera to the kayak.
+	g.camera.setParent(kayak);
 
 	// Data related to paddling the kayakheight(kayak.x, kayak.z)
 	kayak.paddler = {
@@ -159,9 +159,9 @@ export function setup(gumInstance, assets) {
 		restNeeded: 2000, // ms of rest to recover from each stroke
 	};
 
-  g.camera.move(0, 1.3, -1);
+	g.camera.move(0, 1.3, -1);
 
-  current_vector = setup_current();
+	current_vector = setup_current();
 }
 
 export function heightmap_friction_calculation() {
@@ -193,10 +193,10 @@ export function kayak_bobbing(current_time) {
 }
 
 export function update_speed_and_rotation() {
-  let current_time = g.time
-  let kayak_turn = turn_ratio(current_time);
-  global_kayak_turn = kayak_turn;
-  let kayak_speed = movement_ratio(current_time, movement_speed_target_backwards);
+	let current_time = g.time
+	let kayak_turn = turn_ratio(current_time);
+	global_kayak_turn = kayak_turn;
+	let kayak_speed = movement_ratio(current_time, movement_speed_target_backwards);
 
 	let local_friction = heightmap_friction_calculation();
 	kayak.velocity.mult(1 - local_friction);
@@ -230,32 +230,34 @@ export function update_speed_and_rotation() {
 		.add(current_vector);
 }
 
+
+
 // The tick function
 export function draw(delta) {
-
 	const cicadaDiff = g.vec3(kayak.x - cidada_location.x, 0, kayak.z - cidada_location.z)
 	let cicadaDiffMag = .5 / Math.abs(cicadaDiff.x) + .5 / Math.abs(cicadaDiff.z)
 	g.audioEngine.loopVolume('cicadas', cicadaDiffMag);
 
-  const sigh_diff = g.vec3(kayak.x - sigh_location.x, 0, kayak.z - sigh_location.z)
+	const sigh_diff = g.vec3(kayak.x - sigh_location.x, 0, kayak.z - sigh_location.z)
 	let sighDiffMag = .5 / Math.abs(sigh_location.x) + .5 / Math.abs(sigh_location.z)
 	g.audioEngine.loopVolume('sigh', sighDiffMag * 5);
 
-  const whale_diff = g.vec3(kayak.x - whale_location.x, 0, kayak.z - whale_location.z)
+	const whale_diff = g.vec3(kayak.x - whale_location.x, 0, kayak.z - whale_location.z)
 	let whaleDiffMag = .5 / Math.abs(whale_location.x) + .5 / Math.abs(whale_location.z)
 	g.audioEngine.loopVolume('whale', whaleDiffMag * 5);
 
-  g.camera.target.set(...kayak.transform.transformPoint([0, 1, -2]));
-  kayak.transform.position.add(kayak.velocity.copy().mult(0.1 * delta));
-  update_speed_and_rotation();
-  const terror = g.postProcessingStack.effects[0];
-  terror.uniforms['uTime'] = g.time;
-  terror.uniforms['uTerror'] = kayak.position.mag();
-  terror.uniforms['uVel'] = kayak.velocity.mag();
+	update_speed_and_rotation();
+	kayak.transform.position.add(kayak.velocity.copy().mult(0.1));
+	g.camera.target.set(...kayak.transform.transformPoint([0, 1, -2]));
 
-  const h = height(kayak.x, kayak.z);
-  heightInfo.innerText =
-    `X: ${kayak.x.toFixed(3)}, 
+	const terror = g.postProcessingStack.effects[0];
+	terror.uniforms['uTime'] = g.time;
+	terror.uniforms['uTerror'] = kayak.position.mag();
+	terror.uniforms['uVel'] = kayak.velocity.mag();
+
+	const h = height(kayak.x, kayak.z);
+	heightInfo.innerText =
+		`X: ${kayak.x.toFixed(3)}, 
    Z: ${kayak.z.toFixed(3)}, 
    HEIGHT: ${h[0].toFixed(3)},
    DX: ${h[1].toFixed(3)},
@@ -299,52 +301,52 @@ export function backward_right() {
 // Handle the impulse to paddle, as directed by player's keypress
 // if the paddler is too tired, they must rest before continuing
 async function paddle(direction) {
-  return new Promise((resolve, reject) => {
-    // are you tired yet?
-    if (kayak.paddler.fatigue < 2) {
-      // no? ok, paddle this stroke
-      switch (direction) {
-        case "forwardleft":
-          // -Z is forward.
-          g.audioEngine.playOneShot('splish1', splashiesVolume);
-          forward_left();
-          break;
-        case "forwardright":
-          g.audioEngine.playOneShot('splash1', splashiesVolume);
-          forward_right();
-          break;
-        case "backwardleft":
-          g.audioEngine.playOneShot('splish2', splashiesVolume);
-          backward_left();
-          break;
-        case "backwardright":
-          g.audioEngine.playOneShot('splash2', splashiesVolume);
-          backward_right();
-          break;
-        default:
-          return;
-      }
-      // increment the fatigue counter
-      kayak.paddler.fatigue += 1;
-      // then require a certain amount of rest
-      setTimeout(resolve, kayak.paddler.restNeeded);
-    } else {
-      // if you *are* tired, reject the promise
-      reject();
-    }
-  }).then(() => {
-    // when the paddler is all rested up, decrement the counter
-    kayak.paddler.fatigue -= 1;
+	return new Promise((resolve, reject) => {
+		// are you tired yet?
+		if (kayak.paddler.fatigue < 2) {
+			// no? ok, paddle this stroke
+			switch (direction) {
+			case "forwardleft":
+				// -Z is forward.
+				g.audioEngine.playOneShot('splish1', splashiesVolume);
+				forward_left();
+				break;
+			case "forwardright":
+				g.audioEngine.playOneShot('splash1', splashiesVolume);
+				forward_right();
+				break;
+			case "backwardleft":
+				g.audioEngine.playOneShot('splish2', splashiesVolume);
+				backward_left();
+				break;
+			case "backwardright":
+				g.audioEngine.playOneShot('splash2', splashiesVolume);
+				backward_right();
+				break;
+			default:
+				return;
+			}
+			// increment the fatigue counter
+			kayak.paddler.fatigue += 1;
+			// then require a certain amount of rest
+			setTimeout(resolve, kayak.paddler.restNeeded);
+		} else {
+			// if you *are* tired, reject the promise
+			reject();
+		}
+	}).then(() => {
+		// when the paddler is all rested up, decrement the counter
+		kayak.paddler.fatigue -= 1;
 		fatigue_tooltip.innerText = "";
 		q_tooltip.classList.remove('key-pressed');
 		w_tooltip.classList.remove('key-pressed');
 		o_tooltip.classList.remove('key-pressed');
 		p_tooltip.classList.remove('key-pressed');
-  }).catch(() => {
-    // if the paddler was too tired, maybe tell the player
-    console.log("too tired...");
+	}).catch(() => {
+		// if the paddler was too tired, maybe tell the player
+		console.log("too tired...");
 		fatigue_tooltip.innerText = "Don't overwork yourself! Rest a sec...";
-  })
+	})
 }
 
 window.addEventListener('keydown', e => {
