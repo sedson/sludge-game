@@ -106,9 +106,10 @@ export class AudioEngine {
     
     
   createSequencer() {
-    const seq = this.buildOscillator("sine", this.base_note + 3)
+      const seq = this.buildOscillator("sine", 440.0)
     const gainNode = []
-    gainNode.push(this.lowGain(0.005))
+      gainNode.push(this.lowGain(0.005))
+      gainNode[0].gain.value = 0
     const panNode = this.audioCtx.createStereoPanner()
     seq.connect(gainNode[0]).connect(panNode).connect(this.limiter);
     for (let i = 0; i < 8; i++) {
@@ -192,7 +193,7 @@ export class AudioEngine {
     gainNode.gain.value = volume
   }
     
-  update(dt) {
+    update(dt) {
       this.t += (dt * 0.16)
     if (this.t > 2.0) {
         this.t = this.t % 1
@@ -203,8 +204,8 @@ export class AudioEngine {
         this.otherIdx = this.otherIdx % this.otherNotes.length
         const note = this.notes[this.idx] + this.otherNotes[this.otherIdx]
         if (note > 0) {
-            this.playNote(note, 0.02)
-        } else this.playNote(0, 0)
+           this.playNote(note, 0.001)
+         } else  this.playNote(0, 0)
     }
   }
 }
@@ -242,7 +243,7 @@ export function createEngineAndLoadAudio() {
     speakers.createOneShot(str, `./assets/audio/splashies/${str}.mp3`)
   }
 
-  speakers.createSpookyOscillator()
+  // speakers.createSpookyOscillator()
   speakers.createSequencer()
 
   return speakers;
