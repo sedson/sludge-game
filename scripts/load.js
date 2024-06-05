@@ -79,6 +79,10 @@ const assets = {
     path: './assets/beacon-wires.ply',
     type: 'ply',
   },
+  'beacon-fuel': {
+    path: './assets/beacon-fuel.ply',
+    type: 'ply',
+  },
   'raft': {
     path: '/assets/raft.ply',
     type: 'ply',
@@ -91,6 +95,14 @@ const assets = {
     path: '/assets/textures/raft.png',
     type: 'image',
   },
+  'rock': {
+    path: '/assets/rock.ply',
+    type: 'ply',
+  },
+  'beacon-frag': {
+    path: './assets/shaders/beacon.frag',
+    type: 'shader',
+  }
 };
 
 function loadImg(src) {
@@ -99,7 +111,7 @@ function loadImg(src) {
     img.onload = () => res(img);
     img.onerror = rej;
     img.src = src;
-  })
+  });
 }
 
 

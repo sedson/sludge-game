@@ -13,7 +13,7 @@ import { hideHomeScreen, setup_home, showHomeScreen } from './ui-text.js';
 
 // Make a new instance of the Gum engine, attached to the #game-canvas element
 // element.
-const g = new Gum("#game-canvas");
+const g = window.g = new Gum("#game-canvas");
 
 const CAMERA_DEF_POS = g.vec3(0, 1.3, 0);
 const LAST_ORBIT_POS = g.vec3();
@@ -64,9 +64,19 @@ function setup() {
     frag: assets.get('sprite-frag'),
   });
 
+  g.addProgram('sprite-animated', {
+    vert: assets.get('default-vert'),
+    frag: assets.get('sprite-frag'),
+  });
+
   g.addProgram('water', {
     vert: assets.get('default-vert'),
     frag: assets.get('water-frag'),
+  });
+
+  g.addProgram('beacon', {
+    vert: assets.get('default-vert'),
+    frag: assets.get('beacon-frag'),
   });
 
 
@@ -75,7 +85,7 @@ function setup() {
     uShallowColor: g.color("#4c987b").rgb,
     uDeepColor: g.color("#2f5a32").rgb,
     uShoreColor: [0.8, 0.9, 0.8],
-    uWaterParams: [6, 0.95, 0.3],
+    uWaterParams: [10, 0.6, 0.3],
   });
 
 
@@ -130,8 +140,8 @@ function draw(delta) {
 
   TerrainScene.draw(delta);
   SmoothKayakScene.draw(delta);
-  DecorationsScene.draw(delta);
   BeaconsScene.draw(delta);
+  DecorationsScene.draw(delta);
 
   if (!isOrbitMode) {
     g.camera.move(...CAMERA_DEF_POS);
