@@ -77,15 +77,14 @@ function setup() {
 
   g.addEffect('post-terror', {
     uTime: 0,
-      uTerror: 0,
-      uVel: 0,
-  });
-
-  g.addEffect('post-depth-fade', {
+    uTerror: 0,
+    uVel: 0,
     uStart: 10,
-    uEnd: 400,
+    uEnd: 300,
     uBlendColor: g.color('#ccc769').rgba,
   });
+
+
 
   g.audioEngine.loopVolume('cicadas', 1);
   g.audioEngine.loopVolume('waterglide_ambient', 3);

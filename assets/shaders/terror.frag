@@ -123,5 +123,6 @@ void main() {
      float lDepth = linearDepth(depth, uNear, uFar);
      float m = smoothstep(uStart, uEnd, lDepth * (uFar - uNear) + uNear);
      vec4 col = texture(uMainTex, vTexCoord);
+     col.rgb = mix(col.rgb, uBlendColor.rgb, m * uBlendColor.a);
      fragColor = terror(col, lDepth) * 0.001 + col + speed();
 }
