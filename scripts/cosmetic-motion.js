@@ -40,20 +40,20 @@ export function kayak_radial_bobbing(g, current_time, kayak, radial_x, radial_z)
 	let z_med_fre = 730;
 	let z_sml_fre = 270;
 
-	let x_mult = .1; // diminish with speed
-	let z_mult = .1;
+	let x_mult = g.cos(current_time / 2345) / 10; // diminish with speed
+	let z_mult = g.sin(current_time / 4321) / 10;
 
 	let speed = kayak.velocity.mag();
 
 	let x_rot = radial_x + (
-		(((1 - speed) * .15) + x_mult) * (
+		(((1 - speed) * .25) + x_mult) * (
 			(x_big_amp * g.sin(current_time / x_big_fre)) +
 			(x_med_amp * g.sin(current_time / x_med_fre)) +
 			((x_sml_amp * g.sin(kayak.ry)) * g.sin(current_time / x_sml_fre))
 		)
 	);
 	let z_rot = radial_z + (
-		(((1 - speed) * .35) + z_mult) * (
+		(((1 - speed) * .45) + z_mult) * (
 			(z_big_amp * g.sin(current_time / z_big_fre)) +
 			(z_med_amp * g.sin(current_time / z_med_fre)) +
 			((z_sml_amp * g.cos(kayak.ry)) * g.sin(current_time / z_sml_fre))
