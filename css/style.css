@@ -27,52 +27,34 @@ body {
   font-size: 36px;
 }
 
-.q-tooltip {
+.q-tooltip, .w-tooltip, .o-tooltip, .p-tooltip {
   bottom: 3rem;
   color: green;
   font-size: 24px;
   margin: auto;
   position: fixed;
-  text-align: right;
   width: 4%;
-  left: 42%;
   z-index: 11;
+}
+
+.q-tooltip {
+  left: 42%;
+  text-align: right;
 }
 
 .w-tooltip {
-  bottom: 3rem;
-  color: green;
-  font-size: 24px;
   left: 46%;
-  margin: auto;
-  position: fixed;
   text-align: center;
-  width: 4%;
-  z-index: 11;
 }
 
 .o-tooltip {
-  bottom: 3rem;
-  color: green;
-  font-size: 24px;
   left: 50%;
-  margin: auto;
-  position: fixed;
   text-align: center;
-  width: 4%;
-  z-index: 11;
 }
 
 .p-tooltip {
-  bottom: 3rem;
-  color: green;
-  font-size: 24px;
   left: 54%;
-  margin: auto;
-  position: fixed;
   text-align: left;
-  width: 4%;
-  z-index: 11;
 }
 
 .key-pressed {
