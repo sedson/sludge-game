@@ -4,6 +4,7 @@ export class AudioEngine {
     this.loops = {}
     this.oneShotBuffers = {}
     this.oneShots = {}
+    this.spookyOscillators = {}
 
     const waveShaper = this.audioCtx.createWaveShaper()
     waveShaper.curve = this.createLimiterCurve(50)
@@ -26,16 +27,6 @@ export class AudioEngine {
     return curve;
   }
 
-  createOscillator() {
-    const oscillator = this.audioCtx.createOscillator();
-    oscillator.type = "square";
-    oscillator.frequency.setValueAtTime(440, this.audioCtx.currentTime);
-    const gainNode = new GainNode(this.audioCtx);
-    gainNode.gain.value = .01
-    oscillator.connect(gainNode).connect(this.limiter);
-    oscillator.start();
-  }
-
   buildOscillator(type, freq) {
     const osc = this.audioCtx.createOscillator();
     osc.type = type;
@@ -45,7 +36,7 @@ export class AudioEngine {
 
   lowGain(gain) {
     const gainNode = new GainNode(this.audioCtx);
-    gainNode.gain.value = gain || .01
+    gainNode.gain.value = gain
     return gainNode
   }
 
@@ -55,32 +46,42 @@ export class AudioEngine {
     convolver.buffer = await this.audioCtx.decodeAudioData(audioData);
   }
 
-  createSpookyOscillator() {
-    const sp1 = this.buildOscillator("sine", 100);
-    const gainNode = this.lowGain(.005)
-    // sp1.connect(gainNode).connect(this.limiter);
-    // sp1.start()
+  createSpookyOscillator(name) {
+    const sp1 = this.buildOscillator("sine", 150 - Math.floor(Math.random() * 100)); //100
+    const gainNode = this.lowGain(0)
 
-    // // Vibrato effect (frequency modulation)
-    const vibrato = this.buildOscillator("sine", 93);
-    const vibratoGain = this.lowGain(.005)
+    const vibrato = this.buildOscillator("sine", 100 - Math.floor(Math.random() * 5)); //93
+    const vibratoGain = this.lowGain(0)
     vibratoGain.gain.setValueAtTime(50, this.audioCtx.currentTime);
     vibrato.connect(vibratoGain).connect(sp1.frequency);
     vibrato.start();
 
-    const vibrato2 = this.buildOscillator("sine", 98);
-    const vibratoGain2 = this.lowGain()
+    const vibrato2 = this.buildOscillator("sine", 100 - Math.floor(Math.random() * 5)); //98
+    const vibratoGain2 = this.lowGain(0)
     vibratoGain2.gain.setValueAtTime(50, this.audioCtx.currentTime);
     vibrato2.connect(vibratoGain2).connect(sp1.frequency);
     vibrato2.start();
 
-    // Connect nodes
     sp1.connect(gainNode).connect(this.limiter);
-    // sp1.connect(gainNode).connect(convolver).connect(this.limiter);
     sp1.start();
 
+    this.spookyOscillators[name] = {
+      osc: sp1,
+      gain1: gainNode,
+      gain2: vibratoGain,
+      gain3: vibratoGain2,
+    }
+  }
 
+  spookyOscillatorVolume(name, volume) {
+    if (!this.spookyOscillators[name]) {
+      return
+    }
 
+    const osc= this.spookyOscillators[name]
+    osc.gain1.gain.value = volume
+    osc.gain2.gain.value = volume
+    osc.gain3.gain.value = volume
   }
 
   async playOneShot(name, volume) {
@@ -99,9 +100,13 @@ export class AudioEngine {
   }
 
   async loadAudioFile(url) {
-    const response = await fetch(url);
-    const audioData = await response.arrayBuffer();
-    return this.audioCtx.decodeAudioData(audioData);
+    try {
+      const response = await fetch(url);
+      const audioData = await response.arrayBuffer();
+      return this.audioCtx.decodeAudioData(audioData);
+    } catch (e) {
+      console.log(`Had a problem loading the file: ${url}`)
+    }
   }
 
   async createLoop(name, url) {
@@ -109,7 +114,7 @@ export class AudioEngine {
     bufferSource.buffer = await this.loadAudioFile(url)
 
     let gainNode = this.audioCtx.createGain();
-    gainNode.gain.value = .06
+    gainNode.gain.value = .0
 
     bufferSource.connect(gainNode).connect(this.limiter);
     bufferSource.loop = true;
@@ -165,9 +170,6 @@ export function createEngineAndLoadAudio() {
   for (const str of ['splash1', 'splash2', 'splish1', 'splish2']) {
     speakers.createOneShot(str, `./assets/audio/splashies/${str}.mp3`)
   }
-
-  speakers.createSpookyOscillator()
-
 
   return speakers;
 }

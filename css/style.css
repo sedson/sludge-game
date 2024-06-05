@@ -17,14 +17,16 @@ body {
 }
 
 .fatigue-tooltip {
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: fixed;
   width: 100%;
   margin: auto;
   text-align: center;
   z-index: 10;
   top: 3rem;
-  color: red;
-  font-size: 36px;
+  color: rgb(80, 15, 10);
+  text-shadow: 3px 3px 3px turquoise;
+  font-size: 20px;
 }
 
 .q-tooltip, .w-tooltip, .o-tooltip, .p-tooltip {

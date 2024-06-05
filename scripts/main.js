@@ -7,6 +7,7 @@ import * as SmoothKayakScene from "./game-scene.js";
 
 import * as TerrainScene from "./terrain.js";
 import * as DecorationsScene from "./decorations-scene.js";
+import * as BeaconsScene from "./beacons-scene.js";
 
 
 // Make a new instance of the Gum engine, attached to the #game-canvas element 
@@ -85,6 +86,7 @@ function setup() {
   TerrainScene.setup(g, assets);
   SmoothKayakScene.setup(g, assets);
   DecorationsScene.setup(g, assets);
+  BeaconsScene.setup(g, assets);
 
   g.addEffect('post-terror', {
     uTime: 0,
