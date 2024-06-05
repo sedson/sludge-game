@@ -1,66 +1,70 @@
 const assets = {
   'default-vert': {
-    path: '/assets/shaders/default.vert',
+    path: './assets/shaders/default.vert',
     type: 'shader',
   },
   'default-frag': {
-    path: '/assets/shaders/default.frag',
+    path: './assets/shaders/default.frag',
     type: 'shader',
   },
   'terrain-vert': {
-    path: '/assets/shaders/terrain.vert',
+    path: './assets/shaders/terrain.vert',
     type: 'shader',
   },
   'terrain-frag': {
-    path: '/assets/shaders/terrain.frag',
+    path: './assets/shaders/terrain.frag',
     type: 'shader',
   },
   'kayak-model': {
-    path: '/assets/kayak.ply',
+    path: './assets/kayak.ply',
     type: 'ply',
   },
   'kayak-rigging-model': {
-    path: '/assets/kayak_rigging.ply',
+    path: './assets/kayak_rigging.ply',
     type: 'ply',
   },
   'tree': {
-    path: '/assets/tree.ply',
+    path: './assets/tree.ply',
     type: 'ply',
   },
   'tree-canopy': {
-    path: '/assets/tree-canopy.ply',
+    path: './assets/tree-canopy.ply',
     type: 'ply',
   },
   'heron': {
-    path: '/assets/heron.ply',
+    path: './assets/heron.ply',
     type: 'ply',
   },
   'tree-sprite': {
-    path: '/assets/tree_test_sprite.png',
+    path: './assets/tree_test_sprite.png',
     type: 'image',
   },
   'foliage-frag': {
-    path: '/assets/shaders/foliage.frag',
+    path: './assets/shaders/foliage.frag',
     type: 'shader',
   },
   'sprite-frag': {
-    path: '/assets/shaders/sprite.frag',
+    path: './assets/shaders/sprite.frag',
     type: 'shader',
   },
   'heron': {
-    path: '/assets/textures/heron-1.png',
+    path: './assets/textures/heron-1.png',
     type: 'image',
   },
   'silhouettes': {
-    path: '/assets/textures/silhouettes.png',
+    path: './assets/textures/silhouettes.png',
     type: 'image',
   },
   'panorama': {
-    path: '/assets/panorama.ply',
+    path: './assets/panorama.ply',
     type: 'ply',
   },
   'terror-frag': {
-    path: '/assets/shaders/terror.frag',
+    path: './assets/shaders/terror.frag',
+    type: 'shader',
+  },
+  'water-frag': {
+    path: './assets/shaders/water.frag',
     type: 'shader',
   },
 };
@@ -99,9 +103,6 @@ export async function loadAll() {
         const img = await loadImg(details.path);
         assetMap.set(name, img);
       }
-
-      // TODO (seamus) : What about images, sounds etc!
-
 
     } catch (e) {
       throw new Error(`Error loading asset: ${name}.`);

@@ -1,4 +1,4 @@
-import { Gum } from '/dep/gum.module.js';
+import { Gum } from '../dep/gum.module.js';
 import { loadAll } from "./load.js";
 import { createEngineAndLoadAudio } from './audio-engine.js';
 
@@ -17,7 +17,7 @@ const g = new Gum("#game-canvas");
 g.pixelRatio = window.devicePixelRatio ?? 1.0;
 g.defaultPass = 'unlit';
 
-const waterQuad = g.mesh(g.shapes.quad(''))
+const waterQuad = g.mesh(g.shapes.quad(1000, 1));
 
 // Step (1) async and wait load all the assets. That way our code below can 
 // just call assets.get('default-frag') or assets.get('kayak-model') and get 
@@ -51,11 +51,17 @@ function setup() {
     frag: assets.get('foliage-frag'),
   });
 
-
   g.addProgram('sprite', {
     vert: assets.get('default-vert'),
     frag: assets.get('sprite-frag'),
   });
+
+  g.addProgram('water', {
+    vert: assets.get('default-vert'),
+    frag: assets.get('water-frag'),
+  });
+
+
 
   Object.assign(g.globalUniforms, {
     uShallowColor: g.color("#4c987b").rgb,
@@ -64,9 +70,11 @@ function setup() {
     uWaterParams: [6, 0.95, 0.3],
   });
 
+
   g.shaders['post-terror'] = {
     frag: assets.get('terror-frag'),
   };
+
 
   g.audioEngine = createEngineAndLoadAudio();
 
@@ -101,6 +109,13 @@ function draw(delta) {
 
 
   g.drawScene();
+
+  const gl = g.renderer.gl;
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  g.renderer.setProgram('water');
+  g.drawMesh(waterQuad);
+  gl.disable(gl.BLEND);
 }
 
 

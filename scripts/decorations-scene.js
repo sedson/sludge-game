@@ -16,7 +16,8 @@ export function setup(gumInstance, assets) {
 
   const pano1 = g.node()
     .setGeometry(panoMesh)
-    .rescale(20)
+    .rescale(50)
+    .move(0, -8, 0)
     .setProgram('sprite')
     .uniform('uTex', spriteTexture.id);
 
@@ -42,7 +43,7 @@ export function setup(gumInstance, assets) {
       .setGeometry(mesh)
       .setProgram('sprite')
       .uniform('uTex', spriteTexture.id)
-      .move(x, h, z)
+      .move(x, h - 0.4, z)
       .rescale(scale);
 
     const canoppObj = g.node()
@@ -54,17 +55,19 @@ export function setup(gumInstance, assets) {
   }
 
 
-  tree1(4, 0, 0, 10);
+  // tree1(4, 0, 0, 10);
 
 
   for (let i = 0; i < 40; i++) {
     const x = g.random(-100, 100);
     const z = g.random(-100, 100);
 
-    tree1(x, 0, z, g.random(10, 20));
+    if (height(x, z)[0] > 0.4) {
+      tree1(x, 0, z, g.random(10, 20));
+    }
+
   }
 
-  // g.orbit();
   g.camera.far = 1000;
 }
 

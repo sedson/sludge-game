@@ -155,15 +155,15 @@ export function createEngineAndLoadAudio() {
   }
   speakers.activateContext()
 
-  speakers.createLoop('cicadas', "../assets/audio/cicadas.wav")
-  speakers.createLoop('whale', "../assets/audio/mechanical_whale.mp3")
-  speakers.createLoop('sighs', "../assets/audio/giant_sighs.mp3")
-  speakers.createLoop('waterglide', "../assets/audio/splashies/continuous1.mp3")
-  speakers.createLoop('waterglide_ambient', "../assets/audio/splashies/continuous1.mp3")
+  speakers.createLoop('cicadas', "./assets/audio/cicadas.wav")
+  speakers.createLoop('whale', "./assets/audio/mechanical_whale.mp3")
+  speakers.createLoop('sighs', "./assets/audio/giant_sighs.mp3")
+  speakers.createLoop('waterglide', "./assets/audio/splashies/continuous1.mp3")
+  speakers.createLoop('waterglide_ambient', "./assets/audio/splashies/continuous1.mp3")
 
   // Splashes
   for (const str of ['splash1', 'splash2', 'splish1', 'splish2']) {
-    speakers.createOneShot(str, `../assets/audio/splashies/${str}.mp3`)
+    speakers.createOneShot(str, `./assets/audio/splashies/${str}.mp3`)
   }
 
   speakers.createSpookyOscillator()
