@@ -2,6 +2,7 @@ import * as UIText from "./ui-text.js";
 import * as CosmeticMotion from "./cosmetic-motion.js"
 import * as KayakMotion from "./kayak-motion.js"
 import * as KayakMath from "./kayak-math.js"
+import * as SceneSounds from "./scene-sounds.js"
 
 // g is the the kludge here.
 let g;
@@ -12,19 +13,9 @@ const DEBUG = true;
 // Module "state" can go here. We can do better.
 
 export let kayak;
-let cidada_location;
-let sigh_location;
-let whale_location;
-let current_vector;
-
-let splashiesVolume = .11
 
 let debugObjects = {};
 let exertion_feelings = ["Aghhh...", "*breathes heavily*", "huff huff", "Fwoo!", "*wipes sweat off brow*", "fwoof", "my goodness", "!", "I am tired", "...", "I am afraid"]
-
-const randomWorldPoint = () => {
-	return g.vec3(Math.floor(Math.random() * 200), 0, Math.floor(Math.random() * 200));
-}
 
 function makeKayak(assets) {
 	const boat = g.node();
@@ -50,13 +41,11 @@ export function setup(gumInstance, assets) {
 	kayak.velocity = g.vec3();
 
 	// Audio Locations
-	cidada_location = randomWorldPoint(g, 300, 200);
-	whale_location = randomWorldPoint(g, 200, 200);
-	sigh_location = randomWorldPoint(g, 200, 200);
+	SceneSounds.setup_locations(g)
 
 	// Parent the camera to the kayak.
 	g.camera.setParent(kayak);
-  g.beacons = {}
+	g.beacons = {};
 
 	// Data related to paddling the kayakheight(kayak.x, kayak.z)
 	kayak.paddler = {
@@ -81,21 +70,11 @@ export function setup(gumInstance, assets) {
 
 // The tick function
 export function draw(delta) {
-  
-	const cicadaDiff = g.vec3(kayak.x - cidada_location.x, 0, kayak.z - cidada_location.z)
-	let cicadaDiffMag = .5 / Math.abs(cicadaDiff.x) + .5 / Math.abs(cicadaDiff.z)
-	g.audioEngine.loopVolume('cicadas', cicadaDiffMag / 2);
 
-	const sighDiff = g.vec3(kayak.x - sigh_location.x, 0, kayak.z - sigh_location.z)
-	let sighDiffMag = .5 / Math.abs(sighDiff.x) + .5 / Math.abs(sighDiff.z)
-	g.audioEngine.loopVolume('sighs', sighDiffMag) / 2;
-
-	const whale_diff = g.vec3(kayak.x - whale_location.x, 0, kayak.z - whale_location.z)
-	let whaleDiffMag = .5 / Math.abs(whale_diff.x) + .5 / Math.abs(whale_diff.z)
-	g.audioEngine.loopVolume('whale', whaleDiffMag / 2);
+	SceneSounds.play_loops(g, kayak);
 
 	KayakMotion.update_speed_and_rotation(g, kayak, debugObjects, DEBUG);
-	
+
 	g.camera.target.set(...kayak.transform.transformPoint([0, 1, -2]));
 
 	const terror = g.postProcessingStack.effects[0];
@@ -107,7 +86,6 @@ export function draw(delta) {
 		`X: ${kayak.x.toFixed(3)} Z: ${kayak.z.toFixed(3)} `;
 }
 
-
 // Handle the impulse to paddle, as directed by player's keypress
 // if the paddler is too tired, they must rest before continuing
 async function paddle(direction) {
@@ -118,19 +96,19 @@ async function paddle(direction) {
 			switch (direction) {
 				case "forwardleft":
 					// -Z is forward.
-					g.audioEngine.playOneShot('splish1', splashiesVolume);
+					SceneSounds.play_splish(g, 'splish1');
 					KayakMotion.forward_left(g);
 					break;
 				case "forwardright":
-					g.audioEngine.playOneShot('splash1', splashiesVolume);
+					SceneSounds.play_splish(g, 'splash1');
 					KayakMotion.forward_right(g);
 					break;
 				case "backwardleft":
-					g.audioEngine.playOneShot('splish2', splashiesVolume);
+					SceneSounds.play_splish(g, 'splish2');
 					KayakMotion.backward_left(g);
 					break;
 				case "backwardright":
-					g.audioEngine.playOneShot('splash2', splashiesVolume);
+					SceneSounds.play_splish(g, 'splash2');
 					KayakMotion.backward_right(g);
 					break;
 				default:
