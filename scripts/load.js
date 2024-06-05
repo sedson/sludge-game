@@ -68,15 +68,15 @@ const assets = {
     type: 'shader',
   },
   'fuel': {
-    path: '/assets/textures/fuel.png',
+    path: './assets/textures/fuel.png',
     type: 'image',
   },
   'beacon': {
-    path: '/assets/beacon.ply',
+    path: './assets/beacon.ply',
     type: 'ply',
   },
   'beaconwires': {
-    path: '/assets/beacon-wires.ply',
+    path: './assets/beacon-wires.ply',
     type: 'ply',
   },
 };
@@ -92,8 +92,12 @@ function loadImg(src) {
 
 
 export async function loadAll() {
+  const loadingTextUi = document.querySelector('.loading');
   const assetMap = new Map();
   for (const [name, details] of Object.entries(assets)) {
+    if (loadingTextUi) {
+      loadingTextUi.innerText = `loading ${name} @ ${details.path}`;
+    }
     try {
 
       const res = await fetch(details.path);
@@ -119,6 +123,9 @@ export async function loadAll() {
     } catch (e) {
       throw new Error(`Error loading asset: ${name}.`);
     }
+  }
+  if (loadingTextUi) {
+    loadingTextUi.innerText = `Done!`;
   }
   return assetMap;
 }

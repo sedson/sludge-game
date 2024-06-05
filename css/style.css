@@ -1,5 +1,7 @@
 body {
   background: black;
+  pading: 0;
+  margin: 0;
 }
 #game-canvas {
   position: fixed;
@@ -17,22 +19,23 @@ body {
 }
 
 .fatigue-tooltip {
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: fixed;
   width: 100%;
   margin: auto;
   text-align: center;
   z-index: 10;
   top: 3rem;
-  color: rgb(80, 15, 10);
+  color: white;
+  mix-blend-mode: difference;
   text-shadow: 3px 3px 3px turquoise;
   font-size: 20px;
+
 }
 
 .q-tooltip, .w-tooltip, .o-tooltip, .p-tooltip {
   bottom: 3rem;
   color: green;
-  font-size: 24px;
+  font-size: 3vw;
   margin: auto;
   position: fixed;
   width: 4%;
@@ -40,26 +43,72 @@ body {
 }
 
 .q-tooltip {
-  left: 42%;
+  left: 35%;
   text-align: right;
 }
 
 .w-tooltip {
-  left: 46%;
+  left: 40%;
   text-align: center;
 }
 
 .o-tooltip {
-  left: 50%;
+  left: 60%;
   text-align: center;
 }
 
 .p-tooltip {
-  left: 54%;
+  left: 65%;
   text-align: left;
 }
 
 .key-pressed {
   color: blue;
   font-weight: bold;
+}
+
+#home {
+  background: teal;
+  color: orange;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 500;
+  top: 0;
+  left: 0;
+  filter: contrast(200%);
+  transition: opacity 1s ease;
+  flex-direction: column;
+}
+
+.hidden {
+  pointer-events: none;
+  opacity: 0;
+}
+
+h1 {
+  font-size: 6vw;
+  filter: blur(0.1vw);
+  user-select: none;
+}
+
+.loading {
+  font-size: 2vw;
+  position: fixed;
+  left: 2vw;
+  bottom: 0;
+  text-align: center;
+}
+
+#play-button {
+  font-size: 4vw;
+  width: 5ch;
+  padding: 2vw;
+  border: 2px solid orange;
+  background: red;
+  filter: blur(1px);
+  cursor: pointer;
 }

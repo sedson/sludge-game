@@ -8,6 +8,7 @@ import * as SmoothKayakScene from "./game-scene.js";
 import * as TerrainScene from "./terrain.js";
 import * as DecorationsScene from "./decorations-scene.js";
 import * as BeaconsScene from "./beacons-scene.js";
+import { hideHomeScreen, setup_home, showHomeScreen } from './ui-text.js';
 
 
 // Make a new instance of the Gum engine, attached to the #game-canvas element
@@ -29,6 +30,8 @@ const waterQuad = g.mesh(g.shapes.quad(1000, 1));
 // the responses synchronously. Less headache (maybe). The assets will contain
 // a map of responses.
 const assets = await loadAll();
+
+setup_home();
 
 // called once. We can use the 'g' namespace for static type things outside of
 // setup but certain things must be done in setup. Those things are
@@ -122,7 +125,7 @@ function setup() {
 
 // called each frame
 function draw(delta) {
-    g.audioEngine.update(delta);
+  g.audioEngine.update(delta);
   g.clear(g.color('#ccc769'));
 
   TerrainScene.draw(delta);

@@ -13,7 +13,7 @@ export const o_tooltip = document.createElement('div');
 export const p_tooltip = document.createElement('div');
 
 
-export function setup_ui_text () {
+export function setup_ui_text() {
 	document.body.append(heightInfo);
 	document.body.append(fatigue_tooltip);
 	document.body.append(o_tooltip);
@@ -32,3 +32,17 @@ export function setup_ui_text () {
 	w_tooltip.innerText = "W";
 }
 
+
+export function setup_home() {
+	const plyBtn = document.getElementById('play-button');
+	plyBtn.onclick = hideHomeScreen;
+	plyBtn.classList.remove('hidden');
+}
+
+export function hideHomeScreen() {
+	document.getElementById('home').classList.add('hidden');
+}
+
+export function showHomeScreen() {
+	document.getElementById('home').classList.add('hidden');
+}
