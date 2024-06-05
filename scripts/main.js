@@ -10,7 +10,7 @@ import * as DecorationsScene from "./decorations-scene.js";
 import * as BeaconsScene from "./beacons-scene.js";
 
 
-// Make a new instance of the Gum engine, attached to the #game-canvas element 
+// Make a new instance of the Gum engine, attached to the #game-canvas element
 // element.
 const g = new Gum("#game-canvas");
 
@@ -24,14 +24,14 @@ g.defaultPass = 'unlit';
 
 const waterQuad = g.mesh(g.shapes.quad(1000, 1));
 
-// Step (1) async and wait load all the assets. That way our code below can 
-// just call assets.get('default-frag') or assets.get('kayak-model') and get 
-// the responses synchronously. Less headache (maybe). The assets will contain 
+// Step (1) async and wait load all the assets. That way our code below can
+// just call assets.get('default-frag') or assets.get('kayak-model') and get
+// the responses synchronously. Less headache (maybe). The assets will contain
 // a map of responses.
 const assets = await loadAll();
 
-// called once. We can use the 'g' namespace for static type things outside of 
-// setup but certain things must be done in setup. Those things are 
+// called once. We can use the 'g' namespace for static type things outside of
+// setup but certain things must be done in setup. Those things are
 // (1) adding shader programs
 // (2) adding post-process passes
 function setup() {
@@ -39,7 +39,7 @@ function setup() {
   // User interaction required to start audio - otherwise audio engine is "suspended"
   document.addEventListener('click', () => g.audioEngine.activateContext())
   document.addEventListener('keydown', () => g.audioEngine.activateContext())
-  // Here is the easiest way to add new shaders to GUM! These shaders will be 
+  // Here is the easiest way to add new shaders to GUM! These shaders will be
   // available to any mesh as 'terrainShaderProgram'.
   g.addProgram('main', {
     vert: assets.get('default-vert'),
@@ -85,8 +85,8 @@ function setup() {
 
   TerrainScene.setup(g, assets);
   SmoothKayakScene.setup(g, assets);
-  DecorationsScene.setup(g, assets);
   BeaconsScene.setup(g, assets);
+  DecorationsScene.setup(g, assets);
 
   g.addEffect('post-terror', {
     uTime: 0,

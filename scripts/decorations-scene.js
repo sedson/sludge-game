@@ -68,7 +68,7 @@ export function setup(gumInstance, assets) {
 
   }
 
-  // g.orbit();
+  g.orbit();
   // load the texture for beacon model
   const beaconSpriteData = assets.get('fuel');
   const beaconSpriteTex = new g.Texer(beaconSpriteData.width,
@@ -97,9 +97,11 @@ export function setup(gumInstance, assets) {
     return beacon;
   }
 
-  // place beacon models, randomly?
-  // TODO sync with sound points
-  makeBeacon(0, 0, 10);
+  // draw a beacon at the source of each sound
+  for (const [k, v] of Object.entries(g.beacons)) {
+    const [x, y, z] = v;
+    makeBeacon(x, y, z);
+  }
 
   g.camera.far = 1000;
 }

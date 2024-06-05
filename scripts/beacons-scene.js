@@ -3,13 +3,6 @@ import { kayak } from "./game-scene.js";
 
 let g;
 
-function makeBeacon(x, z) {
-  const beaconMesh = g.shapes.cube(4);
-	const beacon = g.node('a').setGeometry(g.mesh(beaconMesh));
-  beacon.move(x, 5, z)
-  return beacon
-}
-
 export function setup(gumInstance, assets) {
   g = gumInstance;
   const OSCILLATOR_COUNT = 9
@@ -17,7 +10,6 @@ export function setup(gumInstance, assets) {
     g.audioEngine.createSpookyOscillator(`osc-${i}`)
     let location = randomWaterPoint(g, 220, 60)
     g.beacons[`osc-${i}`] = location
-    makeBeacon(location.x, location.z)
   }
 }
 
