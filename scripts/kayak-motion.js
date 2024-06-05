@@ -87,7 +87,9 @@ export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 	let local_friction = heightmap_friction_calculation(g, kayak, debugObjects, DEBUG);
 	kayak.velocity.mult(1 - local_friction);
 
-	CosmeticMotion.kayak_bobbing(g, current_time, kayak);
+	let radial_x = 0;
+	let radial_z = 0;
+	CosmeticMotion.kayak_vertical_bobbing(g, current_time, kayak);
 
 	if (current_time <= movement_msec_start + movement_msec_total) {
 		if (kayak_turn !== 0) {
@@ -104,12 +106,33 @@ export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 			} else {
 				local_rotation_value = kayak_turn
 			}
-			kayak.rotate(0, kayak.ry + KayakMath.degrees_to_radians(local_rotation_value), 0);
+			radial_x = (
+					(movement_speed_target_backwards != local_rotation_value > 0)?
+					KayakMath.degrees_to_radians(local_rotation_value):
+					KayakMath.degrees_to_radians(local_rotation_value) * -1
+				);
+			radial_z = KayakMath.degrees_to_radians(local_rotation_value) * -1;
+
+			kayak.rotate(
+				0,
+				kayak.ry + KayakMath.degrees_to_radians(local_rotation_value),
+				0);
 		}
 	} else if (Math.abs(movement_angular_momentum) > 0.00001 && movement_rotation_past_peak) {
-		kayak.rotate(0, kayak.ry + KayakMath.degrees_to_radians(movement_angular_momentum), 0);
+		radial_x = ((movement_speed_target_backwards != movement_angular_momentum > 0)?
+				KayakMath.degrees_to_radians(movement_angular_momentum):
+				KayakMath.degrees_to_radians(movement_angular_momentum) * -1
+			);
+		radial_z = KayakMath.degrees_to_radians(movement_angular_momentum) * -1;
+		kayak.rotate(
+			0,
+			kayak.ry + KayakMath.degrees_to_radians(movement_angular_momentum),
+			0);
 
 	}
+
+	CosmeticMotion.kayak_radial_bobbing(g, current_time, kayak, radial_x, radial_z);
+
 	movement_angular_momentum = movement_angular_momentum * .97;
 	kayak.velocity = KayakMath.make_vector(g, g.degrees(kayak.ry) + kayak_turn, kayak_speed)
 		.add(kayak.velocity)
