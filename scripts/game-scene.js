@@ -1,4 +1,5 @@
 import { height } from "./height-map.js";
+import * as UIText from "./ui-text.js";
 
 // g is the the kludge here.
 let g;
@@ -33,38 +34,6 @@ let movement_rotation_past_peak = false;
 let movement_passive_friction = 0.005;
 
 let global_kayak_turn = 0;
-
-
-// Make a height debugger. 
-const heightInfo = document.createElement('div');
-heightInfo.classList.add('height-info');
-document.body.append(heightInfo);
-
-// Make a fatigued tooltip
-const fatigue_tooltip = document.createElement('div');
-fatigue_tooltip.classList.add('fatigue-tooltip');
-document.body.append(fatigue_tooltip);
-
-// Make controls display
-const q_tooltip = document.createElement('div');
-q_tooltip.classList.add('q-tooltip');
-document.body.append(q_tooltip);
-q_tooltip.innerText = "Q";
-
-const w_tooltip = document.createElement('div');
-w_tooltip.classList.add('w-tooltip');
-document.body.append(w_tooltip);
-w_tooltip.innerText = "W";
-
-const o_tooltip = document.createElement('div');
-o_tooltip.classList.add('o-tooltip');
-document.body.append(o_tooltip);
-o_tooltip.innerText = "O";
-
-const p_tooltip = document.createElement('div');
-p_tooltip.classList.add('p-tooltip');
-document.body.append(p_tooltip);
-p_tooltip.innerText = "P";
 
 let splashiesVolume = .11
 
@@ -147,7 +116,7 @@ export function setup(gumInstance, assets) {
 
 	// Audio Locations
 	cidada_location = randomWorldPoint()
-	whale_location = g.vec3(200, 0, 200);
+		whale_location = g.vec3(200, 0, 200);
 	sigh_location = g.vec3(0, 0, 0);
 
 	// Parent the camera to the kayak.
@@ -155,13 +124,14 @@ export function setup(gumInstance, assets) {
 
 	// Data related to paddling the kayakheight(kayak.x, kayak.z)
 	kayak.paddler = {
-		fatigue: 0,
-		restNeeded: 2000, // ms of rest to recover from each stroke
+fatigue: 0,
+		 restNeeded: 2000, // ms of rest to recover from each stroke
 	};
 
 	g.camera.move(0, 1.3, 0);
 
 	current_vector = setup_current();
+	UIText.setup_ui_text();
 }
 
 export function heightmap_friction_calculation() {
@@ -196,15 +166,15 @@ export function kayak_bobbing(current_time) {
 	let sml_amp = .035;
 	let sml_fre = 300;
 	kayak.position.y = (-0.04 +
-		(big_amp * g.sin(current_time / big_fre)) +
-		(med_amp * g.sin(current_time / med_fre)) +
-		(sml_amp * g.sin(current_time / sml_fre))
-	);
+			(big_amp * g.sin(current_time / big_fre)) +
+			(med_amp * g.sin(current_time / med_fre)) +
+			(sml_amp * g.sin(current_time / sml_fre))
+			);
 }
 
 export function update_speed_and_rotation() {
 	let current_time = g.time
-	let kayak_turn = turn_ratio(current_time);
+		let kayak_turn = turn_ratio(current_time);
 	global_kayak_turn = kayak_turn;
 	let kayak_speed = movement_ratio(current_time, movement_speed_target_backwards);
 
@@ -245,16 +215,16 @@ export function update_speed_and_rotation() {
 // The tick function
 export function draw(delta) {
 	const cicadaDiff = g.vec3(kayak.x - cidada_location.x, 0, kayak.z - cidada_location.z)
-	let cicadaDiffMag = .5 / Math.abs(cicadaDiff.x) + .5 / Math.abs(cicadaDiff.z)
-	g.audioEngine.loopVolume('cicadas', cicadaDiffMag);
+		let cicadaDiffMag = .5 / Math.abs(cicadaDiff.x) + .5 / Math.abs(cicadaDiff.z)
+		g.audioEngine.loopVolume('cicadas', cicadaDiffMag);
 
 	const sigh_diff = g.vec3(kayak.x - sigh_location.x, 0, kayak.z - sigh_location.z)
-	let sighDiffMag = .5 / Math.abs(sigh_location.x) + .5 / Math.abs(sigh_location.z)
-	g.audioEngine.loopVolume('sigh', sighDiffMag * 5);
+		let sighDiffMag = .5 / Math.abs(sigh_location.x) + .5 / Math.abs(sigh_location.z)
+		g.audioEngine.loopVolume('sigh', sighDiffMag * 5);
 
 	const whale_diff = g.vec3(kayak.x - whale_location.x, 0, kayak.z - whale_location.z)
-	let whaleDiffMag = .5 / Math.abs(whale_location.x) + .5 / Math.abs(whale_location.z)
-	g.audioEngine.loopVolume('whale', whaleDiffMag * 5);
+		let whaleDiffMag = .5 / Math.abs(whale_location.x) + .5 / Math.abs(whale_location.z)
+		g.audioEngine.loopVolume('whale', whaleDiffMag * 5);
 
 	update_speed_and_rotation();
 	kayak.transform.position.add(kayak.velocity.copy().mult(0.1));
@@ -265,16 +235,8 @@ export function draw(delta) {
 	terror.uniforms['uTerror'] = kayak.position.mag();
 	terror.uniforms['uVel'] = kayak.velocity.mag();
 
-	const h = height(kayak.x, kayak.z);
-	heightInfo.innerText =
-		`X: ${kayak.x.toFixed(3)}, 
-   Z: ${kayak.z.toFixed(3)}, 
-   HEIGHT: ${h[0].toFixed(3)},
-   DX: ${h[1].toFixed(3)},
-   DX: ${h[3].toFixed(3)}
-   vel: ${kayak.velocity}
-   angle: ${g.degrees(kayak.rotation.y)},
-   turn : ${global_kayak_turn}`;
+	UIText.heightInfo.innerText =
+		`X: ${kayak.x.toFixed(3)} Z: ${kayak.z.toFixed(3)} `;
 }
 
 
@@ -312,67 +274,67 @@ export function backward_right() {
 // if the paddler is too tired, they must rest before continuing
 async function paddle(direction) {
 	return new Promise((resolve, reject) => {
-		// are you tired yet?
-		if (kayak.paddler.fatigue < 2) {
+			// are you tired yet?
+			if (kayak.paddler.fatigue < 2) {
 			// no? ok, paddle this stroke
 			switch (direction) {
 			case "forwardleft":
-				// -Z is forward.
-				g.audioEngine.playOneShot('splish1', splashiesVolume);
-				forward_left();
-				break;
+			// -Z is forward.
+			g.audioEngine.playOneShot('splish1', splashiesVolume);
+			forward_left();
+			break;
 			case "forwardright":
-				g.audioEngine.playOneShot('splash1', splashiesVolume);
-				forward_right();
-				break;
+			g.audioEngine.playOneShot('splash1', splashiesVolume);
+			forward_right();
+			break;
 			case "backwardleft":
-				g.audioEngine.playOneShot('splish2', splashiesVolume);
-				backward_left();
-				break;
+			g.audioEngine.playOneShot('splish2', splashiesVolume);
+			backward_left();
+			break;
 			case "backwardright":
-				g.audioEngine.playOneShot('splash2', splashiesVolume);
-				backward_right();
-				break;
+			g.audioEngine.playOneShot('splash2', splashiesVolume);
+			backward_right();
+			break;
 			default:
-				return;
+			return;
 			}
 			// increment the fatigue counter
 			kayak.paddler.fatigue += 1;
 			// then require a certain amount of rest
 			setTimeout(resolve, kayak.paddler.restNeeded);
-		} else {
-			// if you *are* tired, reject the promise
-			reject();
-		}
+			} else {
+				// if you *are* tired, reject the promise
+				reject();
+			}
 	}).then(() => {
 		// when the paddler is all rested up, decrement the counter
 		kayak.paddler.fatigue -= 1;
-		fatigue_tooltip.innerText = "";
-		q_tooltip.classList.remove('key-pressed');
-		w_tooltip.classList.remove('key-pressed');
-		o_tooltip.classList.remove('key-pressed');
-		p_tooltip.classList.remove('key-pressed');
-	}).catch(() => {
-		// if the paddler was too tired, maybe tell the player
-		fatigue_tooltip.innerText = "Don't overwork yourself! Rest a sec...";
-	})
+		UIText.fatigue_tooltip.innerText = "";
+		UIText.q_tooltip.classList.remove('key-pressed');
+		UIText.w_tooltip.classList.remove('key-pressed');
+		UIText.o_tooltip.classList.remove('key-pressed');
+		UIText.p_tooltip.classList.remove('key-pressed');
+		}).catch(() => {
+			// if the paddler was too tired, maybe tell the player
+			UIText.fatigue_tooltip.innerText = "Don't overwork yourself! Rest a sec...";
+			})
 }
 
 window.addEventListener('keydown', e => {
-	if (e.key === 'q') {
-		q_tooltip.classList.add('key-pressed');
+		if (e.key === 'q') {
+		UIText.q_tooltip.classList.add('key-pressed');
 		paddle('backwardleft');
-	}
-	if (e.key === 'w') {
-		w_tooltip.classList.add('key-pressed');
+		}
+		if (e.key === 'w') {
+		UIText.w_tooltip.classList.add('key-pressed');
 		paddle('forwardleft');
-	}
-	if (e.key === 'o') {
-		o_tooltip.classList.add('key-pressed');
+		}
+		if (e.key === 'o') {
+		UIText.o_tooltip.classList.add('key-pressed');
 		paddle('forwardright');
-	}
-	if (e.key === 'p') {
-		p_tooltip.classList.add('key-pressed');
+		}
+		if (e.key === 'p') {
+		UIText.p_tooltip.classList.add('key-pressed');
 		paddle('backwardright');
-	}
-})
+		}
+		})
