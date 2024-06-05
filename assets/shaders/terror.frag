@@ -114,7 +114,9 @@ vec4 circle(in vec2 v) {
 
 vec4 terror(vec4 col, float ldepth) {
      vec4 outCol = height(windowTime() * vTexCoord * 5.0);
-     outCol = 10.0 * smoothstep(0.0, 400.0, uTerror) * outCol * outCol;
+     vec4 intermediate = 10.0 * outCol * outCol;
+     outCol = 0.5 * smoothstep(0.0, 400.0, uTerror) * intermediate;
+     outCol += smoothstep(490.0, 500.0, uTerror) * intermediate * intermediate;
      return mix(vec4(0), floor(outCol), ldepth);
 }
 
