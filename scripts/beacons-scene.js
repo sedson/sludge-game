@@ -1,4 +1,4 @@
-import { randomWaterPoint } from "./utils.js";
+import { randomWaterPoint, generateSoundDiff } from "./utils.js";
 import { kayak } from "./game-scene.js";
 
 let g;
@@ -17,13 +17,7 @@ export function setup(gumInstance, assets) {
 export function draw(delta) {
   for (let osc in g.audioEngine.spookyOscillators) {
     let location = g.beacons[osc]
-    const x = location.x
-    const z = location.z
-    const locationDiff = g.vec3(kayak.x - x, 0, kayak.z - z)
-    let soundDiffMag = .5 / Math.abs(locationDiff.x) + .5 / Math.abs(locationDiff.z)
-    if (soundDiffMag > 1) {
-      soundDiffMag = 1
-    }
+    let soundDiffMag = generateSoundDiff(g, location, kayak, 1)
     g.audioEngine.spookyOscillatorVolume(osc, soundDiffMag / 10)
   }
 }

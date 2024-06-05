@@ -21,3 +21,15 @@ export const randomWaterPoint = (gumInstance, boundsx, boundsy) => {
   } // Else, it's water!
   return vec
 }
+
+export const generateSoundDiff = (gumInstance, objectLocation, playerObject, peak) => {
+  // Example call: let soundDiffMag = generateSoundDiff(g, location, kayak, 1)
+  let g = gumInstance;
+  let [x, y, z] = objectLocation
+  const locationDiff = g.vec3(playerObject.x - x, 0, playerObject.y - z)
+  let soundDiffMag = .5 / Math.abs(locationDiff.x) + .5 / Math.abs(locationDiff.z)
+  if (soundDiffMag > peak) {
+    soundDiffMag = peak
+  }
+  return soundDiffMag
+}
