@@ -3,8 +3,7 @@ import { loadAll } from "./load.js";
 import { createEngineAndLoadAudio } from './audio-engine.js';
 
 // Grab our scenes.
-import * as KayakScene from "./kayak-test-scene.js";
-import * as SmoothKayakScene from "./smooth-kayak-test-scene.js";
+import * as SmoothKayakScene from "./game-scene.js";
 
 import * as TerrainScene from "./terrain.js";
 import * as DecorationsScene from "./decorations-scene.js";
@@ -97,7 +96,6 @@ function draw(delta) {
   g.clear(g.color('#ccc769'));
 
   TerrainScene.draw(delta);
-  // KayakScene.draw(delta);
   SmoothKayakScene.draw(delta);
   DecorationsScene.draw(delta);
 
