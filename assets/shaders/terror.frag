@@ -101,7 +101,7 @@ vec4 speed() {
      vec3 colorize = lines * vec3(hash(v) + wt, hash(v.yzx) + wt, hash(v.zxy) + wt);
      vec4 outCol = vec4(colorize, 1.0);
      float vel = 1.0 - easeOutQuad(uVel);
-     outCol = mix(vec4(0), outCol, 0.2 * smoothstep(vel + 0.4, vel + 0.7, length(rad())));
+     outCol = mix(vec4(0), outCol, 0.2 * smoothstep(vel + 0.5, vel + 0.8, length(rad())));
      outCol = mix(vec4(0), outCol, vTexCoord.y);
      return outCol;
 }
