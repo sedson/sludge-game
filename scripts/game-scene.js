@@ -1,6 +1,6 @@
 import { height } from "./height-map.js";
 import * as UIText from "./ui-text.js";
-import * as KayakMotion from "./kayak-motion.js";
+import * as CosmeticMotion from "./cosmetic-motion.js"
 
 // g is the the kludge here.
 let g;
@@ -11,11 +11,6 @@ let kayak;
 let cidada_location;
 let sigh_location;
 let whale_location;
-
-// 0 is -z
-
-let current_vector;
-
 
 let movement_msec_start = 0;
 let movement_msec_total = 600;
@@ -84,13 +79,6 @@ export function make_angle(target, is_turning_right) {
 	movement_angle_target = g.radians(new_angle);
 }
 
-export function setup_current() {
-
-	let current_angle = g.random(0, 360);
-	let current_speed = 0.0004;
-	return make_vector(current_angle, current_speed);
-}
-
 function makeKayak(assets) {
 	const boat = g.node();
 
@@ -131,7 +119,7 @@ export function setup(gumInstance, assets) {
 
 	g.camera.move(0, 1.3, 0);
 
-	current_vector = setup_current();
+	CosmeticMotion.setup_drift_current(g, make_vector);
 	UIText.setup_ui_text();
 }
 
@@ -159,20 +147,6 @@ export function heightmap_friction_calculation() {
 	return friction_factor;
 }
 
-export function kayak_bobbing(current_time) {
-	let big_amp = .045;
-	let big_fre = 1300;
-	let med_amp = .065;
-	let med_fre = 700;
-	let sml_amp = .035;
-	let sml_fre = 300;
-	kayak.position.y = (-0.04 +
-		(big_amp * g.sin(current_time / big_fre)) +
-		(med_amp * g.sin(current_time / med_fre)) +
-		(sml_amp * g.sin(current_time / sml_fre))
-	);
-}
-
 export function update_speed_and_rotation() {
 	let current_time = g.time
 	let kayak_turn = turn_ratio(current_time);
@@ -182,7 +156,7 @@ export function update_speed_and_rotation() {
 	let local_friction = heightmap_friction_calculation();
 	kayak.velocity.mult(1 - local_friction);
 
-	kayak_bobbing(current_time);
+	CosmeticMotion.kayak_bobbing(g, current_time, kayak);
 
 	if (current_time <= movement_msec_start + movement_msec_total) {
 		if (kayak_turn !== 0) {
@@ -208,10 +182,8 @@ export function update_speed_and_rotation() {
 	movement_angular_momentum = movement_angular_momentum * .97;
 	kayak.velocity = make_vector(g.degrees(kayak.ry) + kayak_turn, kayak_speed)
 		.add(kayak.velocity)
-		.add(current_vector);
+		.add(CosmeticMotion.drift_current_vector);
 }
-
-
 
 // The tick function
 export function draw(delta) {
