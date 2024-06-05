@@ -107,11 +107,15 @@ export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 				local_rotation_value = kayak_turn
 			}
 			radial_x = (
-					(movement_speed_target_backwards != local_rotation_value > 0)?
-					KayakMath.degrees_to_radians(local_rotation_value):
-					KayakMath.degrees_to_radians(local_rotation_value) * -1
-				);
-			radial_z = KayakMath.degrees_to_radians(local_rotation_value) * -1;
+				(movement_speed_target_backwards != local_rotation_value > 0)?
+				KayakMath.degrees_to_radians(local_rotation_value):
+				KayakMath.degrees_to_radians(local_rotation_value) * -1
+			);
+			radial_z = (
+				movement_speed_target_backwards ? 
+				KayakMath.degrees_to_radians(local_rotation_value) :
+				KayakMath.degrees_to_radians(local_rotation_value) * -1
+			);
 
 			kayak.rotate(
 				0,
@@ -120,10 +124,15 @@ export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 		}
 	} else if (Math.abs(movement_angular_momentum) > 0.00001 && movement_rotation_past_peak) {
 		radial_x = ((movement_speed_target_backwards != movement_angular_momentum > 0)?
-				KayakMath.degrees_to_radians(movement_angular_momentum):
-				KayakMath.degrees_to_radians(movement_angular_momentum) * -1
-			);
-		radial_z = KayakMath.degrees_to_radians(movement_angular_momentum) * -1;
+			KayakMath.degrees_to_radians(movement_angular_momentum):
+			KayakMath.degrees_to_radians(movement_angular_momentum) * -1
+		);
+		radial_z = (
+			movement_speed_target_backwards ?
+			KayakMath.degrees_to_radians(movement_angular_momentum) :
+			KayakMath.degrees_to_radians(movement_angular_momentum) * -1
+		);
+
 		kayak.rotate(
 			0,
 			kayak.ry + KayakMath.degrees_to_radians(movement_angular_momentum),

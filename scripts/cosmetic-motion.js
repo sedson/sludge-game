@@ -45,14 +45,14 @@ export function kayak_radial_bobbing(g, current_time, kayak, radial_x, radial_z)
 
 	let speed = kayak.velocity.mag();
 
-	let x_rot = radial_x + (
+	let x_rot = (2 * radial_x) + (
 		(((1 - speed) * .25) + x_mult) * (
 			(x_big_amp * g.sin(current_time / x_big_fre)) +
 			(x_med_amp * g.sin(current_time / x_med_fre)) +
 			((x_sml_amp * g.sin(kayak.ry)) * g.sin(current_time / x_sml_fre))
 		)
 	);
-	let z_rot = radial_z + (
+	let z_rot = (4 * radial_z) + (
 		(((1 - speed) * .45) + z_mult) * (
 			(z_big_amp * g.sin(current_time / z_big_fre)) +
 			(z_med_amp * g.sin(current_time / z_med_fre)) +
