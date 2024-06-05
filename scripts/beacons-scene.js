@@ -16,6 +16,7 @@ export function setup(gumInstance, assets) {
 // The tick function
 export function draw(delta) {
   for (let osc in g.audioEngine.spookyOscillators) {
+    if (osc === "undefined") continue;
     let location = g.beacons[osc]
     let soundDiffMag = generateSoundDiff(g, location, kayak, 1)
     g.audioEngine.spookyOscillatorVolume(osc, soundDiffMag / 10)
