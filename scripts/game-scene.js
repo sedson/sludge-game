@@ -94,7 +94,7 @@ export function draw(delta) {
 	let whaleDiffMag = .5 / Math.abs(whale_diff.x) + .5 / Math.abs(whale_diff.z)
 	g.audioEngine.loopVolume('whale', whaleDiffMag / 2);
 
-	KayakMotion.update_speed_and_rotation(g, kayak, debugObjects);
+	KayakMotion.update_speed_and_rotation(g, kayak, debugObjects, DEBUG);
 	
 	g.camera.target.set(...kayak.transform.transformPoint([0, 1, -2]));
 

@@ -41,7 +41,7 @@ export function turn_ratio(g, time) {
 	return new_angle;
 }
 
-export function heightmap_friction_calculation(g, kayak, debugObjects) {
+export function heightmap_friction_calculation(g, kayak, debugObjects, DEBUG) {
 	// Get some point in front of the kayak.
 	let front = kayak.transform.transformPoint([0, 0, -3.5]);
 	let back = kayak.transform.transformPoint([0, 0, 3]);
@@ -78,13 +78,13 @@ export function heightmap_friction_calculation(g, kayak, debugObjects) {
 	return friction_factor;
 }
 
-export function update_speed_and_rotation(g, kayak, debugObjects) {
+export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 	let current_time = g.time
 	let kayak_turn = turn_ratio(g, current_time);
 	global_kayak_turn = kayak_turn;
 	let kayak_speed = movement_ratio(current_time, movement_speed_target_backwards);
 
-	let local_friction = heightmap_friction_calculation(g, kayak, debugObjects);
+	let local_friction = heightmap_friction_calculation(g, kayak, debugObjects, DEBUG);
 	kayak.velocity.mult(1 - local_friction);
 
 	CosmeticMotion.kayak_bobbing(g, current_time, kayak);
