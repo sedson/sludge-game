@@ -125,12 +125,18 @@ export function setup(gumInstance, assets) {
 
 export function heightmap_friction_calculation() {
 	// Get some point in front of the kayak.
-	let front = kayak.transform.transformPoint([0, 0, -1]);
+	let front = kayak.transform.transformPoint([0, 0, -3.5]);
+  let back = kayak.transform.transformPoint([0, 0, 6.5]);
+  let left = kayak.transform.transformPoint([-2, 0, 0]);
+  let right = kayak.transform.transformPoint([2, 0, 0]);
 
 	// Local depth 
 	let depth_center = -height(kayak.x, kayak.z)[0];
 	let depth_front = -height(front[0], front[2])[0];
-	let local_depth = Math.min(depth_center, depth_front);
+  let depth_back = -height(back[0], back[0])[0];
+  let depth_left = -height(left[0], left[2])[0];
+  let depth_right = -height(right[0], right[2])[0];
+	let local_depth = Math.min(depth_center, depth_front, depth_back, depth_left, depth_right);
 
 	// Ignore negative depth (positive height)
 	local_depth = Math.max(local_depth, 0);
