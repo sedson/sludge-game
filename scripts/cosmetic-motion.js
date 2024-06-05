@@ -1,12 +1,14 @@
+import * as KayakMath from "./kayak-math.js";
+
 // This module contains purely cosmetic touches
 // drift from the water current, height bobbing with the waves, etc.
 
 export let drift_current_vector = 0;
 
-export function setup_drift_current(g, make_vector) {
+export function setup_drift_current(g) {
 	let current_angle = g.random(0, 360);
 	let current_speed = 0.0004;
-	drift_current_vector = make_vector(current_angle, current_speed);
+	drift_current_vector = KayakMath.make_vector(g, current_angle, current_speed);
 }
 
 export function kayak_bobbing(g, current_time, kayak) {

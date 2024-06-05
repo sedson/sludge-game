@@ -1,4 +1,6 @@
 import * as CosmeticMotion from "./cosmetic-motion.js";
+import * as KayakMath from "./kayak-math.js";
+import { height } from "./height-map.js";
 
 let movement_msec_start = 0;
 let movement_msec_total = 600;
@@ -37,17 +39,6 @@ export function turn_ratio(g, time) {
 	}
 	let new_angle = (movement_angle_target * (g.sin((time - movement_msec_start) / movement_msec_total)));
 	return new_angle;
-}
-
-export function make_angle(g, target, is_turning_right) {
-	let variation = g.random(0, 10);
-	let new_angle;
-	if (is_turning_right) {
-		new_angle = target + variation;
-	} else {
-		new_angle = -1 * (target + variation);
-	}
-	movement_angle_target = g.radians(new_angle);
 }
 
 export function heightmap_friction_calculation(g, kayak, debugObjects) {
@@ -113,14 +104,14 @@ export function update_speed_and_rotation(g, kayak, debugObjects) {
 			} else {
 				local_rotation_value = kayak_turn
 			}
-			kayak.rotate(0, kayak.ry + degrees_to_radians(local_rotation_value), 0);
+			kayak.rotate(0, kayak.ry + KayakMath.degrees_to_radians(local_rotation_value), 0);
 		}
 	} else if (Math.abs(movement_angular_momentum) > 0.00001 && movement_rotation_past_peak) {
-		kayak.rotate(0, kayak.ry + degrees_to_radians(movement_angular_momentum), 0);
+		kayak.rotate(0, kayak.ry + KayakMath.degrees_to_radians(movement_angular_momentum), 0);
 
 	}
 	movement_angular_momentum = movement_angular_momentum * .97;
-	kayak.velocity = make_vector(g.degrees(kayak.ry) + kayak_turn, kayak_speed)
+	kayak.velocity = KayakMath.make_vector(g, g.degrees(kayak.ry) + kayak_turn, kayak_speed)
 		.add(kayak.velocity)
 		.add(CosmeticMotion.drift_current_vector);
 	kayak.transform.position.add(kayak.velocity.copy().mult(0.1));
@@ -130,28 +121,28 @@ export function forward_left(g) {
 	// -Z is forward.
 	movement_msec_start = g.time;
 	movement_speed_target_backwards = false;
-	make_angle(g, movement_angle_base_forward, false);
+	movement_angle_target = KayakMath.make_angle(g, movement_angle_base_forward, false);
 	movement_angular_momentum = -1 * movement_angular_momentum_max;
 	movement_rotation_past_peak = false;
 }
 export function forward_right(g) {
 	movement_msec_start = g.time;
 	movement_speed_target_backwards = false;
-	make_angle(g, movement_angle_base_forward, true);
+	movement_angle_target = KayakMath.make_angle(g, movement_angle_base_forward, true);
 	movement_angular_momentum = movement_angular_momentum_max;
 	movement_rotation_past_peak = false;
 }
 export function backward_left(g) {
 	movement_msec_start = g.time;
 	movement_speed_target_backwards = true;
-	make_angle(g, movement_angle_base_backward, true);
+	movement_angle_target = KayakMath.make_angle(g, movement_angle_base_backward, true);
 	movement_angular_momentum = movement_angular_momentum_max;
 	movement_rotation_past_peak = false;
 }
 export function backward_right(g) {
 	movement_msec_start = g.time;
 	movement_speed_target_backwards = true;
-	make_angle(g, movement_angle_base_backward, false);
+	movement_angle_target = KayakMath.make_angle(g, movement_angle_base_backward, false);
 	movement_angular_momentum = -1 * movement_angular_momentum_max;
 	movement_rotation_past_peak = false;
 }

@@ -1,7 +1,7 @@
-import { height } from "./height-map.js";
 import * as UIText from "./ui-text.js";
 import * as CosmeticMotion from "./cosmetic-motion.js"
 import * as KayakMotion from "./kayak-motion.js"
+import * as KayakMath from "./kayak-math.js"
 
 // g is the the kludge here.
 let g;
@@ -64,7 +64,9 @@ export function setup(gumInstance, assets) {
 		restNeeded: 2000, // ms of rest to recover from each stroke
 	};
 
-	CosmeticMotion.setup_drift_current(g, make_vector);
+	g.camera.move(0, 1.3, 0);
+	CosmeticMotion.setup_drift_current(g);
+
 	UIText.setup_ui_text();
 
 	if (DEBUG) {
