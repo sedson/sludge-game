@@ -15,3 +15,67 @@ body {
   bottom: 1rem;
   left: 1rem;
 }
+
+.fatigue-tooltip {
+  position: fixed;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  z-index: 10;
+  top: 3rem;
+  color: red;
+  font-size: 36px;
+}
+
+.q-tooltip {
+  bottom: 3rem;
+  color: green;
+  font-size: 24px;
+  margin: auto;
+  position: fixed;
+  text-align: right;
+  width: 4%;
+  left: 42%;
+  z-index: 11;
+}
+
+.w-tooltip {
+  bottom: 3rem;
+  color: green;
+  font-size: 24px;
+  left: 46%;
+  margin: auto;
+  position: fixed;
+  text-align: center;
+  width: 4%;
+  z-index: 11;
+}
+
+.o-tooltip {
+  bottom: 3rem;
+  color: green;
+  font-size: 24px;
+  left: 50%;
+  margin: auto;
+  position: fixed;
+  text-align: center;
+  width: 4%;
+  z-index: 11;
+}
+
+.p-tooltip {
+  bottom: 3rem;
+  color: green;
+  font-size: 24px;
+  left: 54%;
+  margin: auto;
+  position: fixed;
+  text-align: left;
+  width: 4%;
+  z-index: 11;
+}
+
+.key-pressed {
+  color: blue;
+  font-weight: bold;
+}

@@ -40,6 +40,32 @@ const heightInfo = document.createElement('div');
 heightInfo.classList.add('height-info');
 document.body.append(heightInfo);
 
+// Make a fatigued tooltip
+const fatigue_tooltip = document.createElement('div');
+fatigue_tooltip.classList.add('fatigue-tooltip');
+document.body.append(fatigue_tooltip);
+
+// Make controls display
+const q_tooltip = document.createElement('div');
+q_tooltip.classList.add('q-tooltip');
+document.body.append(q_tooltip);
+q_tooltip.innerText = "Q";
+
+const w_tooltip = document.createElement('div');
+w_tooltip.classList.add('w-tooltip');
+document.body.append(w_tooltip);
+w_tooltip.innerText = "W";
+
+const o_tooltip = document.createElement('div');
+o_tooltip.classList.add('o-tooltip');
+document.body.append(o_tooltip);
+o_tooltip.innerText = "O";
+
+const p_tooltip = document.createElement('div');
+p_tooltip.classList.add('p-tooltip');
+document.body.append(p_tooltip);
+p_tooltip.innerText = "P";
+
 let splashiesVolume = .11
 
 const randomWorldPoint = () => {
@@ -270,22 +296,6 @@ export function backward_right() {
 	movement_rotation_past_peak = false;
 }
 
-// window.addEventListener('keydown', e => {
-// 	if (e.key === 'q') {
-// 		backward_left();
-// 	}
-// 	if (e.key === 'w') {
-// 		forward_left();
-// 	}
-// 	if (e.key === 'o') {
-// 		forward_right();
-// 	}
-// 	if (e.key === 'p') {
-// 		backward_right();
-// 	}
-// })
-
-
 // Handle the impulse to paddle, as directed by player's keypress
 // if the paddler is too tired, they must rest before continuing
 async function paddle(direction) {
@@ -325,23 +335,33 @@ async function paddle(direction) {
   }).then(() => {
     // when the paddler is all rested up, decrement the counter
     kayak.paddler.fatigue -= 1;
+		fatigue_tooltip.innerText = "";
+		q_tooltip.classList.remove('key-pressed');
+		w_tooltip.classList.remove('key-pressed');
+		o_tooltip.classList.remove('key-pressed');
+		p_tooltip.classList.remove('key-pressed');
   }).catch(() => {
     // if the paddler was too tired, maybe tell the player
     console.log("too tired...");
+		fatigue_tooltip.innerText = "Don't overwork yourself! Rest a sec...";
   })
 }
 
 window.addEventListener('keydown', e => {
-  if (e.key === 'q') {
-    paddle('backwardleft');
-  }
-  if (e.key === 'w') {
-    paddle('forwardleft');
-  }
-  if (e.key === 'o') {
-    paddle('forwardright');
-  }
-  if (e.key === 'p') {
-    paddle('backwardright');
-  }
+	if (e.key === 'q') {
+		q_tooltip.classList.add('key-pressed');
+		paddle('backwardleft');
+	}
+	if (e.key === 'w') {
+		w_tooltip.classList.add('key-pressed');
+		paddle('forwardleft');
+	}
+	if (e.key === 'o') {
+		o_tooltip.classList.add('key-pressed');
+		paddle('forwardright');
+	}
+	if (e.key === 'p') {
+		p_tooltip.classList.add('key-pressed');
+		paddle('backwardright');
+	}
 })
