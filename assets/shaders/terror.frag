@@ -126,5 +126,13 @@ void main() {
      float m = smoothstep(uStart, uEnd, lDepth * (uFar - uNear) + uNear);
      vec4 col = texture(uMainTex, vTexCoord);
      col.rgb = mix(col.rgb, uBlendColor.rgb, m * uBlendColor.a);
-     fragColor = terror(col, lDepth) * 0.001 + col + speed();
+     vec3 outCol = (terror(col, lDepth) * 0.001 + col + speed()).xyz;
+    
+     outCol = 1.2*outCol/(1.0+outCol);
+    
+     // outCol = sqrt( outCol );
+     outCol = pow( outCol, vec3(0.96,0.78,0.95) ); 
+     outCol = outCol*0.1 + 0.9*outCol*outCol*(3.0-2.0*outCol);
+
+     fragColor = vec4(outCol - 0.05, 1.0);
 }
