@@ -33,6 +33,8 @@ function makeKayak(assets) {
   const riggingMesh = g.plyLoader.fromBuffer(assets.get('kayak-rigging-model'));
 
   boat.setGeometry(g.mesh(mainMesh));
+  boat.setProgram('main');
+
 
   const child = boat.createChildNode()
     .setGeometry(g.mesh(riggingMesh.renderEdges()));

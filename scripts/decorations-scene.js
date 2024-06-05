@@ -33,7 +33,7 @@ export function setup(gumInstance, assets) {
   function tree1(x, y, z, scale) {
     const mesh = g.mesh(g.plyLoader.fromBuffer(assets.get('tree')));
     const canopyMesh = g.mesh(
-      g.plyLoader.fromBuffer(assets.get('tree-canopy')).fill(g.color('vert'))
+      g.plyLoader.fromBuffer(assets.get('tree-canopy')).fill(g.color('chocolate'))
     );
 
     const h = height(x, z)[0];

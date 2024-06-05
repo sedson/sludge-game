@@ -110,12 +110,10 @@ function makeKayak(assets) {
 // The once at the start function.
 export function setup(gumInstance, assets) {
 	g = gumInstance;
-	const gridShape = g.shapes.grid(100, 100);
-	g.node().setGeometry(
-		g.mesh(gridShape.renderEdges())
-	);
+
 
 	kayak = makeKayak(assets);
+	kayak.setProgram('main');
 	window.kayak = kayak;
 	kayak.velocity = g.vec3();
 
@@ -155,9 +153,9 @@ export function kayak_bobbing(current_time) {
 	let big_fre = 1300;
 	let med_amp = .065;
 	let med_fre = 700;
-	let sml_amp = .035; 
+	let sml_amp = .035;
 	let sml_fre = 300;
-	kayak.position.y = ( -0.04 +
+	kayak.position.y = (-0.04 +
 		(big_amp * g.sin(current_time / big_fre)) +
 		(med_amp * g.sin(current_time / med_fre)) +
 		(sml_amp * g.sin(current_time / sml_fre))
@@ -282,25 +280,25 @@ async function paddle(direction) {
 		if (kayak.paddler.fatigue < 2) {
 			// no? ok, paddle this stroke
 			switch (direction) {
-				case "forwardleft":
-					// -Z is forward.
-					g.audioEngine.playOneShot('splish1', splashiesVolume);
-					forward_left();
-					break;
-				case "forwardright":
-					g.audioEngine.playOneShot('splash1', splashiesVolume);
-					forward_right();
-					break;
-				case "backwardleft":
-					g.audioEngine.playOneShot('splish2', splashiesVolume);
-					backward_left();
-					break;
-				case "backwardright":
-					g.audioEngine.playOneShot('splash2', splashiesVolume);
-					backward_right();
-					break;
-				default:
-					return;
+			case "forwardleft":
+				// -Z is forward.
+				g.audioEngine.playOneShot('splish1', splashiesVolume);
+				forward_left();
+				break;
+			case "forwardright":
+				g.audioEngine.playOneShot('splash1', splashiesVolume);
+				forward_right();
+				break;
+			case "backwardleft":
+				g.audioEngine.playOneShot('splish2', splashiesVolume);
+				backward_left();
+				break;
+			case "backwardright":
+				g.audioEngine.playOneShot('splash2', splashiesVolume);
+				backward_right();
+				break;
+			default:
+				return;
 			}
 			// increment the fatigue counter
 			kayak.paddler.fatigue += 1;

@@ -18,6 +18,8 @@ const g = new Gum("#game-canvas");
 g.pixelRatio = window.devicePixelRatio ?? 1.0;
 g.defaultPass = 'unlit';
 
+const waterQuad = g.mesh(g.shapes.quad(''))
+
 // Step (1) async and wait load all the assets. That way our code below can 
 // just call assets.get('default-frag') or assets.get('kayak-model') and get 
 // the responses synchronously. Less headache (maybe). The assets will contain 
@@ -35,6 +37,11 @@ function setup() {
   document.addEventListener('keydown', () => g.audioEngine.activateContext())
   // Here is the easiest way to add new shaders to GUM! These shaders will be 
   // available to any mesh as 'terrainShaderProgram'.
+  g.addProgram('main', {
+    vert: assets.get('default-vert'),
+    frag: assets.get('default-frag'),
+  });
+
   g.addProgram('terrainShaderProgram', {
     vert: assets.get('terrain-vert'),
     frag: assets.get('terrain-frag'),
@@ -50,21 +57,24 @@ function setup() {
     frag: assets.get('sprite-frag'),
   });
 
+  Object.assign(g.globalUniforms, {
+    uShallowColor: g.color("#4c987b").rgb,
+    uDeepColor: g.color("#2f5a32").rgb,
+    uShoreColor: [0.8, 0.9, 0.8],
+    uWaterParams: [7, 0.5, 0.4],
+  });
 
   g.audioEngine = createEngineAndLoadAudio();
 
   TerrainScene.setup(g, assets);
-  // KayakScene.setup(g, assets);
   SmoothKayakScene.setup(g, assets);
-
   DecorationsScene.setup(g, assets);
 
   g.addEffect('post-depth-fade', {
     uStart: 10,
     uEnd: 400,
-    uBlendColor: g.color('#444466').rgba,
+    uBlendColor: g.color('#ccc769').rgba,
   });
-
 
   g.audioEngine.loopVolume('cicadas', 1);
   g.audioEngine.loopVolume('waterglide_ambient', 3);
@@ -74,7 +84,7 @@ function setup() {
 
 // called each frame
 function draw(delta) {
-  g.clear(g.color('#444466'));
+  g.clear(g.color('#ccc769'));
 
   TerrainScene.draw(delta);
   // KayakScene.draw(delta);
