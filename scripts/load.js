@@ -58,7 +58,11 @@ const assets = {
   'panorama': {
     path: '/assets/panorama.ply',
     type: 'ply',
-  }
+  },
+  'terror-frag': {
+    path: '/assets/shaders/terror.frag',
+    type: 'shader',
+  },
 };
 
 function loadImg(src) {

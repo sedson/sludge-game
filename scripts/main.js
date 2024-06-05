@@ -52,6 +52,7 @@ function setup() {
     frag: assets.get('foliage-frag'),
   });
 
+
   g.addProgram('sprite', {
     vert: assets.get('default-vert'),
     frag: assets.get('sprite-frag'),
@@ -64,17 +65,22 @@ function setup() {
     uWaterParams: [7, 0.5, 0.4],
   });
 
+  g.shaders['post-terror'] = {
+    frag: assets.get('terror-frag'),
+  };
+
   g.audioEngine = createEngineAndLoadAudio();
 
   TerrainScene.setup(g, assets);
   SmoothKayakScene.setup(g, assets);
   DecorationsScene.setup(g, assets);
 
-    g.addEffect('post-terror', {
-        uTime: 0,
-        uTerror: 0,
-    });
-    
+  g.addEffect('post-terror', {
+    uTime: 0,
+      uTerror: 0,
+      uVel: 0,
+  });
+
   g.addEffect('post-depth-fade', {
     uStart: 10,
     uEnd: 400,
