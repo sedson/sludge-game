@@ -74,21 +74,6 @@ export class AudioEngine {
     vibrato2.connect(vibratoGain2).connect(sp1.frequency);
     vibrato2.start();
 
-    // const tremolo = this.buildOscillator("sine", 4);
-    // const tremoloGain = this.lowGain(.05)
-    // tremoloGain.gain.setValueAtTime(0.5, this.audioCtx.currentTime);
-    // tremolo.connect(tremoloGain.gain)
-    // tremolo.start();
-
-    // // Reverb effect
-    // const convolver = this.audioCtx.createConvolver();
-    // this.loadReverbBuffer(convolver);
-
-    // // Gain node for tremolo effect
-    // const gainNode2 = this.audioCtx.createGain();
-    // gainNode2.gain.value = 0.5; // Base volume
-    // tremoloGain.connect(gainNode2.gain);
-
     // Connect nodes
     sp1.connect(gainNode).connect(this.limiter);
     // sp1.connect(gainNode).connect(convolver).connect(this.limiter);
@@ -171,6 +156,8 @@ export function createEngineAndLoadAudio() {
   speakers.activateContext()
 
   speakers.createLoop('cicadas', "../assets/audio/cicadas.wav")
+  speakers.createLoop('whale', "../assets/audio/mechanical_whale.mp3")
+  speakers.createLoop('sighs', "../assets/audio/giant_sighs.mp3")
   speakers.createLoop('waterglide', "../assets/audio/splashies/continuous1.mp3")
   speakers.createLoop('waterglide_ambient', "../assets/audio/splashies/continuous1.mp3")
 

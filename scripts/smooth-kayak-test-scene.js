@@ -7,6 +7,8 @@ let g;
 
 let kayak;
 let cidada_location;
+let sigh_location;
+let whale_location;
 
 // 0 is -z
 
@@ -117,8 +119,10 @@ export function setup(gumInstance, assets) {
 	window.kayak = kayak;
 	kayak.velocity = g.vec3();
 
-	// Cicada location
+	// Audio Locations
 	cidada_location = randomWorldPoint()
+	whale_location = g.vec3(200, 0, 200);
+	sigh_location = g.vec3(0, 0, 0);
 
   // Parent the camera to the kayak.
   g.camera.setParent(kayak);
@@ -205,8 +209,15 @@ export function draw(delta) {
 
 	const cicadaDiff = g.vec3(kayak.x - cidada_location.x, 0, kayak.z - cidada_location.z)
 	let cicadaDiffMag = .5 / Math.abs(cicadaDiff.x) + .5 / Math.abs(cicadaDiff.z)
-	// console.log(300 - cicadaDiffMag)
 	g.audioEngine.loopVolume('cicadas', cicadaDiffMag);
+
+  const sigh_diff = g.vec3(kayak.x - sigh_location.x, 0, kayak.z - sigh_location.z)
+	let sighDiffMag = .5 / Math.abs(sigh_location.x) + .5 / Math.abs(sigh_location.z)
+	g.audioEngine.loopVolume('sigh', sighDiffMag * 5);
+
+  const whale_diff = g.vec3(kayak.x - whale_location.x, 0, kayak.z - whale_location.z)
+	let whaleDiffMag = .5 / Math.abs(whale_location.x) + .5 / Math.abs(whale_location.z)
+	g.audioEngine.loopVolume('whale', whaleDiffMag * 5);
 
   g.camera.target.set(...kayak.transform.transformPoint([0, 1, -2]));
   kayak.transform.position.add(kayak.velocity.copy().mult(0.1 * delta));
