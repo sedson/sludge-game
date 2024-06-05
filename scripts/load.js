@@ -67,6 +67,18 @@ const assets = {
     path: './assets/shaders/water.frag',
     type: 'shader',
   },
+  'fuel': {
+    path: '/assets/textures/fuel.png',
+    type: 'image',
+  },
+  'beacon': {
+    path: '/assets/beacon.ply',
+    type: 'ply',
+  },
+  'beaconwires': {
+    path: '/assets/beacon-wires.ply',
+    type: 'ply',
+  },
 };
 
 function loadImg(src) {

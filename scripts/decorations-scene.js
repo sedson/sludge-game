@@ -68,6 +68,39 @@ export function setup(gumInstance, assets) {
 
   }
 
+  // g.orbit();
+  // load the texture for beacon model
+  const beaconSpriteData = assets.get('fuel');
+  const beaconSpriteTex = new g.Texer(beaconSpriteData.width,
+				      beaconSpriteData.height);
+  beaconSpriteTex.ctx.drawImage(beaconSpriteData, 0, 0);
+  g.addTexer(beaconSpriteTex);
+
+  // function to make beacon model
+  function makeBeacon(x, y, z) {
+    const scale = 1;
+    const solidMesh = g.mesh(g.plyLoader.fromBuffer(
+      assets.get('beacon')));
+    const wireMesh = g.plyLoader.fromBuffer(
+      assets.get('beaconwires')).fill(g.color('#ffff00'))
+
+    const beacon = g.node()
+	  .setGeometry(solidMesh)
+	  .setProgram('sprite')
+	  .uniform('uTex', beaconSpriteTex.id)
+	  .move(x, y, z) // no h
+	  .rescale(scale);
+
+    const beaconWire = beacon.createChildNode()
+	  .setGeometry(g.mesh(wireMesh.renderEdges()));
+
+    return beacon;
+  }
+
+  // place beacon models, randomly?
+  // TODO sync with sound points
+  makeBeacon(0, 0, 10);
+
   g.camera.far = 1000;
 }
 
