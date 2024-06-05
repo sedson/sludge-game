@@ -20,14 +20,14 @@ export function setup(gumInstance, assets) {
     .setProgram('sprite')
     .uniform('uTex', spriteTexture.id);
 
-  const pano2 = g.node()
-    .setGeometry(panoMesh)
-    .rescale(10)
-    .rotate(0, 20, 0)
-    .setProgram('sprite')
-    .uniform('uTex', spriteTexture.id);
-
-
+  // TODO make a second panorama for the close one?
+  // otherwise bridges won't work...
+  // const pano2 = g.node()
+  //   .setGeometry(panoMesh)
+  //   .rescale(10)
+  //   .rotate(0, 20, 0)
+  //   .setProgram('sprite')
+  //   .uniform('uTex', spriteTexture.id);
 
   // Make the default tree!
   function tree1(x, y, z, scale) {
