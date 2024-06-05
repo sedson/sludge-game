@@ -159,23 +159,35 @@ export function setup(gumInstance, assets) {
 		restNeeded: 2000, // ms of rest to recover from each stroke
 	};
 
-	g.camera.move(0, 1.3, -1);
+	g.camera.move(0, 1.3, 0);
 
 	current_vector = setup_current();
 }
 
 export function heightmap_friction_calculation() {
-	let boundary = 1;
-	let local_height = height(kayak.x, kayak.z)[0];
-	let remaining = 1 - movement_passive_friction
-	if (local_height < (0 - boundary)) {
-		return movement_passive_friction;
-	} else {
-		return Math.max(
-			1,
-			movement_passive_friction + (remaining * g.sin(boundary + local_height))
-		);
-	}
+	// Get some point in front of the kayak.
+	let front = kayak.transform.transformPoint([0, 0, -1]);
+	console.log(front);
+
+	// Local depth 
+	let depth_center = -height(kayak.x, kayak.z)[0];
+	let depth_front = -height(front[0], front[2])[0];
+	let local_depth = Math.min(depth_center, depth_front);
+
+	// Ignore negative depth (positive height)
+	local_depth = Math.max(local_depth, 0);
+
+	// Depth where more friction starts 
+	let depth_boundary = 1;
+
+	// Multiplier for full friction.
+	let friction_multiplier = 60;
+
+	// Remap the depth from 
+	const friction_factor = g.remap(local_depth, depth_boundary, -depth_boundary, movement_passive_friction, friction_multiplier * movement_passive_friction);
+
+	console.log({ friction_factor });
+	return friction_factor;
 }
 
 export function kayak_bobbing(current_time) {
