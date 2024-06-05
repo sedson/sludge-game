@@ -7,7 +7,7 @@ export class AudioEngine {
     this.spookyOscillators = {}
 
     const waveShaper = this.audioCtx.createWaveShaper()
-    waveShaper.curve = this.createLimiterCurve(50)
+    waveShaper.curve = this.createLimiterCurve(100)
     waveShaper.oversample = '4x'
     waveShaper.connect(this.audioCtx.destination)
     this.limiter = waveShaper

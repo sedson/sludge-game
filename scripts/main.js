@@ -127,6 +127,7 @@ function draw(delta) {
   TerrainScene.draw(delta);
   SmoothKayakScene.draw(delta);
   DecorationsScene.draw(delta);
+  BeaconsScene.draw(delta);
 
   if (!isOrbitMode) {
     g.camera.move(...CAMERA_DEF_POS);

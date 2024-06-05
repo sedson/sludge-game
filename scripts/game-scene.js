@@ -38,6 +38,7 @@ let global_kayak_turn = 0;
 let splashiesVolume = .11
 
 let debugObjects = {};
+let exertion_feelings = ["Aghhh...", "*breathes heavily*", "huff huff", "Fwoo!", "*wipes sweat off brow*", "fwoof", "my goodness", "!", "I am tired", "...", "I am afraid"]
 
 const randomWorldPoint = () => {
 	return g.vec3(Math.floor(Math.random() * 200), 0, Math.floor(Math.random() * 200));
@@ -116,6 +117,7 @@ export function setup(gumInstance, assets) {
 
 	// Parent the camera to the kayak.
 	g.camera.setParent(kayak);
+  g.beacons = {}
 
 	// Data related to paddling the kayakheight(kayak.x, kayak.z)
 	kayak.paddler = {
@@ -214,7 +216,7 @@ export function update_speed_and_rotation() {
 
 // The tick function
 export function draw(delta) {
-
+  
 	const cicadaDiff = g.vec3(kayak.x - cidada_location.x, 0, kayak.z - cidada_location.z)
 	let cicadaDiffMag = .5 / Math.abs(cicadaDiff.x) + .5 / Math.abs(cicadaDiff.z)
 	g.audioEngine.loopVolume('cicadas', cicadaDiffMag / 2);
@@ -310,14 +312,15 @@ async function paddle(direction) {
 	}).then(() => {
 		// when the paddler is all rested up, decrement the counter
 		kayak.paddler.fatigue -= 1;
-		UIText.fatigue_tooltip.innerText = "";
+		UIText.fatigue_tooltip.innerText = ""
 		UIText.q_tooltip.classList.remove('key-pressed');
 		UIText.w_tooltip.classList.remove('key-pressed');
 		UIText.o_tooltip.classList.remove('key-pressed');
 		UIText.p_tooltip.classList.remove('key-pressed');
 	}).catch(() => {
 		// if the paddler was too tired, maybe tell the player
-		UIText.fatigue_tooltip.innerText = "Don't overwork yourself! Rest a sec...";
+		UIText.fatigue_tooltip.innerText = exertion_feelings[Math.floor(Math.random() * exertion_feelings.length)];
+		// UIText.fatigue_tooltip.innerText = "Don't overwork yourself! Rest a sec...";
 	})
 }
 
