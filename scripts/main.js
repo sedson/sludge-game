@@ -122,6 +122,7 @@ function setup() {
 
 // called each frame
 function draw(delta) {
+    g.audioEngine.update(delta);
   g.clear(g.color('#ccc769'));
 
   TerrainScene.draw(delta);
