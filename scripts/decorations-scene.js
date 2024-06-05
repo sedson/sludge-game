@@ -82,7 +82,7 @@ export function setup(gumInstance, assets) {
     const solidMesh = g.mesh(g.plyLoader.fromBuffer(
       assets.get('beacon')));
     const wireMesh = g.plyLoader.fromBuffer(
-      assets.get('beaconwires')).fill(g.color('#ffff00'))
+      assets.get('beaconwires')).fill(g.color('#df713b'))
 
     const beacon = g.node()
 	  .setGeometry(solidMesh)
