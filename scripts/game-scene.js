@@ -17,28 +17,77 @@ export let kayak;
 let debugObjects = {};
 let exertion_feelings = ["Aghhh...", "*breathes heavily*", "huff huff", "Fwoo!", "*wipes sweat off brow*", "fwoof", "my goodness", "!", "I am tired", "...", "I am afraid"]
 
-function makeKayak(assets) {
-	const boat = g.node();
+// TODO provide way to switch boats? maybe at start screen
+// TODO maybe rename this makeBoat
+function makeBoat(assets, instructions) {
 
-	const mainMesh = g.plyLoader.fromBuffer(assets.get('kayak-model'));
-	const riggingMesh = g.plyLoader.fromBuffer(assets.get('kayak-rigging-model'));
+  // unpack "instructions" for building a boat
+  // (object containing some combination of these keys)
+  const {
+    'model': model,
+    'modelcolor': modelcolor,
+    'sprite': sprite,
+    'wires': wires,
+    'wirecolor': wirecolor,
+  } = instructions;
 
-	boat.setGeometry(g.mesh(mainMesh));
+  // start building the boat, as a new scene graph node
+  const boat = g.node();
 
-	const child = boat.createChildNode()
-		.setGeometry(g.mesh(riggingMesh.renderEdges()));
+  // load the boat mesh, and maybe wireframe
+  const mainMesh = g.plyLoader.fromBuffer(assets.get(model));
+  boat.setGeometry(g.mesh(mainMesh))
 
-	return boat;
+  // maybe load and use a sprite for the main mesh
+  if (sprite) {
+    const boatSpriteData = assets.get(sprite);
+    const boatSpriteTex = new g.Texer(boatSpriteData.width,
+				      boatSpriteData.height);
+    boatSpriteTex.ctx.drawImage(boatSpriteData, 0, 0);
+    g.addTexer(boatSpriteTex);
+
+    boat.setProgram('sprite').uniform('uTex', boatSpriteTex.id);
+  }
+  // otherwise apply a solid color?
+  // else {
+  //   boat.setProgram('main');
+  // }
+
+  // maybe load an additional wireframe (rigging) mesh
+  if (wires) {
+    const riggingMesh = g.plyLoader.fromBuffer(assets.get(wires)).fill(g.color(wirecolor));
+    boat.createChildNode().setGeometry(g.mesh(riggingMesh.renderEdges()));
+  }
+
+  return boat;
 }
 
 // The once at the start function.
 export function setup(gumInstance, assets) {
-	g = gumInstance;
+  g = gumInstance;
 
-	kayak = makeKayak(assets);
-	kayak.setProgram('main');
-	window.kayak = kayak;
-	kayak.velocity = g.vec3();
+  const boats = [
+    {
+      'model': 'raft',
+      'modelcolor': null,
+      'sprite': 'raft-sprite',
+      'wires': 'raft-rigging',
+      'wirecolor': '#8f563b',
+    },
+    {
+      'model': 'kayak-model',
+      'modelcolor': '#00ff00',
+      'sprite': null,
+      'wires': 'kayak-rigging-model',
+      'wirecolor': '#ffff00',
+    },
+  ];
+  // TODO get index of selected boat from load screen?
+  const selectedBoat = 0;
+  kayak = makeBoat(assets, boats[selectedBoat]);
+
+  window.kayak = kayak;
+  kayak.velocity = g.vec3();
 
 	// Audio Locations
 	SceneSounds.setup_locations(g)

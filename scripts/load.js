@@ -79,6 +79,18 @@ const assets = {
     path: './assets/beacon-wires.ply',
     type: 'ply',
   },
+  'raft': {
+    path: '/assets/raft.ply',
+    type: 'ply',
+  },
+  'raft-rigging': {
+    path: '/assets/raft-rigging.ply',
+    type: 'ply',
+  },
+  'raft-sprite': {
+    path: '/assets/textures/raft.png',
+    type: 'image',
+  },
 };
 
 function loadImg(src) {
