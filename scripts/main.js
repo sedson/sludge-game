@@ -13,6 +13,10 @@ import * as DecorationsScene from "./decorations-scene.js";
 // element.
 const g = new Gum("#game-canvas");
 
+const CAMERA_DEF_POS = g.vec3(0, 1.3, 0);
+const LAST_ORBIT_POS = g.vec3();
+let isOrbitMode = false;
+
 // Tell gum to use high pixel density if available.
 g.pixelRatio = window.devicePixelRatio ?? 1.0;
 g.defaultPass = 'unlit';
@@ -96,6 +100,21 @@ function setup() {
   g.audioEngine.loopVolume('cicadas', 1);
   g.audioEngine.loopVolume('waterglide_ambient', 3);
 
+  g.orbit();
+  g.camera.move(...CAMERA_DEF_POS);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'r') {
+      if (isOrbitMode) {
+        LAST_ORBIT_POS.set(...g.camera.position);
+        g.camera.move(...CAMERA_DEF_POS);
+        isOrbitMode = false;
+        return;
+      }
+      isOrbitMode = true;
+      g.camera.position.set(...LAST_ORBIT_POS);
+    }
+  })
 }
 
 
@@ -107,7 +126,9 @@ function draw(delta) {
   SmoothKayakScene.draw(delta);
   DecorationsScene.draw(delta);
 
-
+  if (!isOrbitMode) {
+    g.camera.move(...CAMERA_DEF_POS);
+  }
   g.drawScene();
 
   const gl = g.renderer.gl;
@@ -116,6 +137,7 @@ function draw(delta) {
   g.renderer.setProgram('water');
   g.drawMesh(waterQuad);
   gl.disable(gl.BLEND);
+
 }
 
 

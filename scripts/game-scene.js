@@ -5,6 +5,9 @@ import * as CosmeticMotion from "./cosmetic-motion.js"
 // g is the the kludge here.
 let g;
 
+// Add some debug boxes.
+const DEBUG = true;
+
 // Module "state" can go here. We can do better.
 
 let kayak;
@@ -32,6 +35,8 @@ let movement_passive_friction = 0.005;
 let global_kayak_turn = 0;
 
 let splashiesVolume = .11
+
+let debugObjects = {};
 
 const randomWorldPoint = () => {
 	return g.vec3(Math.floor(Math.random() * 200), 0, Math.floor(Math.random() * 200));
@@ -117,26 +122,41 @@ export function setup(gumInstance, assets) {
 		restNeeded: 2000, // ms of rest to recover from each stroke
 	};
 
-	g.camera.move(0, 1.3, 0);
-
 	CosmeticMotion.setup_drift_current(g, make_vector);
 	UIText.setup_ui_text();
+
+	if (DEBUG) {
+		let msh = g.mesh(g.shapes.uvsphere(1, 4).fill(g.color("#ffff00")));
+		debugObjects.front = g.node().setGeometry(msh);
+		debugObjects.back = g.node().setGeometry(msh);
+		debugObjects.left = g.node().setGeometry(msh);
+		debugObjects.right = g.node().setGeometry(msh);
+	}
+
 }
+
 
 export function heightmap_friction_calculation() {
 	// Get some point in front of the kayak.
 	let front = kayak.transform.transformPoint([0, 0, -3.5]);
-  let back = kayak.transform.transformPoint([0, 0, 6.5]);
-  let left = kayak.transform.transformPoint([-2, 0, 0]);
-  let right = kayak.transform.transformPoint([2, 0, 0]);
+	let back = kayak.transform.transformPoint([0, 0, 3]);
+	let left = kayak.transform.transformPoint([-1, 0, 0]);
+	let right = kayak.transform.transformPoint([1, 0, 0]);
 
 	// Local depth 
 	let depth_center = -height(kayak.x, kayak.z)[0];
 	let depth_front = -height(front[0], front[2])[0];
-  let depth_back = -height(back[0], back[0])[0];
-  let depth_left = -height(left[0], left[2])[0];
-  let depth_right = -height(right[0], right[2])[0];
+	let depth_back = -height(back[0], back[2])[0];
+	let depth_left = -height(left[0], left[2])[0];
+	let depth_right = -height(right[0], right[2])[0];
 	let local_depth = Math.min(depth_center, depth_front, depth_back, depth_left, depth_right);
+
+	if (DEBUG) {
+		debugObjects.front.move(front[0], -depth_front + 0.1, front[2]);
+		debugObjects.back.move(back[0], -depth_back + 0.1, back[2]);
+		debugObjects.left.move(left[0], -depth_left + 0.1, left[2]);
+		debugObjects.right.move(right[0], -depth_right + 0.1, right[2]);
+	}
 
 	// Ignore negative depth (positive height)
 	local_depth = Math.max(local_depth, 0);
@@ -257,25 +277,25 @@ async function paddle(direction) {
 		if (kayak.paddler.fatigue < 2) {
 			// no? ok, paddle this stroke
 			switch (direction) {
-				case "forwardleft":
-					// -Z is forward.
-					g.audioEngine.playOneShot('splish1', splashiesVolume);
-					forward_left();
-					break;
-				case "forwardright":
-					g.audioEngine.playOneShot('splash1', splashiesVolume);
-					forward_right();
-					break;
-				case "backwardleft":
-					g.audioEngine.playOneShot('splish2', splashiesVolume);
-					backward_left();
-					break;
-				case "backwardright":
-					g.audioEngine.playOneShot('splash2', splashiesVolume);
-					backward_right();
-					break;
-				default:
-					return;
+			case "forwardleft":
+				// -Z is forward.
+				g.audioEngine.playOneShot('splish1', splashiesVolume);
+				forward_left();
+				break;
+			case "forwardright":
+				g.audioEngine.playOneShot('splash1', splashiesVolume);
+				forward_right();
+				break;
+			case "backwardleft":
+				g.audioEngine.playOneShot('splish2', splashiesVolume);
+				backward_left();
+				break;
+			case "backwardright":
+				g.audioEngine.playOneShot('splash2', splashiesVolume);
+				backward_right();
+				break;
+			default:
+				return;
 			}
 			// increment the fatigue counter
 			kayak.paddler.fatigue += 1;
