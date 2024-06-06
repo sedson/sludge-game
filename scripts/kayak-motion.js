@@ -144,7 +144,7 @@ export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 
 	}
 
-	CosmeticMotion.kayak_radial_bobbing(g, current_time, kayak, radial_x, radial_z);
+	CosmeticMotion.kayak_radial_bobbing(g, current_time, kayak, radial_x, radial_z, x_mod, z_mod);
 
 	movement_angular_momentum = movement_angular_momentum * movement_angular_momentum_decay;
 	kayak.velocity = KayakMath.make_vector(g, g.degrees(kayak.ry) + kayak_turn, kayak_speed)
