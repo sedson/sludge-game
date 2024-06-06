@@ -1,4 +1,6 @@
 import { height } from "./height-map.js";
+import { createBoatModel } from "./game-scene.js";
+
 
 // Make a height debugger. 
 export const heightInfo = document.createElement('div');
@@ -35,7 +37,10 @@ export function setup_ui_text() {
 
 export function setup_home() {
 	const plyBtn = document.getElementById('play-button');
-	plyBtn.onclick = hideHomeScreen;
+	plyBtn.onclick = () => {
+		hideHomeScreen();
+		createBoatModel(document.getElementById("boats").value);
+	}
 	plyBtn.classList.remove('hidden');
 }
 

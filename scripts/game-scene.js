@@ -5,7 +5,7 @@ import * as KayakMath from "./kayak-math.js"
 import * as SceneSounds from "./scene-sounds.js"
 
 // g is the the kludge here.
-let g;
+let g, _assets;
 
 // Add some debug boxes.
 const DEBUG = false;
@@ -59,13 +59,11 @@ function makeBoat(assets, instructions) {
 		boat.createChildNode().setGeometry(g.mesh(riggingMesh.renderEdges()));
 	}
 
+	boat.setParent(kayak);
 	return boat;
 }
 
-// The once at the start function.
-export function setup(gumInstance, assets) {
-	g = gumInstance;
-
+export function createBoatModel(type) {
 	const boats = {
 		'raft': {
 			'model': 'raft',
@@ -89,9 +87,18 @@ export function setup(gumInstance, assets) {
 			'wirecolor': null,
 		},
 	};
-	const selectedBoat = document.getElementById("boats").value;
-	kayak = makeBoat(assets, boats[selectedBoat]);
 
+	makeBoat(_assets, boats[type]);
+}
+
+
+// The once at the start function.
+export function setup(gumInstance, assets) {
+	g = gumInstance;
+	_assets = assets;
+
+
+	kayak = g.node();
 	window.kayak = kayak;
 	kayak.velocity = g.vec3();
 
@@ -121,8 +128,8 @@ export function setup(gumInstance, assets) {
 		debugObjects.left = g.node().setGeometry(msh);
 		debugObjects.right = g.node().setGeometry(msh);
 	}
-
 }
+
 
 // The tick function
 export function draw(delta) {
