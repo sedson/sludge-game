@@ -64,13 +64,13 @@ export class AudioEngine {
     const sp1 = this.buildOscillator("sine", 150 - Math.floor(Math.random() * 100)); //100
     const gainNode = this.lowGain(0)
 
-    const vibrato = this.buildOscillator("sine", 100 - Math.floor(Math.random() * 5)); //93
+    const vibrato = this.buildOscillator("sine", 100 - Math.floor(Math.random() * 7)); //93
     const vibratoGain = this.lowGain(0)
     vibratoGain.gain.setValueAtTime(50, this.audioCtx.currentTime);
     vibrato.connect(vibratoGain).connect(sp1.frequency);
     vibrato.start();
 
-    const vibrato2 = this.buildOscillator("sine", 100 - Math.floor(Math.random() * 5)); //98
+    const vibrato2 = this.buildOscillator("sine", 100 - Math.floor(Math.random() * 2)); //98
     const vibratoGain2 = this.lowGain(0)
     vibratoGain2.gain.setValueAtTime(50, this.audioCtx.currentTime);
     vibrato2.connect(vibratoGain2).connect(sp1.frequency);
