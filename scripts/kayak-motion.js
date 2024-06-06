@@ -93,7 +93,7 @@ export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 	let radial_x = 0;
 	let radial_z = 0;
 
-	CosmeticMotion.kayak_vertical_bobbing(g, current_time, kayak, cosmetic_x_bob_modifier, cosmetic_z_bob_modifier);
+	CosmeticMotion.kayak_vertical_bobbing(g, current_time, kayak);
 
 	if (current_time <= movement_msec_start + movement_msec_total) {
 		if (kayak_turn !== 0) {
@@ -144,7 +144,7 @@ export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 
 	}
 
-	CosmeticMotion.kayak_radial_bobbing(g, current_time, kayak, radial_x, radial_z, x_mod, z_mod);
+	CosmeticMotion.kayak_radial_bobbing(g, current_time, kayak, radial_x, radial_z, cosmetic_x_bob_modifier, cosmetic_z_bob_modifier);
 
 	movement_angular_momentum = movement_angular_momentum * movement_angular_momentum_decay;
 	kayak.velocity = KayakMath.make_vector(g, g.degrees(kayak.ry) + kayak_turn, kayak_speed)
