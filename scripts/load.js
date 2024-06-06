@@ -95,6 +95,14 @@ const assets = {
     path: '/assets/textures/raft.png',
     type: 'image',
   },
+  'rowboat': {
+    path: '/assets/rowboat.ply',
+    type: 'ply',
+  },
+  'rowboat-sprite': {
+    path: '/assets/textures/rowboat.png',
+    type: 'image',
+  },
   'rock': {
     path: '/assets/rock.ply',
     type: 'ply',

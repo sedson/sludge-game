@@ -66,24 +66,30 @@ function makeBoat(assets, instructions) {
 export function setup(gumInstance, assets) {
 	g = gumInstance;
 
-	const boats = [
-		{
+	const boats = {
+		'raft': {
 			'model': 'raft',
 			'modelcolor': null,
 			'sprite': 'raft-sprite',
 			'wires': 'raft-rigging',
 			'wirecolor': '#8f563b',
-    },
-		{
+		},
+		'kayak': {
 			'model': 'kayak-model',
 			'modelcolor': '#00ff00',
 			'sprite': null,
 			'wires': 'kayak-rigging-model',
 			'wirecolor': '#ffff00',
-    },
-  ];
-	// TODO get index of selected boat from load screen?
-	const selectedBoat = 0;
+		},
+		'rowboat': {
+			'model': 'rowboat',
+			'modelcolor': null,
+			'sprite': 'rowboat-sprite',
+			'wires': null,
+			'wirecolor': null,
+		},
+	};
+	const selectedBoat = document.getElementById("boats").value;
 	kayak = makeBoat(assets, boats[selectedBoat]);
 
 	window.kayak = kayak;
