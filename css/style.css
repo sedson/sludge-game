@@ -135,13 +135,9 @@ h1 {
   margin-top: 1em;
   border: 1px solid currentColor;
   cursor: pointer;
-<<<<<<< HEAD
-}
-=======
   background: hotpink;
 }
 #play-button.inactive {
   background: silver;
   opacity: 0.1;
 }
->>>>>>> 7377e7c (feat: add birds and algea)
