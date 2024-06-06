@@ -250,7 +250,6 @@ export function draw(delta) {
 
 	const terror = g.postProcessingStack.effects[0];
 	terror.uniforms['uTime'] = g.time;
-	terror.uniforms['uTerror'] = kayak.position.mag();
 	terror.uniforms['uVel'] = kayak.velocity.mag();
 
 	const h = height(kayak.x, kayak.z);

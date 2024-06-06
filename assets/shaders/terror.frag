@@ -4,6 +4,7 @@ precision highp float;
 uniform float uTime;
 uniform float uTerror;
 uniform float uVel;
+uniform float uWarp;
 
 uniform sampler2D uMainTex;
 uniform sampler2D uDepthTex;
@@ -121,10 +122,15 @@ vec4 terror(vec4 col, float ldepth) {
 }
 
 void main() {
-     float depth = texture(uDepthTex, vTexCoord).r;
+     vec2 sampleCoord = vTexCoord;
+     sampleCoord.x += heightMap(sampleCoord.xyx * 20.0 + uTime * 0.004).x * 0.001 * uWarp;
+     sampleCoord.y += heightMap(sampleCoord.yxy * 20.0 + uTime * 0.004).x * 0.001 * uWarp;
+
+
+     float depth = texture(uDepthTex, sampleCoord).r;
      float lDepth = linearDepth(depth, uNear, uFar);
      float m = smoothstep(uStart, uEnd, lDepth * (uFar - uNear) + uNear);
-     vec4 col = texture(uMainTex, vTexCoord);
+     vec4 col = texture(uMainTex, sampleCoord);
      col.rgb = mix(col.rgb, uBlendColor.rgb, m * uBlendColor.a);
      vec3 outCol = (terror(col, lDepth) * 0.001 + col + speed()).xyz;
     

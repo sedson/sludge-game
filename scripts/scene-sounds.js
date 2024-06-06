@@ -10,11 +10,11 @@ function randomWorldPoint(g) {
 
 export function setup(g) {
 
-  // Update for the music is being called in the draw function of main.js
+	// Update for the music is being called in the draw function of main.js
 
-  // Sound
-  g.audioEngine.loopVolume('waterglide_ambient', 3);
-  g.audioEngine.createSequencer()
+	// Sound
+	g.audioEngine.loopVolume('waterglide_ambient', 3);
+	g.audioEngine.createSequencer()
 
 	cidada_location = randomWorldPoint(g, 300, 200);
 	whale_location = randomWorldPoint(g, 200, 200);
@@ -24,15 +24,15 @@ export function setup(g) {
 export function loops(g, kayak) {
 	const cicadaDiff = g.vec3(kayak.x - cidada_location.x, 0, kayak.z - cidada_location.z)
 	let cicadaDiffMag = .005 / (1 + Math.abs(cicadaDiff.x)) + .5 / (1 + Math.abs(cicadaDiff.z))
-	g.audioEngine.loopVolume('cicadas', cicadaDiffMag / 2);
+	g.audioEngine.loopVolume('cicadas', cicadaDiffMag / 3);
 
 	const sighDiff = g.vec3(kayak.x - sigh_location.x, 0, kayak.z - sigh_location.z)
-	  let sighDiffMag = .005 / (1 + Math.abs(sighDiff.x)) + .5 / (1 + Math.abs(sighDiff.z))
-	  g.audioEngine.loopVolume('sighs', sighDiffMag);
+	let sighDiffMag = .005 / (1 + Math.abs(sighDiff.x)) + .5 / (1 + Math.abs(sighDiff.z))
+	g.audioEngine.loopVolume('sighs', sighDiffMag * 0.6);
 
 	const whale_diff = g.vec3(kayak.x - whale_location.x, 0, kayak.z - whale_location.z)
-	  let whaleDiffMag = .005 / (1 + Math.abs(whale_diff.x)) + .5 / (1 + Math.abs(whale_diff.z))
-	g.audioEngine.loopVolume('whale', whaleDiffMag);
+	let whaleDiffMag = .005 / (1 + Math.abs(whale_diff.x)) + .5 / (1 + Math.abs(whale_diff.z))
+	g.audioEngine.loopVolume('whale', whaleDiffMag * 0.6);
 
 }
 

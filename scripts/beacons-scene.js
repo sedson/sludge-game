@@ -16,12 +16,31 @@ export function setup(gumInstance, assets) {
 
 // The tick function
 export function draw(delta) {
+  let minDistToABecaon = Infinity;
+  const osc0 = Object.keys(g.audioEngine.spookyOscillators)[0];
+
   for (let osc in g.audioEngine.spookyOscillators) {
     if (osc === "undefined") continue;
-    let location = g.beacons[osc]
-    let locationDiff = g.vec3(kayak.x - location.x, 0, kayak.y - location.z)
-    let locationDiffMag = Math.abs(locationDiff.x) + Math.abs(locationDiff.z)
-    let soundDiffMag = 1 / (1 + locationDiffMag)
-    g.audioEngine.spookyOscillatorVolume(osc, soundDiffMag / 8)
+    let location = g.beacons[osc];
+    let locationDiff = g.vec3(kayak.x - location.x, 0, kayak.z - location.z);
+    let dist = locationDiff.mag();
+    if (dist < minDistToABecaon) {
+      minDistToABecaon = dist;
+    }
   }
+
+  // Beyond distance range[0], the beacon-based effects do no set in. The effect
+  // reach max at range[0];
+  const effectRange = [40, 2];
+  const effectPower = g.remap(minDistToABecaon, effectRange[0], effectRange[1], 0, 1);
+
+  const spookyVolume = g.lerp(0, 0.01, effectPower);
+  g.audioEngine.spookyOscillatorVolume(osc0, spookyVolume);
+
+  let terror = kayak.position.mag();
+  terror += g.lerp(0, 480, effectPower);
+  g.postProcessingStack.effects[0].uniforms['uTerror'] = terror;
+
+  let warp = g.lerp(0, 5, effectPower);
+  g.postProcessingStack.effects[0].uniforms['uWarp'] = warp;
 }

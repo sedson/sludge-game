@@ -21,73 +21,73 @@ let exertion_feelings = ["Aghhh...", "*breathes heavily*", "huff huff", "Fwoo!",
 // TODO maybe rename this makeBoat
 function makeBoat(assets, instructions) {
 
-  // unpack "instructions" for building a boat
-  // (object containing some combination of these keys)
-  const {
-    'model': model,
-    'modelcolor': modelcolor,
-    'sprite': sprite,
-    'wires': wires,
-    'wirecolor': wirecolor,
-  } = instructions;
+	// unpack "instructions" for building a boat
+	// (object containing some combination of these keys)
+	const {
+		'model': model,
+		'modelcolor': modelcolor,
+		'sprite': sprite,
+		'wires': wires,
+		'wirecolor': wirecolor,
+	} = instructions;
 
-  // start building the boat, as a new scene graph node
-  const boat = g.node();
+	// start building the boat, as a new scene graph node
+	const boat = g.node();
 
-  // load the boat mesh, and maybe wireframe
-  const mainMesh = g.plyLoader.fromBuffer(assets.get(model));
-  boat.setGeometry(g.mesh(mainMesh))
+	// load the boat mesh, and maybe wireframe
+	const mainMesh = g.plyLoader.fromBuffer(assets.get(model));
+	boat.setGeometry(g.mesh(mainMesh))
 
-  // maybe load and use a sprite for the main mesh
-  if (sprite) {
-    const boatSpriteData = assets.get(sprite);
-    const boatSpriteTex = new g.Texer(boatSpriteData.width,
-				      boatSpriteData.height);
-    boatSpriteTex.ctx.drawImage(boatSpriteData, 0, 0);
-    g.addTexer(boatSpriteTex);
+	// maybe load and use a sprite for the main mesh
+	if (sprite) {
+		const boatSpriteData = assets.get(sprite);
+		const boatSpriteTex = new g.Texer(boatSpriteData.width,
+			boatSpriteData.height);
+		boatSpriteTex.ctx.drawImage(boatSpriteData, 0, 0);
+		g.addTexer(boatSpriteTex);
 
-    boat.setProgram('sprite').uniform('uTex', boatSpriteTex.id);
-  }
-  // otherwise apply a solid color?
-  // else {
-  //   boat.setProgram('main');
-  // }
+		boat.setProgram('sprite').uniform('uTex', boatSpriteTex.id);
+	}
+	// otherwise apply a solid color?
+	// else {
+	//   boat.setProgram('main');
+	// }
 
-  // maybe load an additional wireframe (rigging) mesh
-  if (wires) {
-    const riggingMesh = g.plyLoader.fromBuffer(assets.get(wires)).fill(g.color(wirecolor));
-    boat.createChildNode().setGeometry(g.mesh(riggingMesh.renderEdges()));
-  }
+	// maybe load an additional wireframe (rigging) mesh
+	if (wires) {
+		const riggingMesh = g.plyLoader.fromBuffer(assets.get(wires)).fill(g.color(wirecolor));
+		boat.createChildNode().setGeometry(g.mesh(riggingMesh.renderEdges()));
+	}
 
-  return boat;
+	return boat;
 }
 
 // The once at the start function.
 export function setup(gumInstance, assets) {
-  g = gumInstance;
+	g = gumInstance;
 
-  const boats = [
-    {
-      'model': 'raft',
-      'modelcolor': null,
-      'sprite': 'raft-sprite',
-      'wires': 'raft-rigging',
-      'wirecolor': '#8f563b',
+	const boats = [
+		{
+			'model': 'raft',
+			'modelcolor': null,
+			'sprite': 'raft-sprite',
+			'wires': 'raft-rigging',
+			'wirecolor': '#8f563b',
     },
-    {
-      'model': 'kayak-model',
-      'modelcolor': '#00ff00',
-      'sprite': null,
-      'wires': 'kayak-rigging-model',
-      'wirecolor': '#ffff00',
+		{
+			'model': 'kayak-model',
+			'modelcolor': '#00ff00',
+			'sprite': null,
+			'wires': 'kayak-rigging-model',
+			'wirecolor': '#ffff00',
     },
   ];
-  // TODO get index of selected boat from load screen?
-  const selectedBoat = 0;
-  kayak = makeBoat(assets, boats[selectedBoat]);
+	// TODO get index of selected boat from load screen?
+	const selectedBoat = 0;
+	kayak = makeBoat(assets, boats[selectedBoat]);
 
-  window.kayak = kayak;
-  kayak.velocity = g.vec3();
+	window.kayak = kayak;
+	kayak.velocity = g.vec3();
 
 	// Audio Locations
 	// SceneSounds.setup_locations(g)
@@ -129,7 +129,7 @@ export function draw(delta) {
 
 	const terror = g.postProcessingStack.effects[0];
 	terror.uniforms['uTime'] = g.time;
-	terror.uniforms['uTerror'] = kayak.position.mag();
+	// terror.uniforms['uTerror'] = kayak.position.mag();
 	terror.uniforms['uVel'] = kayak.velocity.mag();
 
 	UIText.heightInfo.innerText =
@@ -144,25 +144,25 @@ async function paddle(direction) {
 		if (kayak.paddler.fatigue < 2) {
 			// no? ok, paddle this stroke
 			switch (direction) {
-				case "forwardleft":
-					// -Z is forward.
-					SceneSounds.play_splish(g, 'splish1');
-					KayakMotion.forward_left(g);
-					break;
-				case "forwardright":
-					SceneSounds.play_splish(g, 'splash1');
-					KayakMotion.forward_right(g);
-					break;
-				case "backwardleft":
-					SceneSounds.play_splish(g, 'splish2');
-					KayakMotion.backward_left(g);
-					break;
-				case "backwardright":
-					SceneSounds.play_splish(g, 'splash2');
-					KayakMotion.backward_right(g);
-					break;
-				default:
-					return;
+			case "forwardleft":
+				// -Z is forward.
+				SceneSounds.play_splish(g, 'splish1');
+				KayakMotion.forward_left(g);
+				break;
+			case "forwardright":
+				SceneSounds.play_splish(g, 'splash1');
+				KayakMotion.forward_right(g);
+				break;
+			case "backwardleft":
+				SceneSounds.play_splish(g, 'splish2');
+				KayakMotion.backward_left(g);
+				break;
+			case "backwardright":
+				SceneSounds.play_splish(g, 'splash2');
+				KayakMotion.backward_right(g);
+				break;
+			default:
+				return;
 			}
 			// increment the fatigue counter
 			kayak.paddler.fatigue += 1;

@@ -93,9 +93,9 @@ export class AudioEngine {
     }
 
     const osc = this.spookyOscillators[name]
-    osc.gain1.gain.value = volume
-    osc.gain2.gain.value = volume
-    osc.gain3.gain.value = volume
+    osc.gain1.gain.value = volume;
+    osc.gain2.gain.value = volume;
+    osc.gain3.gain.value = volume;
   }
 
   midiToFreq(midi) {
@@ -107,12 +107,13 @@ export class AudioEngine {
   createSequencer() {
     const seq = this.buildOscillator("sine", this.base_note + 3)
     const gainNode = []
-    gainNode.push(this.lowGain(0.001))
+    gainNode.push(this.lowGain(0.3))
+    gainNode[0].gain.value = 0;
     const panNode = this.audioCtx.createStereoPanner()
     seq.connect(gainNode[0]).connect(panNode).connect(this.audioCtx.destination);
     for (let i = 0; i < 8; i++) {
       const delay = this.audioCtx.createDelay(5.0);
-      const gain = this.lowGain(0.001)
+      const gain = this.lowGain(0.2)
       gainNode.push(gain)
       const pan = this.audioCtx.createStereoPanner()
       seq.connect(gain).connect(pan).connect(delay).connect(this.audioCtx.destination);
