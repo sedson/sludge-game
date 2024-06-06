@@ -90,7 +90,8 @@ export function setup(gumInstance, assets) {
   kayak.velocity = g.vec3();
 
 	// Audio Locations
-	SceneSounds.setup_locations(g)
+	// SceneSounds.setup_locations(g)
+	SceneSounds.setup(g)
 
 	// Parent the camera to the kayak.
 	g.camera.setParent(kayak);
@@ -120,7 +121,7 @@ export function setup(gumInstance, assets) {
 // The tick function
 export function draw(delta) {
 
-	SceneSounds.play_loops(g, kayak);
+	SceneSounds.loops(g, kayak);
 
 	KayakMotion.update_speed_and_rotation(g, kayak, debugObjects, DEBUG);
 

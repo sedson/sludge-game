@@ -110,11 +110,6 @@ function setup() {
     uBlendColor: g.color('#ccc769').rgba,
   });
 
-
-
-  g.audioEngine.loopVolume('cicadas', 1);
-  g.audioEngine.loopVolume('waterglide_ambient', 3);
-
   g.orbit();
   g.camera.move(...CAMERA_DEF_POS);
 

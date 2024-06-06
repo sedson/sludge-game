@@ -242,7 +242,6 @@ export function createEngineAndLoadAudio() {
     speakers.createOneShot(str, `./assets/audio/splashies/${str}.mp3`)
   }
 
-  speakers.createSpookyOscillator()
   speakers.createSequencer()
 
   return speakers;
