@@ -19,7 +19,7 @@ let movement_speed_add = .02;
 let movement_angle_base_forward = 80;
 let movement_angle_base_backward = 120;
 let movement_angular_momentum_decay = .97;
-let movement_passive_friction = 0.005;
+let movement_passive_friction = 0.004;
 
 // Bob X. and Bob Z. want different amounts of makeup
 let cosmetic_x_bob_modifier = .25;
@@ -194,7 +194,7 @@ export function set_boat_type(boat) {
 			movement_angle_base_forward = 60;
 			movement_angle_base_backward = 60;
 			movement_angular_momentum_decay = .95;
-			movement_passive_friction = .004;
+			movement_passive_friction = .003;
 			cosmetic_x_bob_modifier = .15;
 			cosmetic_z_bob_modifier = .40;
 			break;
@@ -204,7 +204,7 @@ export function set_boat_type(boat) {
 			movement_angle_base_forward = 120;
 			movement_angle_base_backward = 120;
 			movement_angular_momentum_decay = .99;
-			movement_passive_friction = .006;
+			movement_passive_friction = .005;
 			cosmetic_x_bob_modifier = .10;
 			cosmetic_z_bob_modifier = .10;
 			break;

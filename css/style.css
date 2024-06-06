@@ -55,13 +55,13 @@ body {
 }
 
 .o-tooltip {
-  left: 60%;
+  left: 56%;
   transform: translate(0, -2vw);
   text-align: center;
 }
 
 .p-tooltip {
-  left: 65%;
+  left: 61%;
   text-align: left;
 }
 
