@@ -31,7 +31,7 @@ const assets = {
     path: './assets/tree-canopy.ply',
     type: 'ply',
   },
-  'heron': {
+  'heron-model': {
     path: './assets/heron.ply',
     type: 'ply',
   },
@@ -105,6 +105,10 @@ const assets = {
   },
   'rock': {
     path: '/assets/rock.ply',
+    type: 'ply',
+  },
+  'algae': {
+    path: '/assets/algae.ply',
     type: 'ply',
   },
   'beacon-frag': {

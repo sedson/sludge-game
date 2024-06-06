@@ -10,8 +10,8 @@
  * @param {number} max The max. Default 1.
  * @returns {number} The clamped value.
  * @global
-*/
-function clamp (x, min = 0, max = 1) {
+ */
+function clamp(x, min = 0, max = 1) {
   return Math.min(Math.max(x, min), max);
 }
 
@@ -24,7 +24,7 @@ function clamp (x, min = 0, max = 1) {
  * @returns {number} The lerped number.
  * @global
  */
-function lerp (a, b, fac = 0.5) {
+function lerp(a, b, fac = 0.5) {
   fac = clamp(fac);
   return b * fac + (1 - fac) * a;
 }
@@ -40,7 +40,7 @@ function lerp (a, b, fac = 0.5) {
  * @returns {number} The remapped number.
  * @global
  */
-function remap (x, min, max, outMin = 0, outMax = 1) {
+function remap(x, min, max, outMin = 0, outMax = 1) {
   return clamp((x - min) / (max - min)) * (outMax - outMin) + outMin;
 }
 
@@ -66,7 +66,7 @@ function random(a = 1, b) {
  * @param {number} radians 
  * @returns {number}
  */
-function degrees (radians) {
+function degrees(radians) {
   return 180 * radians / Math.PI;
 }
 
@@ -76,7 +76,7 @@ function degrees (radians) {
  * @param {number} degrees 
  * @returns {number}
  */
-function radians (degrees) {
+function radians(degrees) {
   return Math.PI * degrees / 180;
 }
 
@@ -89,7 +89,7 @@ function generateId() {
   return id;
 }
 
-var common = /*#__PURE__*/Object.freeze({
+var common = /*#__PURE__*/ Object.freeze({
   __proto__: null,
   clamp: clamp,
   degrees: degrees,
@@ -110,12 +110,12 @@ var common = /*#__PURE__*/Object.freeze({
  * @param {string} tag A selector.
  * @returns {HTMLElement|false}
  */
-function select (tag) {
+function select(tag) {
   if (tag instanceof HTMLElement) {
     return tag;
   }
   const elem = document.querySelector(tag);
-  if (!elem) { return false;}
+  if (!elem) { return false; }
   return elem;
 }
 
@@ -128,7 +128,7 @@ function select (tag) {
  * @param {object} styleObject 
  * @returns {HTMLElement}
  */
-function tag (string, styleObject) {
+function tag(string, styleObject) {
   const tag = string.split(/#|\./)[0].trim();
   const elem = document.createElement(tag);
 
@@ -144,7 +144,8 @@ function tag (string, styleObject) {
     classList.forEach((x) => elem.classList.add(x.replace('.', '')));
   }
 
-  if (styleObject) { style(elem, styleObject); }  return elem;
+  if (styleObject) { style(elem, styleObject); }
+  return elem;
 }
 
 
@@ -154,13 +155,13 @@ function tag (string, styleObject) {
  * @param {object} styleObject The style object – with keys is either js 
  *     camelCase form or string wrapped 'background-color' css form.
  */
-function style (elem, styleObject) {
+function style(elem, styleObject) {
   for (const property in styleObject) {
     elem.style[property] = styleObject[property];
   }
 }
 
-var dom = /*#__PURE__*/Object.freeze({
+var dom = /*#__PURE__*/ Object.freeze({
   __proto__: null,
   select: select,
   style: style,
@@ -200,7 +201,7 @@ const containerStyle = {
   backgroundColor: 'rgba(0,0,0,0.25)',
   bottom: 0,
   left: 0,
-  zIndex: 10, 
+  zIndex: 10,
 };
 
 const swatchStyle = {
@@ -208,7 +209,7 @@ const swatchStyle = {
   height: '24px',
 };
 
-function ColorSwatch (color) {
+function ColorSwatch(color) {
 
   let container = select('#swatches');
   if (!container) {
@@ -251,21 +252,21 @@ class Color {
     this._a = a ?? defA;
     ColorSwatch(this.rgbString());
   }
-  
+
   /**
    * The red value.
    * @member
    * @type {number}
    */
   get r() { return this._rgb[0]; }
-  
+
   /**
    * The green value.
    * @member
    * @type {number}
    */
   get g() { return this._rgb[1]; }
-  
+
   /**
    * The blue value.
    * @member
@@ -286,7 +287,7 @@ class Color {
    * @type {number}
    */
   get s() { return this._hsl[1]; }
-  
+
   /**
    * The lightness value.
    * @member
@@ -301,7 +302,7 @@ class Color {
    */
   get a() { return this._a };
   set a(a) { this._a = a; }
- 
+
   /**
    * RGB as a plain array.
    * @member
@@ -322,7 +323,7 @@ class Color {
    * @type {array}
    */
   get hsl() { return [...this._hsl]; }
-  
+
   /**
    * HSLA as a plain array.
    * @member
@@ -1608,7 +1609,7 @@ function attributeMap(vertices, func) {
   return outVertices;
 }
 
-var meshOps = /*#__PURE__*/Object.freeze({
+var meshOps = /*#__PURE__*/ Object.freeze({
   __proto__: null,
   applyAttribConstant: applyAttribConstant,
   applyAttribVarying: applyAttribVarying,
@@ -1628,17 +1629,17 @@ const CHARS = 'abcdefghijfklmnopqrstuvwxyzABCDEFGHIJFKLMNOPQRSTUVWXYZ0123456789_
 const buffer = new Uint8Array(128);
 let index = buffer.byteLength;
 
-function fillBuffer () {
+function fillBuffer() {
   crypto.getRandomValues(buffer);
   index = 0;
 }
 
-function uuid (length = 6) {
+function uuid(length = 6) {
   if (index + length >= buffer.byteLength) fillBuffer();
   let id = '';
-  while(id.length < length) {
+  while (id.length < length) {
     id += CHARS[buffer[index] % CHARS.length];
-    ++ index;
+    ++index;
   }
   return id;
 }
@@ -2793,7 +2794,7 @@ function cone(size, resolution = 12, fill = 'ngon', flat = false) {
   return new Mesh(vertices, faces, { name: 'cylinder' });
 }
 
-var primitives = /*#__PURE__*/Object.freeze({
+var primitives = /*#__PURE__*/ Object.freeze({
   __proto__: null,
   _axes: _axes,
   _fsQuad: _fsQuad,
@@ -2809,19 +2810,19 @@ var primitives = /*#__PURE__*/Object.freeze({
 
 /**
  * 
- */ 
+ */
 
 
 class Line {
-  constructor (points, color = [1, 1, 1, 1]) {
+  constructor(points, color = [1, 1, 1, 1]) {
     this.points = points;
     this.color = color;
     this.thickness = .1;
-    this.name = 'line_' + uuid(); 
+    this.name = 'line_' + uuid();
 
   }
 
-  render () {
+  render() {
     const mode = 'TRIANGLE_STRIP';
     const vertexCount = this.points.length * 2;
     const program = 'line';
@@ -2832,10 +2833,10 @@ class Line {
       position: [],
       normal: [],
       register1: [],
-      register2: [], 
+      register2: [],
       color: [],
     };
-    
+
     for (let i = 0; i < this.points.length; i++) {
 
       const current = this.points[i];
@@ -2870,19 +2871,19 @@ class Line {
 
 /**
  * An edge collection is used to display any number of disjoint edges
- */ 
+ */
 
 
 class EdgeCollection {
-  constructor (edges, color) {
+  constructor(edges, color) {
     this.edges = edges;
     this.color = color || [1, 1, 1, 1];
     this.thickness = 2;
-    this.name = 'edge_collection_' + uuid(); 
+    this.name = 'edge_collection_' + uuid();
 
   }
 
-  render () {
+  render() {
     const mode = 'TRIANGLES';
     const vertexCount = this.edges.length * 6;
     const program = 'line2';
@@ -2894,7 +2895,7 @@ class EdgeCollection {
       register1: [],
       color: [],
     };
-    
+
     for (let i = 0; i < this.edges.length; i++) {
 
       const current = this.edges[i][0];
@@ -2912,17 +2913,17 @@ class EdgeCollection {
 
       // Submit next position for each vert.
       attribs.register1.push(
-        next[0], next[1], next[2], 1, 
-        next[0], next[1], next[2], 1, 
-        next[0], next[1], next[2], 1, 
-        next[0], next[1], next[2], 1, 
-        next[0], next[1], next[2], 1, 
-        next[0], next[1], next[2], 1, 
+        next[0], next[1], next[2], 1,
+        next[0], next[1], next[2], 1,
+        next[0], next[1], next[2], 1,
+        next[0], next[1], next[2], 1,
+        next[0], next[1], next[2], 1,
+        next[0], next[1], next[2], 1,
       );
 
       // Submit color for each vert.
       attribs.color.push(
-        ...this.color, 
+        ...this.color,
         ...this.color,
         ...this.color,
         ...this.color,
@@ -2969,8 +2970,7 @@ const EPSILON = 0.0000001;
  */
 function create() {
 
-  let out;
-  {
+  let out; {
     out = new Array(16).fill(0);
   }
 
@@ -3549,7 +3549,7 @@ function print(a) {
   return str;
 }
 
-var m4 = /*#__PURE__*/Object.freeze({
+var m4 = /*#__PURE__*/ Object.freeze({
   __proto__: null,
   copy: copy,
   create: create,
@@ -3575,7 +3575,7 @@ var m4 = /*#__PURE__*/Object.freeze({
  * The transform class represents one point and manages matrix math to update that.
  */
 class Transform {
-  constructor () {
+  constructor() {
     this.position = new Vec3();
     this.rotation = new Vec3();
     this.scale = new Vec3(1, 1, 1);
@@ -3585,21 +3585,21 @@ class Transform {
     this._changed = false;
   }
 
-  _updateMatrix () {
+  _updateMatrix() {
     identity(this._matrix);
     translate(this._matrix, this._matrix, this.position.xyz);
-    
+
     rotate(this._matrix, this._matrix, this.rotation.y, [0, 1, 0]);
     rotate(this._matrix, this._matrix, this.rotation.x, [1, 0, 0]);
     rotate(this._matrix, this._matrix, this.rotation.z, [0, 0, 1]);
-    
+
     scale(this._matrix, this._matrix, this.scale.xyz);
 
     invert(this._invTranspose, this._matrix);
     transpose(this._invTranspose, this._invTranspose);
   }
 
-  get changed () {
+  get changed() {
     if (this.rotation._changed || this.position._changed || this.scale._changed) {
       this.position._changed = false;
       this.rotation._changed = false;
@@ -3609,39 +3609,39 @@ class Transform {
     return false;
   }
 
-  get matrix () {
+  get matrix() {
     if (this.changed) {
       this._updateMatrix();
     }
     return this._matrix;
   }
 
-  get inverseTransposeMatrix () {
+  get inverseTransposeMatrix() {
     if (this.changed) {
       this._updateMatrix();
     }
     return this._invTranspose;
   }
 
-  transformPoint (point) {
+  transformPoint(point) {
     const out = [0, 0, 0];
     transformMat4(out, point, this.matrix);
     return out;
   }
 
-  transformPointXyz (x, y, z) {
+  transformPointXyz(x, y, z) {
     const out = [x, y, z];
     transformMat4(out, out, this.matrix);
     return out;
   }
 
-  transformNormal (normal) {
+  transformNormal(normal) {
     const out = [0, 0, 0];
     transformMat4(out, normal, this.inverseTransposeMatrix);
     return out;
   }
 
-  transformNormalXyz (x, y, z) {
+  transformNormalXyz(x, y, z) {
     const out = [x, y, z];
     transformMat4(out, out, this.inverseTransposeMatrix);
     return out;
@@ -3689,7 +3689,7 @@ class Node {
      * @type {string|null}
      */
     this.geometry = geometry || null;
-    
+
     /**
      * This objects 3D transform.
      * @type {Transform}
@@ -3721,7 +3721,7 @@ class Node {
      * @private
      */
     this._worldMatrix = create();
-    
+
     /**
      * The shader uniforms attached to this node.
      * @type {object}
@@ -3743,55 +3743,55 @@ class Node {
    * Reference to the transform position.
    * @type {Vec3}
    */
-  get position () { return this.transform.position; }
+  get position() { return this.transform.position; }
 
   /**
    * Reference to the transform rotation.
    * @type {Vec3}
    */
-  get rotation () { return this.transform.rotation; }
+  get rotation() { return this.transform.rotation; }
 
   /**
    * Reference to the transform scale.
    * @type {Vec3}
    */
-  get scale () { return this.transform.scale; }
+  get scale() { return this.transform.scale; }
 
   /**
    * The x position of this object's transform.
    * @type {number}
    */
-  get x ()  { return this.transform.position.x };
-  
+  get x() { return this.transform.position.x };
+
   /**
    * The y position of this object's transform.
    * @type {number}
    */
-  get y ()  { return this.transform.position.y };
-  
+  get y() { return this.transform.position.y };
+
   /**
    * The z position of this object's transform.
    * @type {number}
    */
-  get z ()  { return this.transform.position.z };
-  
+  get z() { return this.transform.position.z };
+
   /**
    * The x rotation of this object's transform.
    * @type {number}
    */
-  get rx () { return this.transform.rotation.x };
+  get rx() { return this.transform.rotation.x };
 
   /**
    * The y rotation of this object's transform.
    * @type {number}
    */
-  get ry () { return this.transform.rotation.y };
+  get ry() { return this.transform.rotation.y };
 
   /**
    * The z rotation of this object's transform.
    * @type {number}
    */
-  get rz () { return this.transform.rotation.z };
+  get rz() { return this.transform.rotation.z };
 
 
   /**
@@ -3801,7 +3801,7 @@ class Node {
    * @param {number} z 
    * @chainable
    */
-  move (x, y, z) {
+  move(x, y, z) {
     this.transform.position.set(x, y, z);
     return this;
   }
@@ -3813,7 +3813,7 @@ class Node {
    * @param {number} z 
    * @chainable
    */
-  rotate (x, y, z) {
+  rotate(x, y, z) {
     this.transform.rotation.set(x, y, z);
     return this;
   }
@@ -3825,16 +3825,16 @@ class Node {
    * @param {number} z 
    * @chainable
    */
-  rescale (x, y, z) {
+  rescale(x, y, z) {
     if (arguments.length === 1) {
       this.transform.scale.set(x, x, x);
     } else {
-      this.transform.scale.set(x, y, z);    
+      this.transform.scale.set(x, y, z);
     }
     return this;
   }
 
-  get worldPosition () {
+  get worldPosition() {
     return ([this._worldMatrix[12], this._worldMatrix[13], this._worldMatrix[14]]);
   }
 
@@ -3843,7 +3843,7 @@ class Node {
    * @param {*} parent 
    * @private
    */
-  _calculateWorldMatrix (parent) {
+  _calculateWorldMatrix(parent) {
     if (parent) {
       multiply(this._worldMatrix, parent._worldMatrix, this.transform.matrix);
     } else {
@@ -3861,7 +3861,7 @@ class Node {
    * @param {Node} node 
    * @chainable
    */
-  setParent (node) {
+  setParent(node) {
     if (this.parent) {
       this.parent._removeChild(this);
     }
@@ -3877,7 +3877,7 @@ class Node {
    * @param {string} geo The string geometry pointer. 
    * @chainable
    */
-  setGeometry (geo) {
+  setGeometry(geo) {
     this.geometry = geo;
     return this;
   }
@@ -3887,7 +3887,7 @@ class Node {
    * @param {string} prog The string program pointer. 
    * @chainable
    */
-  setProgram (prog) {
+  setProgram(prog) {
     this.program = prog;
     return this;
   }
@@ -3898,7 +3898,7 @@ class Node {
    * @param {string} geometry 
    * @returns {Node} 
    */
-  createChildNode (name, geometry) {
+  createChildNode(name, geometry) {
     let node = new Node(name, geometry);
     node.setParent(this);
     return node;
@@ -3909,7 +3909,7 @@ class Node {
    * @param {*} node 
    * @private
    */
-  _removeChild (node) {
+  _removeChild(node) {
     this.children = this.children.filter(n => n !== node);
   }
 
@@ -3918,7 +3918,7 @@ class Node {
    * @param {*} node 
    * @private
    */
-  _addChild (node) {
+  _addChild(node) {
     this.children.push(node);
     this._dirty = true;
   }
@@ -3930,9 +3930,9 @@ class Node {
    * @returns {string}
    * @private
    */
-  _print (output, depth) {
+  _print(output, depth) {
     if (depth > 0) {
-      for (let i = 1; i < depth; i++) { 
+      for (let i = 1; i < depth; i++) {
         output += '  ';
       }
       output += '└─';
@@ -3956,7 +3956,7 @@ class Node {
    * @returns {array}
    * @private
    */
-  _toDrawList (drawList, children = true) {
+  _toDrawList(drawList, children = true) {
     if (!this.visible) {
       return;
     }
@@ -3976,18 +3976,18 @@ class Node {
    * Recursively walk this node and its children, calling a callback at each node.
    * @param {Function} fn A func(node) => { doSomethingTo(node) } shaped callback.
    */
-  traverse (fn) {
+  traverse(fn) {
     fn(this);
     this.children.forEach(child => child.traverse(fn));
   }
-  
+
   /**
    * Set a single uniform on this node.
    * @param {string} name The name of the uniform.
    * @param {number|array} value The GL value to set.
    * @chainable
    */
-  uniform (name, value) {
+  uniform(name, value) {
     this.uniforms[name] = value;
     return this;
   }
@@ -3997,7 +3997,7 @@ class Node {
    * @param {object} uniforms A {name: str -> val: number or array } object to set.
    * @chainable
    */
-  uniforms (uniforms) {
+  uniforms(uniforms) {
     for (let [name, value] of Object.entries(uniforms)) {
       this.uniform(name, value);
     }
@@ -4052,26 +4052,26 @@ class Scene extends Node {
     this._drawCalls = [];
   }
 
-  print () {
+  print() {
     return this._print('* ', 0);
   }
 
-  drawCalls () {
+  drawCalls() {
     this._drawCalls = [];
     return this._toDrawList(this._drawCalls);
   }
 
-  add () {
-    
+  add() {
+
   }
 
-  
-  updateSceneGraph () {
+
+  updateSceneGraph() {
     this._calculateWorldMatrix();
   }
 
 
-  
+
 }
 
 const graphStyle = {
@@ -4087,7 +4087,7 @@ const graphStyle = {
   padding: '1em',
 };
 
-function SceneGraph () {
+function SceneGraph() {
   let graph = tag('div#scene-graph', graphStyle);
   let panel = select('.gum-panel');
   if (panel) {
@@ -4102,7 +4102,7 @@ function SceneGraph () {
  * layout.
  */
 const vertexAttributeLayout = [
-   {
+  {
     name: 'aPosition',
     size: 3,
     type: 'FLOAT',
@@ -4148,13 +4148,13 @@ const vertexAttributeLayout = [
 
 /** 
  * Default values for shader unfiforms.
- */ 
+ */
 
 const defaultUniformValues = {
   uColorA: [0.9, 0.8, 0.9, 1],
   uColorB: [0, 0, 0, 1],
-  uKernel: 2, 
-  uDist: 1, 
+  uKernel: 2,
+  uDist: 1,
   uWeight: 1,
 };
 
@@ -5327,7 +5327,7 @@ class PlyLoader {
     }
 
     header.vertexStart = headerByteLength;
-    if (header.format === 'ascii') ;
+    if (header.format === 'ascii');
 
     header.totalVertexBytes = header.vertexCount * header.bytesPerVertex;
     header.faceStart = header.vertexStart + header.totalVertexBytes;
@@ -5529,13 +5529,13 @@ class PlyLoader {
  */
 
 class Texer {
-  
+
   /**
    * Make a new texer.
    * @param {number} size The size used for the width and height of the canvas.
    *     Power of 2 recommended.
    */
-  constructor (w, h, app) {
+  constructor(w, h, app) {
 
     /**
      * Css style for the texture canvas.
@@ -5567,12 +5567,12 @@ class Texer {
 
     this.textureSettings = {
       width: w,
-      height: h, 
+      height: h,
       clamp: true,
       filter: 'NEAREST'
     };
-    
-    
+
+
 
     this.style = '#111';
 
@@ -5584,28 +5584,28 @@ class Texer {
   /**
    * Set the color to be used by the next 'pixels' call.
    */
-  fill (col) {
+  fill(col) {
     this.style = col;
     this.ctx.fillStyle = col;
     return this;
   }
 
 
-  pixels (x1, y1, x2, y2) {
+  pixels(x1, y1, x2, y2) {
     this.ctx.fillRect(x1, y1, (x2 - x1), (y2 - y1));
     this._changed = true;
     return this;
 
   }
 
-  clear () {
+  clear() {
     this.pixels(0, 0, this.size, this.size);
     this._changed = true;
     return this;
   }
 
 
-  changed () {
+  changed() {
     const c = this._changed;
     this._changed = false;
     return c;
@@ -5619,8 +5619,8 @@ class Texer {
 
 class Instancer {
 
-  constructor (instance, count, renderer, program) {
-    
+  constructor(instance, count, renderer, program) {
+
     /** The instance mesh */
     this.instance = instance;
     if (this.instance.render) {
@@ -5635,13 +5635,13 @@ class Instancer {
 
     /** The name of the shader program */
     this.program = program;
-    
+
     /** Pointer to gl context. */
     this.gl = this.renderer.gl;
 
     /** The total attributes. */
     this.attrs = ['x', 'y', 'z', 'w', 'r', 'g', 'b', 'a'];
-    
+
     /** The total attributes. */
     this.stride = this.attrs.length;
 
@@ -5657,7 +5657,7 @@ class Instancer {
 
     /** Shader attr pointer to the position. Position of the verts per instance. */
     this.posLoc = this.gl.getAttribLocation(this.renderer.shaderPrograms[this.program], 'aPosition');
-    
+
     /** Shader attr pointer to the color. */
     this.colorLoc = this.gl.getAttribLocation(this.renderer.shaderPrograms[this.program], 'aColor');
 
@@ -5672,8 +5672,8 @@ class Instancer {
 
   /** 
    * Fill the particles with randomized data.
-   */ 
-  iniitialize (data = null) {
+   */
+  iniitialize(data = null) {
     if (!data) {
       this.fillRandom();
       this.changed = true;
@@ -5689,9 +5689,9 @@ class Instancer {
 
   /** 
    * Fill the particles with randomized data.
-   */ 
-  fillRandom () {
-    for (let i = 0; i < this.count; i++) { 
+   */
+  fillRandom() {
+    for (let i = 0; i < this.count; i++) {
       this.setAttr(i, 'x', Math.random());
       this.setAttr(i, 'y', Math.random());
       this.setAttr(i, 'z', Math.random());
@@ -5707,7 +5707,7 @@ class Instancer {
    * @param {int} index The particle index.
    * @param {string} attr The attr 
    * @param {float} value
-   */ 
+   */
   setAttr(index, attr, val) {
     this.data[index * this.stride + this.attribIndices.get(attr)] = val;
   }
@@ -5716,19 +5716,19 @@ class Instancer {
    * Get an attr. 
    * @param {int} index The particle index.
    * @param {string} attr The attr.
-   */ 
+   */
   getAttr(index, attr) {
     return this.data[index * this.stride + this.attribIndices.get(attr)];
   }
 
   /**
    * Copy the desired data from the main buffer into the gpu buffer.
-   */ 
-  renderPoints () {
-   
+   */
+  renderPoints() {
+
   }
 
-  draw () {
+  draw() {
     this.renderer.setProgram(this.program);
 
     // Prep the quad mesh for the particle.
@@ -5740,7 +5740,7 @@ class Instancer {
 
     // Prep the instances.
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
-    
+
     // Buffer Data?
     this.gl.bufferData(this.gl.ARRAY_BUFFER, this.data, this.gl.DYNAMIC_DRAW);
 

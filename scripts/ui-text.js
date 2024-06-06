@@ -2,6 +2,8 @@ import { height } from "./height-map.js";
 import { createBoatModel } from "./game-scene.js";
 
 
+let BOAT = 'rowboat';
+
 // Make a height debugger. 
 export const heightInfo = document.createElement('div');
 
@@ -35,13 +37,28 @@ export function setup_ui_text() {
 }
 
 
+function selectBoat(boat) {
+	BOAT = boat;
+	document.querySelectorAll('.option').forEach((o) => {
+		o.classList.remove('selected');
+		if (o.dataset.boat === BOAT) {
+			o.classList.add('selected');
+		}
+	});
+}
+
+document.querySelectorAll('.option').forEach((o) => {
+	o.onclick = () => selectBoat(o.dataset.boat);
+});
+
 export function setup_home() {
 	const plyBtn = document.getElementById('play-button');
 	plyBtn.onclick = () => {
 		hideHomeScreen();
-		createBoatModel(document.getElementById("boats").value);
+		createBoatModel(BOAT);
 	}
-	plyBtn.classList.remove('hidden');
+
+	plyBtn.classList.remove('inactive');
 }
 
 export function hideHomeScreen() {

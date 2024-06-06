@@ -2,6 +2,9 @@ import { height } from "./height-map.js";
 
 let g;
 
+const billboards = [];
+
+
 export function setup(gumInstance, assets) {
   g = gumInstance;
 
@@ -120,23 +123,75 @@ export function setup(gumInstance, assets) {
 
   const rockMesh = g.mesh(g.plyLoader.fromBuffer(assets.get('rock')));
 
-  for (let i = 0; i < 2_000; i++) {
+  for (let i = 0; i < 1000; i++) {
     const x = g.random(-500, 500);
     const z = g.random(-500, 500);
     const h = height(x, z)[0];
     if (h < -5) {
       g.node().setGeometry(rockMesh)
         .move(x, h, z)
-        .rescale(g.random(2, 4))
+        .rescale(g.random(3, 6))
         .setProgram('main')
         .rotate(g.random(), g.random(), g.random())
     }
-
   }
+
+
+
+  const heronImg = assets.get('heron');
+  const heronTex = new g.Texer(heronImg.width, heronImg.height);
+  heronTex.ctx.drawImage(heronImg, 0, 0);
+  g.addTexer(heronTex);
+  const heronMesh = g.mesh(g.plyLoader.fromBuffer(assets.get('heron-model')));
+
+  function makeHeron(x, y, z) {
+    let billboard = g.node()
+      .setGeometry(heronMesh)
+      .setProgram('sprite')
+      .move(x, y, z)
+      .uniform('uTex', heronTex.id);
+
+    billboards.push(billboard);
+  }
+
+  for (let i = 0; i < 100; i++) {
+    const [x, z] = [g.random(-300, 300), g.random(-300, 300)];
+    const h = height(x, z)[0];
+    if (h > 0.5 && h < 3) {
+      makeHeron(x, h, z);
+    }
+  }
+
+
+  const algeaMesh = g.mesh(g.plyLoader.fromBuffer(assets.get('algae')));
+
+  for (let i = 0; i < 6000; i++) {
+    const x = g.random(-500, 500);
+    const z = g.random(-500, 500);
+    const h = height(x, z)[0];
+    if (h < 0 && h > -1) {
+      g.node().setGeometry(algeaMesh)
+        .move(x, 0.01, z)
+        .rescale(g.random(3, 6))
+        .setProgram('main')
+        .rotate(0, g.random(), 0)
+    }
+  }
+
+  console.log('TOTAL DRAW CALLS: ', g.scene._toDrawList([], true).length);
 
 }
 
+
+
 // The tick function
 export function draw(delta) {
+  // UGHHHHH PUT THIS IN GUM!
+  const camPos = g.vec3(g.camera._worldMatrix[12], g.camera._worldMatrix[13], g.camera._worldMatrix[14]);
 
+  for (let billboard of billboards) {
+    const vecToCam = billboard.position.vectorTo(camPos);
+    const thetaToCam = Math.atan2(vecToCam.x, vecToCam.z);
+    billboard.rotate(0, thetaToCam, 0);
+  }
 }

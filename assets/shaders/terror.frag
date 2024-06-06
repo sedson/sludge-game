@@ -123,8 +123,8 @@ vec4 terror(vec4 col, float ldepth) {
 
 void main() {
      vec2 sampleCoord = vTexCoord;
-     sampleCoord.x += heightMap(sampleCoord.xyx * 20.0 + uTime * 0.004).x * 0.001 * uWarp;
-     sampleCoord.y += heightMap(sampleCoord.yxy * 20.0 + uTime * 0.004).x * 0.001 * uWarp;
+     sampleCoord.x += heightMap(sampleCoord.xyx * 35.0 + uTime * 0.004).x * 0.001 * uWarp;
+     sampleCoord.y += heightMap(sampleCoord.yxy * 35.0 + uTime * 0.004).x * 0.001 * uWarp;
 
 
      float depth = texture(uDepthTex, sampleCoord).r;

@@ -144,8 +144,7 @@ export function draw(delta) {
 	// terror.uniforms['uTerror'] = kayak.position.mag();
 	terror.uniforms['uVel'] = kayak.velocity.mag();
 
-	UIText.heightInfo.innerText =
-		`X: ${kayak.x.toFixed(3)} Z: ${kayak.z.toFixed(3)} Speed: ${kayak.velocity.mag().toFixed(2)}`;
+	// UIText.heightInfo.innerText = `X: ${kayak.x.toFixed(3)} Z: ${kayak.z.toFixed(3)} `;
 }
 
 // Handle the impulse to paddle, as directed by player's keypress

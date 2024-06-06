@@ -11,13 +11,14 @@
 <body>
   <div id="home">
     <h1>The Form of The Danger is an Emination of Energy</h1>
-    <label for="boats">Choose your boat:</label>
-    <select name="boats" id="boats">
-      <option value="rowboat">rowboat</option>
-      <option value="kayak">kayak</option>
-      <option value="raft">raft</option>
-    </select>
-    <div id="play-button" class="hidden">PLAY</div>
+
+    <p>Choose a Boat</p>
+    <div class="flex-row">
+      <div class="option selected" data-boat="rowboat">rowboat</div>
+      <div class="option" data-boat="kayak">kayak</div>
+      <div class="option" data-boat="raft">raft</div>
+    </div>
+    <div id="play-button" class="inactive">PLAY</div>
     <p class="loading"></p>
   </div>
   <canvas id="game-canvas"></canvas>
