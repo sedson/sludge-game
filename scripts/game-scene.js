@@ -17,8 +17,6 @@ export let kayak;
 let debugObjects = {};
 let exertion_feelings = ["Aghhh...", "*breathes heavily*", "huff huff", "Fwoo!", "*wipes sweat off brow*", "fwoof", "my goodness", "!", "I am tired", "...", "I am afraid"]
 
-// TODO provide way to switch boats? maybe at start screen
-// TODO maybe rename this makeBoat
 function makeBoat(assets, instructions) {
 
 	// unpack "instructions" for building a boat
@@ -88,6 +86,7 @@ export function createBoatModel(type) {
 		},
 	};
 
+	KayakMotion.set_boat_type(type);
 	makeBoat(_assets, boats[type]);
 }
 

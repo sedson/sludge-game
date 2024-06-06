@@ -3,13 +3,9 @@ import * as KayakMath from "./kayak-math.js";
 import { height } from "./height-map.js";
 
 let movement_msec_start = 0;
-let movement_msec_total = 600;
 
-let movement_speed_add = .02;
 let movement_speed_target_backwards = true;
 
-let movement_angle_base_forward = 80;
-let movement_angle_base_backward = 120;
 // movement speed increases linearly to max over movement_msec
 // movement angle increases in sine function 0..1 over movement_msec
 let movement_angle_target = 0;
@@ -17,9 +13,17 @@ let movement_angular_momentum = 0;
 let movement_angular_momentum_max = 1;
 let movement_rotation_past_peak = false;
 
+// fields that will vary based on the boat type
+let movement_msec_total = 600;
+let movement_speed_add = .02;
+let movement_angle_base_forward = 80;
+let movement_angle_base_backward = 120;
+let movement_angular_momentum_decay = .97;
 let movement_passive_friction = 0.005;
 
-let global_kayak_turn = 0;
+// Bob X. and Bob Z. want different amounts of makeup
+let cosmetic_x_bob_modifier = .25;
+let cosmetic_z_bob_modifier = .45;
 
 export function movement_ratio(time, backwards) {
 	if (time > movement_msec_start + movement_msec_total || movement_msec_start == 0) {
@@ -81,7 +85,6 @@ export function heightmap_friction_calculation(g, kayak, debugObjects, DEBUG) {
 export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 	let current_time = g.time
 	let kayak_turn = turn_ratio(g, current_time);
-	global_kayak_turn = kayak_turn;
 	let kayak_speed = movement_ratio(current_time, movement_speed_target_backwards);
 
 	let local_friction = heightmap_friction_calculation(g, kayak, debugObjects, DEBUG);
@@ -89,7 +92,8 @@ export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 
 	let radial_x = 0;
 	let radial_z = 0;
-	CosmeticMotion.kayak_vertical_bobbing(g, current_time, kayak);
+
+	CosmeticMotion.kayak_vertical_bobbing(g, current_time, kayak, cosmetic_x_bob_modifier, cosmetic_z_bob_modifier);
 
 	if (current_time <= movement_msec_start + movement_msec_total) {
 		if (kayak_turn !== 0) {
@@ -142,7 +146,7 @@ export function update_speed_and_rotation(g, kayak, debugObjects, DEBUG) {
 
 	CosmeticMotion.kayak_radial_bobbing(g, current_time, kayak, radial_x, radial_z);
 
-	movement_angular_momentum = movement_angular_momentum * .97;
+	movement_angular_momentum = movement_angular_momentum * movement_angular_momentum_decay;
 	kayak.velocity = KayakMath.make_vector(g, g.degrees(kayak.ry) + kayak_turn, kayak_speed)
 		.add(kayak.velocity)
 		.add(CosmeticMotion.drift_current_vector);
@@ -178,3 +182,34 @@ export function backward_right(g) {
 	movement_angular_momentum = -1 * movement_angular_momentum_max;
 	movement_rotation_past_peak = false;
 }
+
+export function set_boat_type(boat) {
+	switch (boat) {
+		case "kayak":
+			// defaults for the boat we made first
+			break;
+		case "rowboat":
+			movement_msec_total = 500
+			movement_speed_add = .025;
+			movement_angle_base_forward = 60;
+			movement_angle_base_backward = 60;
+			movement_angular_momentum_decay = .95;
+			movement_passive_friction = .004;
+			cosmetic_x_bob_modifier = .15;
+			cosmetic_z_bob_modifier = .40;
+			break;
+		case "raft":
+			movement_msec_total = 700;
+			movement_speed_add = .017;
+			movement_angle_base_forward = 120;
+			movement_angle_base_backward = 120;
+			movement_angular_momentum_decay = .99;
+			movement_passive_friction = .006;
+			cosmetic_x_bob_modifier = .10;
+			cosmetic_z_bob_modifier = .10;
+			break;
+		default:
+			// kayak
+	}
+}
+
