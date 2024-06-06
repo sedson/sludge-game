@@ -14,7 +14,7 @@ export function setup(g) {
 
   // Sound
   g.audioEngine.loopVolume('waterglide_ambient', 3);
-  // g.audioEngin.createSequencer()
+  g.audioEngine.createSequencer()
 
 	cidada_location = randomWorldPoint(g, 300, 200);
 	whale_location = randomWorldPoint(g, 200, 200);

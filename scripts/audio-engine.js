@@ -27,7 +27,6 @@ export class AudioEngine {
     waveShaper.oversample = '4x'
     waveShaper.connect(this.audioCtx.destination)
     this.limiter = waveShaper
-    // createOscillator()
   }
 
   // Step 4: Define the curve
