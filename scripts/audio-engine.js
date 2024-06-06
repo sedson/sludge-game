@@ -107,15 +107,15 @@ export class AudioEngine {
   createSequencer() {
     const seq = this.buildOscillator("sine", this.base_note + 3)
     const gainNode = []
-    gainNode.push(this.lowGain(0.005))
+    gainNode.push(this.lowGain(0.001))
     const panNode = this.audioCtx.createStereoPanner()
-    seq.connect(gainNode[0]).connect(panNode).connect(this.limiter);
+    seq.connect(gainNode[0]).connect(panNode).connect(this.audioCtx.destination);
     for (let i = 0; i < 8; i++) {
       const delay = this.audioCtx.createDelay(5.0);
-      const gain = this.lowGain(0.01)
+      const gain = this.lowGain(0.001)
       gainNode.push(gain)
       const pan = this.audioCtx.createStereoPanner()
-      seq.connect(gain).connect(pan).connect(delay).connect(this.limiter);
+      seq.connect(gain).connect(pan).connect(delay).connect(this.audioCtx.destination);
       delay.delayTime.value = 0.1 + 0.3 * i
       gain.gain.value = 0
       pan.pan.value = -1 + (i / 14)
