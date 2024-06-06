@@ -203,7 +203,7 @@ export class AudioEngine {
       this.otherIdx = this.otherIdx % this.otherNotes.length
       const note = this.notes[this.idx] + this.otherNotes[this.otherIdx]
       if (note > 0) {
-        this.playNote(note, 0.02)
+        this.playNote(note, 0.03)
       } else this.playNote(0, 0)
     }
   }
