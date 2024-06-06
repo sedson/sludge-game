@@ -5,7 +5,7 @@ import { height } from "./height-map.js";
 let movement_msec_start = 0;
 let movement_msec_total = 600;
 
-let movement_speed_add = .04;
+let movement_speed_add = .02;
 let movement_speed_target_backwards = true;
 
 let movement_angle_base_forward = 80;

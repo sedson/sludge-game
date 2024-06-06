@@ -8,7 +8,7 @@ import * as SceneSounds from "./scene-sounds.js"
 let g;
 
 // Add some debug boxes.
-const DEBUG = true;
+const DEBUG = false;
 
 // Module "state" can go here. We can do better.
 

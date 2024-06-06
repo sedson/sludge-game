@@ -42,7 +42,7 @@ export function setup(gumInstance, assets) {
       .setGeometry(treeMesh)
       .setProgram('sprite')
       .uniform('uTex', spriteTexture.id)
-      .move(x, h - 1, z)
+      .move(x, h - 3, z)
       .rotate(0, g.random(), 0)
       .rescale(scale);
 

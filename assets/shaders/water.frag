@@ -4,6 +4,10 @@ precision mediump float;
 
 uniform sampler2D uTex;
 uniform float uTime;
+uniform vec3 uEye;
+uniform vec3 uShallowColor;
+uniform vec3 uDeepColor;
+
 
 in vec4 vColor;
 in vec2 vTexCoord;
@@ -53,5 +57,11 @@ void main() {
   float hs = heightMap(vWorldPosition.xyz * 1.0 + uTime * vec3(0.001, 0.001, 0.001)).x * 0.5 + 0.5;
   float hs2 = heightMap(vWorldPosition.zyx * 6.0 + uTime * vec3(0.0002, -0.0005, 0.000)).x * 0.5 + 0.5;;
   float ripple = smoothstep(0.7, 0.71, hs * hs2);
-  fragColor = vec4(1.0, 1.0, 1.0, ripple * 0.2);
+
+  float dist = smoothstep(0.0, 100.0, distance(uEye, vWorldPosition.xyz));
+
+  float alpha = clamp(ripple * 0.2 + dist, 0.0, 1.0);
+  vec3 col = vec3(1.0);
+  col = mix(col, uDeepColor, alpha);
+  fragColor = vec4(col, alpha);
 }
