@@ -19,6 +19,6 @@ export function draw(delta) {
     if (osc === "undefined") continue;
     let location = g.beacons[osc]
     let soundDiffMag = generateSoundDiff(g, location, kayak, 1)
-      g.audioEngine.spookyOscillatorVolume(osc, 0.005 / (1 + soundDiffMag))
+    g.audioEngine.spookyOscillatorVolume(osc, 0.005 / (10 + soundDiffMag))
   }
 }

@@ -46,7 +46,7 @@ export class AudioEngine {
   buildOscillator(type, freq) {
     const osc = this.audioCtx.createOscillator();
     osc.type = type;
-    osc.frequency.setValueAtTime(freq, this.audioCtx.currentTime);
+    osc.frequency.value = freq;
     return osc;
   }
 
