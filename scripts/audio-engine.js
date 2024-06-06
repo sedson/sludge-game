@@ -220,6 +220,8 @@ class NoAudio {
   createSequencer() {};
   update(dt) {};
   midiToFreq(note) {};
+  spookyOscillators() {};
+  spookyOscillatorVolume() {};
 }
 
 export function createEngineAndLoadAudio() {
