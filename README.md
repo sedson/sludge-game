@@ -1,8 +1,8 @@
 # The form of the danger is an emanation of energy.
-This project was created in 3 days for a game jam, where the theme was inspired by [long-term nuclear waste wrning messages](https://en.wikipedia.org/wiki/Long-term_nuclear_waste_warning_messages)
+This project was created in 3 days for a game jam, where the theme was inspired by [long-term nuclear waste warning messages](https://en.wikipedia.org/wiki/Long-term_nuclear_waste_warning_messages)
 
 ## Live Demo
-You can play the Live Demo on itch.io [here](https://sedson.itch.io/form-of-danger).
+You can play the [Live Demo on itch.io here](https://sedson.itch.io/form-of-danger).
 Note: Live Demo may not work correctly in Chrome
 
 ## To Run Locally
